@@ -1,10 +1,10 @@
-import NextAuth, { AuthOptions } from 'next-auth';
+import { AuthOptions } from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
 import { PrismaClient } from '@prisma/client';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 const prisma = new PrismaClient();
 
-export const authOptions = {
+const options: AuthOptions = {
   // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -14,6 +14,8 @@ export const authOptions = {
     }),
     // ...add more providers here
   ],
-} as AuthOptions;
-
-export default NextAuth(authOptions);
+  pages: {
+    signIn: '/auth/login',
+  },
+};
+export default options;
