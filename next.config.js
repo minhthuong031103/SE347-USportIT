@@ -12,6 +12,16 @@ const nextConfig = {
         // !! WARN !!
         ignoreBuildErrors: true,
     },
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'static.nike.com',
+                port: '',
+
+            },
+        ],
+    },
 }
 
 module.exports = nextConfig

@@ -9,6 +9,10 @@ export async function mustBeLoggedIn() {
     redirect('/auth/login');
   }
 }
+export async function getSession() {
+  const session = await getServerSession(options);
+  return session;
+}
 
 export async function alreadyLoggedIn() {
   const session = await getServerSession(options);
