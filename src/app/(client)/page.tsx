@@ -26,7 +26,7 @@ const productCategories = [
 ];
 const page = () => {
   return (
-    <div className="flex h-full w-full flex-col">
+    <div className="mt-10 flex h-full w-full flex-col">
       <HomeBanner />
       <section
         id="hero"
