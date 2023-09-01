@@ -30,6 +30,7 @@ export const Icons = {
   ),
   discord: (props: IconProps) => (
     <svg
+      {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 640 512"
       className="mr-2 h-4 w-4"

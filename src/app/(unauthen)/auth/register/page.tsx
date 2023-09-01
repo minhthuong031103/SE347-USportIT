@@ -2,7 +2,9 @@ import { Metadata } from 'next';
 import React from 'react';
 import { getProviders } from 'next-auth/react';
 
-import Login from './Login';
+import Register from './Register';
+
+import { getSession } from '@/lib/auth';
 
 export const metadata: Metadata = {
   title: 'Authentication',
@@ -11,21 +13,24 @@ export const metadata: Metadata = {
 
 const LoginPage = async () => {
   const providers = await getProviders();
-
+  const session = await getSession();
+  console.log('ok');
+  console.log(session);
   return (
     <>
-      <div className="p-12 relative h-screen w-full ">
+      <div className="p-12 relative h-full w-full ">
         <div className="lg:p-8 sm:p-12 ">
           <div className="mx-auto h-full flex w-full flex-col justify-center space-y-6 ">
             <div className="flex flex-col space-y-2 text-center">
               <h1 className="text-2xl font-semibold tracking-tight">
-                Welcome back!
+                Create an account
               </h1>
               <p className="text-sm text-muted-foreground">
-                Explore the entirely new collection of fashion
+                Create your Member profile and get first access to the very best
+                of our products, inspiration and community.
               </p>
             </div>
-            <Login providers={providers} />
+            <Register providers={providers} />
           </div>
         </div>
       </div>

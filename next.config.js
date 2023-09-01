@@ -20,6 +20,11 @@ const nextConfig = {
                 port: '',
 
             },
+            {
+                protocol: 'https',
+                hostname: 'freight.cargo.site',
+                port: '',
+            }
         ],
     },
 }

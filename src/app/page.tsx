@@ -10,11 +10,10 @@ const page = () => {
       <Header />
       <div className="flex flex-col">
         <Link href={'/auth/login'}>
-          <button>login</button>
+          <Button className="w-[70px]">login</Button>
         </Link>
 
         <Button
-          variant="outline"
           onClick={() => {
             signOut();
           }}

@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 
 export async function mustBeLoggedIn() {
   const session = await getServerSession(options);
-
+  console.log('session: ', session);
   if (!session) {
     redirect('/auth/login');
   }
@@ -16,8 +16,17 @@ export async function getSession() {
 
 export async function alreadyLoggedIn() {
   const session = await getServerSession(options);
-
+  console.log('session: ', session);
   if (session) {
+    redirect('/');
+  }
+}
+export async function mustBeAdmin() {
+  const session = await getServerSession(options);
+  if (!session) {
+    redirect('/auth/login');
+  }
+  if (session?.user?.role !== 'admin') {
     redirect('/');
   }
 }
