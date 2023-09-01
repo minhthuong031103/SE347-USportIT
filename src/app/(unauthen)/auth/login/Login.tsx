@@ -36,8 +36,9 @@ const Login = ({ className }: { className?: string; providers: unknown }) => {
       toast.error(res?.error);
       return;
     }
+
+    if (!res?.error) router.replace('/');
     setIsLoading(false);
-    if (!res?.error) router.replace('/user');
     console.log(res);
   }
   if (isLoading)

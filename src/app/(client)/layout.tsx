@@ -1,0 +1,17 @@
+import { Header } from '@/components/header';
+import { getServerSession } from 'next-auth';
+
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const session = await getServerSession();
+  console.log(session);
+  return (
+    <div className="w-full h-full">
+      <Header session={session} />
+      {children}
+    </div>
+  );
+}

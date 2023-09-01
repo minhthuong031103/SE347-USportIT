@@ -51,7 +51,7 @@ const options: AuthOptions = {
         token.id = user.id;
         token.image = user.image;
       }
-      console.log('user in jwt is', user);
+
       //return final token
       return token;
     },

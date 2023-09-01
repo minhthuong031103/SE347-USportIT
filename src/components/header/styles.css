@@ -4,6 +4,14 @@
 @import '@radix-ui/colors/purple.css';
 @import '@radix-ui/colors/violet.css';
 
+/*
+const blackA = { blackA1: '#00000003', blackA2: '#00000006', blackA3: '#0000000e',
+   blackA4: '#00000014',
+   blackA5: '#0000001b', blackA6: '#00000022', blackA7: '#0000002b', 
+   blackA8: '#00000044', blackA9: '#00000072',
+    blackA10: '#0000007f', blackA11: '#0000009b', blackA12: '#000000df', } 
+*/
+
 /* reset */
 button,
 p {
@@ -21,11 +29,12 @@ p {
 .NavigationMenuList {
   display: flex;
   justify-content: center;
-  background-color: white;
+  background-color: white; /* the color of the main box */
   padding: 4px;
   border-radius: 6px;
+  gap: 30px;
   list-style: none;
-  box-shadow: 0 2px 10px var(--black-a7);
+  box-shadow: 0 2px 10px white; /* the shadow of the main box */
   margin: 0;
 }
 
@@ -38,15 +47,15 @@ p {
   line-height: 1;
   border-radius: 4px;
   font-size: 15px;
-  color: var(--violet-11);
+  color: #000000; /* the color of the header text */
 }
 .NavigationMenuTrigger:focus,
 .NavigationMenuLink:focus {
-  box-shadow: 0 0 0 2px var(--violet-7);
+  box-shadow: 0 0 0 2px var(--black-a5);
 }
 .NavigationMenuTrigger:hover,
 .NavigationMenuLink:hover {
-  background-color: var(--violet-3);
+  background-color: var(--black-a3);
 }
 
 .NavigationMenuTrigger {
@@ -107,6 +116,7 @@ p {
 }
 
 .NavigationMenuViewport {
+  /* the view port is the container of the dropdown menu */
   position: relative;
   transform-origin: top center;
   margin-top: 10px;
@@ -161,21 +171,21 @@ p {
   line-height: 1;
 }
 .ListItemLink:focus {
-  box-shadow: 0 0 0 2px var(--violet-7);
+  box-shadow: 0 0 0 2px var(--black-a5); /*the border color when click to the link item */
 }
 .ListItemLink:hover {
-  background-color: var(--mauve-3);
+  background-color: var(--black-a3); /* the color of the box when hover */
 }
 
 .ListItemHeading {
   font-weight: 500;
   line-height: 1.2;
   margin-bottom: 5px;
-  color: var(--violet-12);
+  color: #000000; /* the color of the title text */
 }
 
 .ListItemText {
-  color: var(--mauve-11);
+  color: #6a7385; /* the color of the description text */
   line-height: 1.4;
   font-weight: initial;
 }
@@ -186,7 +196,7 @@ p {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, var(--purple-9) 0%, var(--indigo-9) 100%);
+  background: linear-gradient(135deg, black 0%, var(--black-a9) 100%);
   border-radius: 6px;
   padding: 25px;
   text-decoration: none;
@@ -194,7 +204,7 @@ p {
   user-select: none;
 }
 .Callout:focus {
-  box-shadow: 0 0 0 2px var(--violet-7);
+  box-shadow: 0 0 0 2px var(--black-a3);
 }
 
 .CalloutHeading {
@@ -224,7 +234,7 @@ p {
 
 .CaretDown {
   position: relative;
-  color: var(--violet-10);
+  color: black;
   top: 1px;
   transition: transform 250ms ease;
 }
@@ -234,8 +244,8 @@ p {
 
 .Arrow {
   position: relative;
-  top: 70%;
-  background-color: white;
+  top: 50%;
+  background-color: black;
   width: 10px;
   height: 10px;
   transform: rotate(45deg);
