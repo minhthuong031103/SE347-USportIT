@@ -46,16 +46,17 @@ const NavigationMenuDemo = ({ session }) => {
     setLastScrollY(window.scrollY);
   };
   return (
-    <div>
-      <MobileNav />
-      <div
-        className={`w-full h-[50px] md:h-[80px] hidden lg:flex
+    <div
+      className={`w-full h-[50px] md:h-[80px] 
     bg-white  items-center justify-between z-20
     sticky top-0 transition-transform duration-300 px-14
     ${show}
     `}
-      >
-        <div>logo</div>
+    >
+      <div>logo</div>
+      <MobileNav />
+      <div className="hidden lg:flex">
+        {' '}
         <NavigationMenu.Root className="NavigationMenuRoot">
           <NavigationMenu.List className="NavigationMenuList">
             <NavigationMenu.Item>

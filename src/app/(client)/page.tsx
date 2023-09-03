@@ -1,23 +1,15 @@
 'use client';
 
-import Link from 'next/link';
 import React, { useRef } from 'react';
-import { signOut } from 'next-auth/react';
-import { Button, buttonVariants } from '@/components/new-york/button';
 import HomeBanner from '@/components/HomeBanner';
 import { Balancer } from 'react-wrap-balancer';
-import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { cn } from '@/lib/utils';
-import ProductCard from '@/components/ProductCard';
 import ShopByCollection from './ShopByCollection';
 import Categories from './Categories';
 import Image from 'next/image';
 import FeaturedProduct from './FeaturedProduct';
 import SalesProduct from './SalesProduct';
 import ShopAll from './ShopAll';
-import { AspectRatio } from '@/components/new-york/aspect-ratio';
-import { CommonSvg } from '@/assets/CommonSvg';
 import {
   Sheet,
   SheetContent,
