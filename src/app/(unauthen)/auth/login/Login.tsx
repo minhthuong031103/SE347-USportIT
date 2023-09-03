@@ -119,7 +119,7 @@ const Login = ({ className }: { className?: string; providers: unknown }) => {
           <Button
             className="w-1/2 "
             onClick={() => {
-              signIn('discord');
+              signIn('github');
             }}
             variant="outline"
             disabled={isLoading}

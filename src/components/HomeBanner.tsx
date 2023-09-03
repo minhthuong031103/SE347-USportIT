@@ -6,7 +6,7 @@ import Image from 'next/image';
 function HomeBanner() {
   return (
     <div
-      className="relative text-white text-[20px] w-full px-10 mx-auto
+      className="relative text-white text-[20px] w-full lg:px-10 mx-auto
     "
     >
       <Carousel

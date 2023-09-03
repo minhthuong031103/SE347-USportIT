@@ -1,3 +1,4 @@
+import { Footer } from '@/components/footer';
 import { Header } from '@/components/header';
 import { getServerSession } from 'next-auth';
 
@@ -12,6 +13,7 @@ export default async function Layout({
     <div className="w-full h-full">
       <Header session={session} />
       {children}
+      <Footer />
     </div>
   );
 }

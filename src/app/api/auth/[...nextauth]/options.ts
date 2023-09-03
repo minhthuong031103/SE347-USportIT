@@ -1,5 +1,6 @@
 import { AuthOptions } from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
+import GithubProvider from 'next-auth/providers/github';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import prisma from '@/lib/prisma';
 const options: AuthOptions = {
@@ -11,6 +12,11 @@ const options: AuthOptions = {
     DiscordProvider({
       clientId: String(process.env.DISCORD_CLIENT_ID),
       clientSecret: String(process.env.DISCORD_CLIENT_SECRET),
+    }),
+
+    GithubProvider({
+      clientId: String(process.env.GITHUB_CLIENT_ID),
+      clientSecret: String(process.env.GITHUB_CLIENT_SECRET),
     }),
     CredentialsProvider({
       name: 'Credentials',
