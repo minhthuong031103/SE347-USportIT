@@ -24,6 +24,16 @@ const nextConfig = {
                 protocol: 'https',
                 hostname: 'freight.cargo.site',
                 port: '',
+            }, {
+                protocol: 'https',
+                hostname: 'media.about.nike.com',
+                port: '',
+            }
+            ,
+            {
+                protocol: 'https',
+                hostname: 'images.lifestyleasia.com',
+                port: '',
             }
         ],
     },

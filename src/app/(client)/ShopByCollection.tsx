@@ -16,7 +16,7 @@ const productCollections = [
   {
     title: 'BasketBall',
     image:
-      'https://static.nike.com/a/images/f_auto/dpr_3.0,cs_srgb/h_500,c_limit/ncm7sgzs5e6kpvjx37ai/nike-basketball.jpg',
+      'https://static.nike.com/a/images/f_auto/dpr_3.0,cs_srgb/w_342,c_limit/3aa7f8f6-d54e-40bd-8822-f6d87c0cbb60/jordan-brand-launches-tatum-1-signature-shoe.jpg',
   },
   {
     title: 'Running',

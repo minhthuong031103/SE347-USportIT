@@ -16,16 +16,51 @@ import Image from 'next/image';
 import FeaturedProduct from './FeaturedProduct';
 import SalesProduct from './SalesProduct';
 import ShopAll from './ShopAll';
+import { AspectRatio } from '@/components/new-york/aspect-ratio';
+import { CommonSvg } from '@/assets/CommonSvg';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/new-york/sheet';
 
 const page = () => {
   const windowWidth = useRef(window?.innerWidth);
   return (
     <div className="mt-10 flex h-full w-full flex-col">
       <HomeBanner />
+
       <ShopAll />
       <Categories />
-      <SalesProduct />
+      <Image
+        src={
+          'https://images.lifestyleasia.com/wp-content/uploads/sites/6/2020/08/03154422/2020_RTT_Sustainability_Zero-Collection_RN_GROUP_06539_R2_hd_1600-1600x900.jpg'
+        }
+        className="relative"
+        width={windowWidth.current}
+        height={windowWidth.current / 2}
+        priority
+        quality={100}
+        objectFit="cover"
+        alt="hero image"
+      />
 
+      <SalesProduct />
+      <Sheet>
+        <SheetTrigger>Open</SheetTrigger>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>Are you sure absolutely sure?</SheetTitle>
+            <SheetDescription>
+              This action cannot be undone. This will permanently delete your
+              account and remove your data from our servers.
+            </SheetDescription>
+          </SheetHeader>
+        </SheetContent>
+      </Sheet>
       <Image
         src={
           'https://static.nike.com/a/images/f_auto/dpr_1.3,cs_srgb/w_1531,c_limit/bb4458f0-855c-4548-a745-97aefec048ea/nike-just-do-it.jpg'
