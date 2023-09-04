@@ -10,14 +10,6 @@ import Image from 'next/image';
 import FeaturedProduct from './FeaturedProduct';
 import SalesProduct from './SalesProduct';
 import ShopAll from './ShopAll';
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/new-york/sheet';
 
 const page = () => {
   const windowWidth = useRef(window?.innerWidth);

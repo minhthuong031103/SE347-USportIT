@@ -47,7 +47,7 @@ function ProductDetailLeft() {
       "
     >
       <Carousel
-        renderArrowNext={(onClickHandler, hasNext, label) => (
+        renderArrowNext={(onClickHandler) => (
           <div
             onClick={onClickHandler}
             className="absolute right-0 bottom-0 w-[30px] md:w-[50px]
@@ -57,7 +57,7 @@ function ProductDetailLeft() {
             <BiArrowBack className="rotate-180 text-sm md:text-lg" />
           </div>
         )}
-        renderArrowPrev={(onClickHandler, hasNext, label) => (
+        renderArrowPrev={(onClickHandler) => (
           <div
             onClick={onClickHandler}
             className="absolute right-[31px] md:right-[51px] bottom-0 w-[30px] md:w-[50px]
