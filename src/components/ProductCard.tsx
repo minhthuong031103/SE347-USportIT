@@ -67,11 +67,11 @@ export default function ProductCard() {
         <div className="text-start p-4 text-black/[0.9]">
           <h2 className="text-lg font-medium">Product name</h2>
           <div className="flex flex-wrap items-center text-black/[0.5]">
-            <p className="mr-2 text-lg font-semibold ">
+            <p className="mr-2 text-sm font-semibold ">
               {currencyFormat(900000000)}
             </p>
             {1 && (
-              <p className="text-base font-medium line-through ">
+              <p className="text-sm font-medium line-through ">
                 {currencyFormat(9000)}
               </p>
             )}
