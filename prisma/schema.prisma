@@ -33,3 +33,15 @@ model User {
   updatedAt           DateTime? @updatedAt
   image               String? @default("https://i0.wp.com/www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg?ssl=1")
 }
+
+model Product{
+  id                  Int     @id @default(autoincrement())
+  name                String
+  description         String
+  price               Int
+  images              Json
+  createdAt           DateTime? @default(now())
+  updatedAt           DateTime? @updatedAt
+  sizes               String
+
+}

@@ -224,7 +224,9 @@ const NavigationMenuDemo = ({ session }) => {
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Billing</DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link href={'/admin/add-product'}>Add Product</Link>
+              </DropdownMenuItem>
               <DropdownMenuItem>Team</DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => signOut({ callbackUrl: '/auth/login' })}

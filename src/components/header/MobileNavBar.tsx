@@ -27,8 +27,8 @@ const sidebarNavItems = [
     items: [],
   },
   {
-    title: 'Billing',
-    href: '/dashboard/billing',
+    title: 'Add Product',
+    href: '/admin/add-product',
     icon: 'billing',
     items: [],
   },

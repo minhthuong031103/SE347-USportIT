@@ -11,100 +11,50 @@ const data = {
   price: 3000000,
   original_price: 4000000,
   description: `The Nike Air Force 1 '07 Craft puts a fresh spin on the street legend. Its crisp leather upper features intricate stitching and overlays for added durability. A classic Air-Sole unit provides lightweight cushioning for all-day comfort.`,
-  size: {
-    data: [
-      {
-        size: 'US 6',
-        number: 0,
-      },
-      {
-        size: 'US 6.5',
-        number: 1,
-      },
-      {
-        size: 'US 7',
-        number: 2,
-      },
-      {
-        size: 'US 7.5',
-        number: 3,
-      },
-      {
-        size: 'US 8',
-        number: 4,
-      },
-      {
-        size: 'US 8.5',
-        number: 5,
-      },
-      {
-        size: 'US 9',
-        number: 6,
-      },
-      {
-        size: 'US 9.5',
-        number: 7,
-      },
-      {
-        size: 'US 10',
-        number: 8,
-      },
-      {
-        size: 'US 10.5',
-        number: 9,
-      },
-      {
-        size: 'US 11',
-        number: 10,
-      },
-      {
-        size: 'US 11.5',
-        number: 11,
-      },
-      {
-        size: 'US 12',
-        number: 12,
-      },
-      {
-        size: 'US 12.5',
-        number: 13,
-      },
-      {
-        size: 'US 13',
-        number: 14,
-      },
-      {
-        size: 'US 13.5',
-        number: 15,
-      },
-      {
-        size: 'US 14',
-        number: 16,
-      },
-      {
-        size: 'US 14.5',
-        number: 17,
-      },
-      {
-        size: 'US 15',
-        number: 18,
-      },
-      {
-        size: 'US 15.5',
-        number: 19,
-      },
-      {
-        size: 'US 16',
-        number: 20,
-      },
-    ],
-  },
+  size: [
+    {
+      size: 'EU 38.5',
+      number: 0,
+    },
+    {
+      size: 'EU 39',
+      number: 1,
+    },
+    {
+      size: 'EU 40',
+      number: 2,
+    },
+    {
+      size: 'EU 41',
+      number: 3,
+    },
+    {
+      size: 'EU 42',
+      number: 4,
+    },
+    {
+      size: 'EU 43',
+      number: 5,
+    },
+    {
+      size: 'EU 44',
+      number: 6,
+    },
+    {
+      size: 'EU 45',
+      number: 7,
+    },
+    {
+      size: 'EU 46',
+      number: 8,
+    },
+  ],
 };
 
 function ProductDetailRight() {
   const [selectedSize, setSizeSelected] = useState(null);
   const [showError, setShowError] = useState(false);
-
+  console.log(JSON.stringify(data.size));
   return (
     <div className="flex-[1] py-3">
       {/* Product Title */}
@@ -144,7 +94,7 @@ function ProductDetailRight() {
 
         {/* Size start */}
         <div id="sizesGrid" className="grid grid-cols-3 gap-2">
-          {data.size.data.map((size, index) => (
+          {data.size.map((size, index) => (
             <div
               onClick={
                 size.number > 0
