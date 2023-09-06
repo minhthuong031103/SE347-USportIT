@@ -37,11 +37,11 @@ model User {
 model Product{
   id                  Int     @id @default(autoincrement())
   name                String
-  description         String
+  description         String   @db.LongText
   price               Int
-  images              Json
   createdAt           DateTime? @default(now())
   updatedAt           DateTime? @updatedAt
-  sizes               String
-
+  sizes               String? @db.Text
+  thumbnail           String? @db.Text
+  images              String? @db.Text
 }

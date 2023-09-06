@@ -2,14 +2,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-import { currencyFormat } from '@/lib/utils';
+import { currencyFormat, parseJSON } from '@/lib/utils';
 
 import {
   AiOutlineHeart,
   AiFillHeart,
   AiOutlineShoppingCart,
 } from 'react-icons/ai';
-export default function ProductCard() {
+export default function ProductCard({ product }) {
+  console.log(product);
   const [isLiked, setIsLiked] = React.useState<boolean>(false);
   const [isAddToCart, setIsAddToCart] = React.useState<boolean>(false);
   return (
@@ -18,15 +19,13 @@ export default function ProductCard() {
         <Link
           className="
     "
-          href={`/product/1`}
+          href={`/product/${product?.id}`}
         >
           <Image
             objectFit="cover"
             width={900}
             height={900}
-            src={
-              'https://static.nike.com/a/images/t_PDP_864_v1,f_auto,q_auto:eco/u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/baccff07-c847-43d5-bdb3-a78b7fd3846e/air-jordan-1-mid-se-craft-shoes-n5bFMW.png'
-            }
+            src={parseJSON(product?.thumbnail)?.url}
             className="transform duration-200 
     hover:scale-105"
             priority
@@ -62,17 +61,17 @@ export default function ProductCard() {
       <Link
         className="
     "
-        href={`/product/1`}
+        href={`/product/${product?.id}}`}
       >
         <div className="text-start p-4 text-black/[0.9]">
-          <h2 className="text-lg font-medium">Product name</h2>
+          <h2 className="text-lg font-medium">{product?.name}</h2>
           <div className="flex flex-wrap items-center text-black/[0.5]">
             <p className="mr-2 text-sm font-semibold ">
-              {currencyFormat(900000000)}
+              {currencyFormat(product?.price)}
             </p>
             {1 && (
               <p className="text-sm font-medium line-through ">
-                {currencyFormat(9000)}
+                {currencyFormat(product?.price * 1.3)}
               </p>
             )}
           </div>

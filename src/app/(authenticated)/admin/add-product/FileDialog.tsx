@@ -27,6 +27,7 @@ import {
   DialogTrigger,
 } from '@/components/new-york/dialog';
 import { Icons } from '@/assets/Icons';
+import { ScrollArea } from '@/components/new-york/scroll-area';
 
 // FIXME Your proposed upload exceeds the maximum allowed size, this should trigger toast.error too
 type FileWithPreview = FileWithPath & {
@@ -129,7 +130,8 @@ export function FileDialog<TFieldValues extends FieldValues>({
         <p className="absolute left-5 top-4 text-base font-medium text-muted-foreground">
           Upload your images
         </p>
-        {(files?.length && files?.length < 8) || !files ? (
+
+        {(files && files?.length < maxFiles) || !files ? (
           <div>
             {' '}
             <div
@@ -174,7 +176,7 @@ export function FileDialog<TFieldValues extends FieldValues>({
             </p>
           </div>
         ) : null}
-        <div className="mt-8 ">
+        <ScrollArea className="h-[300px] mt-10">
           {files?.length ? (
             <div className="grid gap-5">
               {files?.map((file, i) => (
@@ -188,8 +190,7 @@ export function FileDialog<TFieldValues extends FieldValues>({
               ))}
             </div>
           ) : null}
-        </div>
-
+        </ScrollArea>
         {files?.length ? (
           <Button
             type="button"

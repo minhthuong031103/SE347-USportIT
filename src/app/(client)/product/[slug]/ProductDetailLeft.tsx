@@ -3,43 +3,9 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a lo
 import React from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import { BiArrowBack } from 'react-icons/bi';
+import { parseJSON } from '@/lib/utils';
 
-const data = [
-  {
-    id: '1',
-    url: 'https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/bab314ed-4a92-4b35-98de-279d66949a94/air-jordan-1-mid-se-craft-mens-shoes-p0kWbP.png',
-  },
-  {
-    id: '2',
-    url: 'https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/9360a584-a807-43b4-992a-97f9c50a4dee/air-jordan-1-mid-se-craft-mens-shoes-p0kWbP.png',
-  },
-  {
-    id: '3',
-    url: 'https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/e957e429-cbe2-45a4-8033-971804fc7070/air-jordan-1-mid-se-craft-mens-shoes-p0kWbP.png',
-  },
-  {
-    id: '4',
-    url: 'https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/a2de643a-2c47-4049-be79-d12ee858e9f2/air-jordan-1-mid-se-craft-mens-shoes-p0kWbP.png',
-  },
-  {
-    id: '1',
-    url: 'https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/bab314ed-4a92-4b35-98de-279d66949a94/air-jordan-1-mid-se-craft-mens-shoes-p0kWbP.png',
-  },
-  {
-    id: '2',
-    url: 'https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/9360a584-a807-43b4-992a-97f9c50a4dee/air-jordan-1-mid-se-craft-mens-shoes-p0kWbP.png',
-  },
-  {
-    id: '3',
-    url: 'https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/e957e429-cbe2-45a4-8033-971804fc7070/air-jordan-1-mid-se-craft-mens-shoes-p0kWbP.png',
-  },
-  {
-    id: '4',
-    url: 'https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/a2de643a-2c47-4049-be79-d12ee858e9f2/air-jordan-1-mid-se-craft-mens-shoes-p0kWbP.png',
-  },
-];
-
-function ProductDetailLeft() {
+function ProductDetailLeft({ data }) {
   return (
     <div
       className=" text-white text-[20px] w-full max-w-[1360px] sticky top-[50px] 
@@ -73,8 +39,8 @@ function ProductDetailLeft() {
         thumbWidth={60}
         className="productCarousel"
       >
-        {data.map((item) => (
-          <div key={item.id}>
+        {parseJSON(data?.images)?.map((item, index) => (
+          <div key={`${item.id}-${index}`}>
             <img src={item.url} alt="product" />
           </div>
         ))}

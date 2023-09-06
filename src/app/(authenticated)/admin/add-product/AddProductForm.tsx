@@ -18,14 +18,14 @@ type FileWithPreview = FileWithPath & {
 const { useUploadThing } = generateReactHelpers<OurFileRouter>();
 
 function AddProductForm() {
-  const [files, setFiles] = React.useState<FileWithPreview[] | null>(null);
-
+  const [files, setFiles] = React.useState<FileWithPreview[]>([]);
+  const [thumbnail, setThumbnail] = React.useState<FileWithPreview[]>([]);
   const { isUploading, startUpload } = useUploadThing('imageUploader');
   console.log(files);
   const { handleSubmit, control } = useForm();
   const onSubmit = async (data) => {
     console.log(data);
-    const images = await startUpload(files).then((res) => {
+    const images = await startUpload([...thumbnail, ...files]).then((res) => {
       const formattedImages = res?.map((image) => ({
         id: image.key,
         name: image.key.split('_')[1] ?? image.key,
@@ -33,6 +33,7 @@ function AddProductForm() {
       }));
       return formattedImages ?? null;
     });
+
     console.log(images);
 
     const res = await fetch('/api/admin/product/create', {
@@ -42,7 +43,9 @@ function AddProductForm() {
       },
       body: JSON.stringify({
         ...data,
-        image: images,
+        price: parseInt(data.price),
+        image: [...images],
+        thumbnail: images?.[0],
       }),
     });
   };
@@ -136,6 +139,45 @@ function AddProductForm() {
           }}
         />
       </div>
+      <div className="space-y-2 flex flex-col">
+        <Label>Thumbnail</Label>
+        {thumbnail?.length ? (
+          <div className="flex items-center gap-2">
+            {thumbnail.map((file, i) => (
+              <Zoom key={i}>
+                <Image
+                  src={file.preview}
+                  alt={file.name}
+                  className="h-20 w-20 shrink-0 rounded-md object-cover object-center"
+                  width={80}
+                  height={80}
+                />
+              </Zoom>
+            ))}
+          </div>
+        ) : null}
+
+        <Controller
+          defaultValue={''}
+          name={'thumbnail'}
+          control={control}
+          render={({ field }) => {
+            return (
+              <FileDialog
+                setValue={field.onChange}
+                name="images"
+                maxFiles={1}
+                maxSize={1024 * 1024 * 4}
+                files={thumbnail}
+                setFiles={setThumbnail}
+                isUploading={isUploading}
+                disabled={false}
+              />
+            );
+          }}
+        />
+      </div>
+
       <Button
         onClick={() => {
           handleSubmit(onSubmit)();

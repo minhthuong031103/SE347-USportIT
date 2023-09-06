@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/new-york/button';
-import { currencyFormat } from '@/lib/utils';
+import { currencyFormat, parseJSON } from '@/lib/utils';
 import React, { useState } from 'react';
 import { IoMdHeartEmpty } from 'react-icons/io';
 
@@ -51,10 +51,10 @@ const data = {
   ],
 };
 
-function ProductDetailRight() {
+function ProductDetailRight({ data }) {
   const [selectedSize, setSizeSelected] = useState(null);
   const [showError, setShowError] = useState(false);
-  console.log(JSON.stringify(data.size));
+
   return (
     <div className="flex-[1] py-3">
       {/* Product Title */}
@@ -94,7 +94,7 @@ function ProductDetailRight() {
 
         {/* Size start */}
         <div id="sizesGrid" className="grid grid-cols-3 gap-2">
-          {data.size.map((size, index) => (
+          {parseJSON(data.sizes)?.map((size, index) => (
             <div
               onClick={
                 size.number > 0

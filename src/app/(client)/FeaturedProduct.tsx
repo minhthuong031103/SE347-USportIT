@@ -1,13 +1,27 @@
+'use client';
 import { buttonVariants } from '@/components/new-york/button';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import ProductCard from '@/components/ProductCard';
+import Loader from '@/components/Loader';
 function FeaturedProduct() {
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+  useEffect(() => {
+    const getFeaturedProducts = async () => {
+      const res = await fetch('/api/product/featured');
+      const data = await res.json();
+      if (data) {
+        setFeaturedProducts(data);
+      }
+    };
+    getFeaturedProducts();
+  }, []);
+
   return (
     <section className="lg:px-10 px-5 py-10 mt-20 md:mt-30">
       <div className=" mx-auto flex flex-col space-y-4 text-center">
@@ -67,27 +81,15 @@ function FeaturedProduct() {
             modules={[Navigation]}
             className="w-full h-auto overflow-visible relative"
           >
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
+            {featuredProducts ? (
+              featuredProducts?.map((product, index) => (
+                <SwiperSlide key={index}>
+                  <ProductCard product={product} />
+                </SwiperSlide>
+              ))
+            ) : (
+              <Loader />
+            )}
           </Swiper>
         </section>
       </div>

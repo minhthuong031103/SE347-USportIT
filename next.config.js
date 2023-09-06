@@ -35,6 +35,12 @@ const nextConfig = {
                 hostname: 'images.lifestyleasia.com',
                 port: '',
             }
+            ,
+            {
+                protocol: 'https',
+                hostname: 'utfs.io',
+                port: '',
+            }
         ],
     },
 }
