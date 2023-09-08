@@ -6,7 +6,7 @@ import { CommonSvg } from '@/assets/CommonSvg';
 async function page({ params }) {
   const { slug } = params;
   const productDetail = await fetch(
-    `http://localhost:3000/api/product/detail?productId=${slug}`,
+    `${process.env.API_HOST}/api/product/detail?productId=${slug}`,
     {
       cache: 'no-cache',
     }
