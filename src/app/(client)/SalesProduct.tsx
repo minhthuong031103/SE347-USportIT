@@ -4,9 +4,9 @@ import Link from 'next/link';
 import React from 'react';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
-import ProductCard from '@/components/ProductCard';
+// import ProductCard from '@/components/ProductCard';
 import { Balancer } from 'react-wrap-balancer';
 function NewArrivals() {
   return (

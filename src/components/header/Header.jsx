@@ -23,6 +23,7 @@ import {
 } from '@/components/new-york/dropdown-menu';
 import AuthSvg from '@/assets/AuthSvg';
 import { MobileNav } from './MobileNavBar';
+import { CommonSvg } from '@/assets/CommonSvg';
 const NavigationMenuDemo = ({ session }) => {
   const [user] = useState(session?.user);
   const [show, setShow] = useState('translate-y-0');
@@ -212,31 +213,37 @@ const NavigationMenuDemo = ({ session }) => {
           </div>
         </NavigationMenu.Root>
         {user ? (
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              {' '}
-              <Avatar>
-                <AvatarImage src={user.image} />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link href={'/admin/add-product'}>Add Product</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>Team</DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => signOut({ callbackUrl: '/auth/login' })}
-                className="border-solid border-t-2 mt-2  gap-2"
-              >
-                <div className="">{AuthSvg.signIn()}</div>
-                Log out
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="flex flex-row gap-5 items-center justify-center">
+            <Button size={'sm'} variant={'outline'}>
+              {CommonSvg.cart({ className: 'w-5 h-5' })}
+            </Button>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                {' '}
+                <Avatar>
+                  <AvatarImage src={user.image} />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href={'/admin/add-product'}>Add Product</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>Team</DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => signOut({ callbackUrl: '/auth/login' })}
+                  className="border-solid border-t-2 mt-2  gap-2"
+                >
+                  <div className="">{AuthSvg.signIn()}</div>
+                  Log out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         ) : (
           <Button className="w-[70px] h-8">
             <Link href={'/auth/login'}>Login</Link>

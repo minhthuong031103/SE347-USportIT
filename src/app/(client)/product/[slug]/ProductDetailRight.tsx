@@ -1,60 +1,25 @@
 'use client';
 
 import { Button } from '@/components/new-york/button';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/new-york/sheet';
 import { currencyFormat, parseJSON } from '@/lib/utils';
 import React, { useState } from 'react';
 import { IoMdHeartEmpty } from 'react-icons/io';
-
-const data = {
-  name: 'Nike Air Force 1 07 Craft',
-  subtitle: 'Men’s Shoe',
-  price: 3000000,
-  original_price: 4000000,
-  description: `The Nike Air Force 1 '07 Craft puts a fresh spin on the street legend. Its crisp leather upper features intricate stitching and overlays for added durability. A classic Air-Sole unit provides lightweight cushioning for all-day comfort.`,
-  size: [
-    {
-      size: 'EU 38.5',
-      number: 0,
-    },
-    {
-      size: 'EU 39',
-      number: 1,
-    },
-    {
-      size: 'EU 40',
-      number: 2,
-    },
-    {
-      size: 'EU 41',
-      number: 3,
-    },
-    {
-      size: 'EU 42',
-      number: 4,
-    },
-    {
-      size: 'EU 43',
-      number: 5,
-    },
-    {
-      size: 'EU 44',
-      number: 6,
-    },
-    {
-      size: 'EU 45',
-      number: 7,
-    },
-    {
-      size: 'EU 46',
-      number: 8,
-    },
-  ],
-};
+import { BsFillCheckCircleFill } from 'react-icons/bs';
+import Image from 'next/image';
+import { useCart } from '@/hooks/useCart';
 
 function ProductDetailRight({ data }) {
   const [selectedSize, setSizeSelected] = useState(null);
   const [showError, setShowError] = useState(false);
-
+  const { onAddToCart, cart } = useCart();
+  console.log(cart);
   return (
     <div className="flex-[1] py-3">
       {/* Product Title */}
@@ -125,35 +90,114 @@ function ProductDetailRight({ data }) {
         )}
         {/* Show error */}
       </div>
+      <div className="flex flex-col gap-2 w-full items-center justify-center">
+        {/* Product size */}
+        {selectedSize ? (
+          <Sheet>
+            <SheetTrigger className="w-full mx-0 flex items-center justify-center  ">
+              <Button
+                className="w-full py-4 rounded-full bg-black text-white text-lg
+                  font-medium transition-transform active:scale-95 mb-3 hover:opacity-75
+                  "
+                onClick={() => {
+                  onAddToCart({ data });
+                }}
+              >
+                Add to cart
+              </Button>
+            </SheetTrigger>
+            <SheetContent side={'topRight'} className="w-[400px]">
+              <SheetHeader>
+                <div className="flex flex-row gap-3 items-center">
+                  <BsFillCheckCircleFill
+                    className="text-green-500 mr-2"
+                    size={20}
+                  />
+                  <SheetTitle>Added to Cart</SheetTitle>
+                </div>
+                <div className=" flex flex-row gap-4 w-full">
+                  <div className="relative aspect-square h-24 w-16 min-w-fit overflow-hidden rounded">
+                    <Image
+                      src={
+                        'https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/8463e545-701f-496d-a794-3bf38910d604/infinityrn-4-road-running-shoes-mLRjcz.png'
+                      }
+                      sizes="(max-width: '768px') 100vw, (max-width: 1200px) 50vw, 33vw"
+                      fill
+                      className="absolute object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <span
+                      className="text-black text-sm
+        font-medium"
+                    >
+                      Nike air Jordan
+                    </span>
+                    <span
+                      className="text-black text-sm
+        font-normal"
+                    >
+                      Men's shoes
+                    </span>
+                    <span
+                      className="text-black text-sm
+        font-normal"
+                    >
+                      Size EU 45
+                    </span>
 
-      {/* Product size */}
+                    <span
+                      className="text-black text-sm
+        font-medium"
+                    >
+                      3,999,000 VND
+                    </span>
+                  </div>
+                </div>
+                <div className="flex-row flex w-full py-3">
+                  <Button variant={'outline'} className="w-full ">
+                    View Cart (4)
+                  </Button>
 
-      <Button
-        className="w-full py-4 rounded-full bg-black text-white text-lg
-                font-medium transition-transform active:scale-95 mb-3 hover:opacity-75
-                "
-        onClick={() => {
-          if (!selectedSize) {
-            setShowError(true);
-            document.getElementById('sizesGrid')?.scrollIntoView({
-              block: 'center',
-              behavior: 'smooth',
-            });
-          }
-        }}
-      >
-        Add to cart
-      </Button>
-      <Button
-        variant={'outline'}
-        className="w-full py-4 rounded-full border border-black
+                  <Button className="w-full">Check out</Button>
+                </div>
+              </SheetHeader>
+            </SheetContent>
+          </Sheet>
+        ) : (
+          <div className="w-full flex ">
+            <Button
+              className="w-full py-4  rounded-full bg-black text-white text-lg
+        font-medium transition-transform active:scale-95 mb-3 hover:opacity-75
+        "
+              onClick={() => {
+                if (!selectedSize) {
+                  setShowError(true);
+                  document.getElementById('sizesGrid')?.scrollIntoView({
+                    block: 'center',
+                    behavior: 'smooth',
+                  });
+                }
+              }}
+            >
+              Add to cart
+            </Button>
+          </div>
+        )}
+        <div className="w-full flex ">
+          <Button
+            variant={'outline'}
+            className="w-full py-4 rounded-full border border-black
         text-lg font-medium transition-transform active:scale-95 flex items-center
         justify-center gap-2 hover:opacity-75 mb-10
                 "
-      >
-        Wish List
-        <IoMdHeartEmpty size={20} />
-      </Button>
+          >
+            Wish List
+            <IoMdHeartEmpty size={20} />
+          </Button>
+        </div>
+      </div>
 
       <div>
         <div className="text-lg font-bold mb-5">Product Details</div>

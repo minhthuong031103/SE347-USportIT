@@ -36,7 +36,7 @@ function AddProductForm() {
 
     console.log(images);
 
-    const res = await fetch('/api/admin/product/create', {
+    await fetch('/api/admin/product/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
