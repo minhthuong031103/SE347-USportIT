@@ -1,6 +1,8 @@
+'use client';
+
 import Link from 'next/link';
 
-import { cn, formatPrice } from '@/lib/utils';
+import { cn, currencyFormat } from '@/lib/utils';
 import { Badge } from './new-york/badge';
 import { Button, buttonVariants } from '@/components/new-york/button';
 import { Separator } from '@/components/new-york/separator';
@@ -12,22 +14,18 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/new-york/sheet';
-import { CartLineItems } from '@/components/checkout/cart-line-items';
+// import { CartLineItems } from '@/components/checkout/cart-line-items';
 import { Icons } from '@/assets/Icons';
-import { getCartAction } from '@/app/_actions/cart';
 
-export async function CartSheet() {
-  const cartLineItems = await getCartAction();
+import { useCart } from '@/hooks/useCart';
+import { CommonSvg } from '@/assets/CommonSvg';
+import { CartLineItems } from './CartLineItems';
 
-  const itemCount = cartLineItems.reduce(
-    (total, item) => total + Number(item.quantity),
-    0
-  );
-
-  const cartTotal = cartLineItems.reduce(
-    (total, item) => total + Number(item.quantity) * Number(item.price),
-    0
-  );
+export function CartSheet() {
+  const { cart } = useCart();
+  const itemCount = cart.listItem.length;
+  const cartLineItems = cart.listItem;
+  const cartTotal = cart.total ?? 0;
 
   return (
     <Sheet>
@@ -46,7 +44,7 @@ export async function CartSheet() {
               {itemCount}
             </Badge>
           )}
-          <Icons.cart className="h-4 w-4" aria-hidden="true" />
+          {CommonSvg.cart({ className: 'h-4 w-4' })}
         </Button>
       </SheetTrigger>
       <SheetContent className="flex w-full flex-col pr-0 sm:max-w-lg">
@@ -65,7 +63,7 @@ export async function CartSheet() {
               <Separator className="mb-2" />
               <div className="flex">
                 <span className="flex-1">Subtotal</span>
-                <span>{formatPrice(cartTotal.toFixed(2))}</span>
+                <span>{currencyFormat(cartTotal)}</span>
               </div>
               <div className="flex">
                 <span className="flex-1">Shipping</span>
@@ -78,7 +76,7 @@ export async function CartSheet() {
               <Separator className="mt-2" />
               <div className="flex">
                 <span className="flex-1">Total</span>
-                <span>{formatPrice(cartTotal.toFixed(2))}</span>
+                <span>{currencyFormat(cartTotal)}</span>
               </div>
               <SheetFooter className="mt-1.5">
                 <SheetTrigger asChild>
@@ -98,10 +96,10 @@ export async function CartSheet() {
           </>
         ) : (
           <div className="flex h-full flex-col items-center justify-center space-y-1">
-            <Icons.cart
-              className="mb-4 h-16 w-16 text-muted-foreground"
-              aria-hidden="true"
-            />
+            {CommonSvg.cart({
+              className: 'mb-4 h-16 w-16 text-muted-foreground',
+            })}
+
             <div className="text-xl font-medium text-muted-foreground">
               Your cart is empty
             </div>

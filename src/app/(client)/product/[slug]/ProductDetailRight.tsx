@@ -19,6 +19,7 @@ function ProductDetailRight({ data }) {
   const [selectedSize, setSizeSelected] = useState(null);
   const [showError, setShowError] = useState(false);
   const { onAddToCart, cart } = useCart();
+
   console.log(cart);
   return (
     <div className="flex-[1] py-3">
@@ -100,7 +101,7 @@ function ProductDetailRight({ data }) {
                   font-medium transition-transform active:scale-95 mb-3 hover:opacity-75
                   "
                 onClick={() => {
-                  onAddToCart({ data });
+                  onAddToCart({ data, selectedSize });
                 }}
               >
                 Add to cart
@@ -118,8 +119,10 @@ function ProductDetailRight({ data }) {
                 <div className=" flex flex-row gap-4 w-full">
                   <div className="relative aspect-square h-24 w-16 min-w-fit overflow-hidden rounded">
                     <Image
+                      alt="add to cart"
                       src={
-                        'https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/8463e545-701f-496d-a794-3bf38910d604/infinityrn-4-road-running-shoes-mLRjcz.png'
+                        parseJSON(data?.thumbnail)?.url ||
+                        '/assets/placeholder.png'
                       }
                       sizes="(max-width: '768px') 100vw, (max-width: 1200px) 50vw, 33vw"
                       fill
@@ -132,7 +135,7 @@ function ProductDetailRight({ data }) {
                       className="text-black text-sm
         font-medium"
                     >
-                      Nike air Jordan
+                      {data.name}
                     </span>
                     <span
                       className="text-black text-sm
@@ -144,20 +147,20 @@ function ProductDetailRight({ data }) {
                       className="text-black text-sm
         font-normal"
                     >
-                      Size EU 45
+                      {selectedSize}
                     </span>
 
                     <span
                       className="text-black text-sm
         font-medium"
                     >
-                      3,999,000 VND
+                      {currencyFormat(data.price)}
                     </span>
                   </div>
                 </div>
                 <div className="flex-row flex w-full py-3">
                   <Button variant={'outline'} className="w-full ">
-                    View Cart (4)
+                    View Cart ({cart?.listItem.length})
                   </Button>
 
                   <Button className="w-full">Check out</Button>

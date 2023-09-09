@@ -30,10 +30,16 @@ const cartSlice = createSlice({
     },
     addToCart: (state, { payload }: { payload: any }) => {
       const product = state.listItem.find(
-        (item) => item.data.id === payload.id
+        (item) =>
+          item.data.id === payload.data.id &&
+          item.selectedSize === payload.selectedSize
       );
       if (!product) {
-        state.listItem.push({ data: payload, quantity: 1 });
+        state.listItem.push({
+          data: payload.data,
+          quantity: 1,
+          selectedSize: payload.selectedSize,
+        });
         state.total += payload.price;
       } else {
         product.quantity += 1;
@@ -42,7 +48,9 @@ const cartSlice = createSlice({
     },
     deleteItemFromCart: (state, { payload }: { payload: any }) => {
       const productIndex = state.listItem.findIndex(
-        (product) => product.data.id === payload.id
+        (product) =>
+          product.data.id === payload.id &&
+          product.selectedSize === payload.selectedSize
       );
       if (state.listItem[productIndex].quantity === 1) {
         state.listItem.splice(productIndex, 1);

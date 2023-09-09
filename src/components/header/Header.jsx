@@ -24,6 +24,7 @@ import {
 import AuthSvg from '@/assets/AuthSvg';
 import { MobileNav } from './MobileNavBar';
 import { CommonSvg } from '@/assets/CommonSvg';
+import { CartSheet } from '../CartSheet';
 const NavigationMenuDemo = ({ session }) => {
   const [user] = useState(session?.user);
   const [show, setShow] = useState('translate-y-0');
@@ -214,10 +215,7 @@ const NavigationMenuDemo = ({ session }) => {
         </NavigationMenu.Root>
         {user ? (
           <div className="flex flex-row gap-5 items-center justify-center">
-            <Button size={'sm'} variant={'outline'}>
-              {CommonSvg.cart({ className: 'w-5 h-5' })}
-            </Button>
-
+            <CartSheet />
             <DropdownMenu>
               <DropdownMenuTrigger>
                 {' '}
