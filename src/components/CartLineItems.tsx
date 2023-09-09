@@ -10,6 +10,7 @@ import { Icons } from '@/assets/Icons';
 import { ScrollArea } from './new-york/scroll-area';
 import { CommonSvg } from '@/assets/CommonSvg';
 import { Input } from './new-york/input';
+import { useCart } from '@/hooks/useCart';
 // import { ScrollArea } from '@/components/ui/scroll-area';
 // import { Separator } from '@/components/ui/separator';
 // import { UpdateCart } from '@/components/checkout/update-cart';
@@ -23,6 +24,11 @@ interface CartLineItemsProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const CartItem = ({ item }) => {
+  const {
+    onIncreaseItemFromCart,
+    onDecreaseItemFromCart,
+    onDeleteItemFromCart,
+  } = useCart();
   return (
     <div className="flex py-5 gap-3 md:gap-5 border-b">
       <div className="shrink-0 aspect-square w-[120px] ">
@@ -47,12 +53,12 @@ const CartItem = ({ item }) => {
           </div>
         </div>
 
-        <div className="flex flex-row justify-between mt-4 gap-2  text-black/[0.5] text-sm md:text-md">
+        <div className="flex flex-row flex-wrap justify-between mt-4 gap-2  text-black/[0.5] text-sm md:text-md">
           <div className="flex lg:items-center gap-1 flex-wrap ">
             <div className="font-semibold">Size:</div>
             {item.selectedSize}
           </div>
-          <div className="flex lg:items-center justify-center gap-1 md:flex-row flex-col">
+          <div className="flex items-center justify-center gap-1 md:flex-row flex-col">
             <div className="font-semibold">Quantity:</div>
 
             <div className="flex items-center  justify-center">
@@ -61,8 +67,14 @@ const CartItem = ({ item }) => {
                 variant="outline"
                 size="icon"
                 className="h-8 w-8 rounded-r-none"
-                onClick={() => {}}
+                onClick={() => {
+                  onDecreaseItemFromCart({
+                    data: item?.data,
+                    selectedSize: item?.selectedSize,
+                  });
+                }}
                 // disabled={isPending}
+                disabled={item.quantity === 1}
               >
                 {CommonSvg.subtract({ className: 'h-3 w-3' })}
               </Button>
@@ -71,8 +83,9 @@ const CartItem = ({ item }) => {
                   id={`${item?.data?.id}-quantity`}
                   type="text"
                   min="0"
-                  className="h-8 w-8 rounded-none border-x-0 "
+                  className="h-8 w-10 rounded-none border-x-0 text-black "
                   value={item.quantity}
+                  disabled
                   // onChange={(e) => {
                   //   startTransition(async () => {
                   //     try {
@@ -94,18 +107,12 @@ const CartItem = ({ item }) => {
                 variant="outline"
                 size="icon"
                 className="h-8 w-8 rounded-l-none"
-                // onClick={() => {
-                //   startTransition(async () => {
-                //     try {
-                //       await updateCartItemAction({
-                //         productId: cartLineItem.id,
-                //         quantity: Number(cartLineItem.quantity) + 1,
-                //       });
-                //     } catch (err) {
-                //       catchError(err);
-                //     }
-                //   });
-                // }}
+                onClick={() => {
+                  onIncreaseItemFromCart({
+                    data: item?.data,
+                    selectedSize: item?.selectedSize,
+                  });
+                }}
                 // disabled={isPending}
               >
                 {CommonSvg.add({ className: 'h-3 w-3' })}
@@ -113,7 +120,17 @@ const CartItem = ({ item }) => {
               </Button>
             </div>
           </div>
-          <Button size={'sm'} variant={'outline'}>
+          <Button
+            onClick={() => {
+              onDeleteItemFromCart({
+                data: item.data,
+                selectedSize: item.selectedSize,
+                quantity: item.quantity,
+              });
+            }}
+            size={'sm'}
+            variant={'outline'}
+          >
             <Icons.trash className="h-4 w-4 text-primary" />
           </Button>
         </div>
@@ -143,7 +160,10 @@ export function CartLineItems({
         {...props}
       >
         {items.map((item) => (
-          <CartItem key={`${item?.id}-${item?.name}`} item={item} />
+          <CartItem
+            key={`${item?.data?.id}-${item?.data?.name}-${item?.selectedSize}`}
+            item={item}
+          />
         ))}
       </div>
     </Wrapper>

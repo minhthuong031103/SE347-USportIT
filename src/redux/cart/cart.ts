@@ -29,27 +29,49 @@ const cartSlice = createSlice({
       };
     },
     addToCart: (state, { payload }: { payload: any }) => {
-      const product = state.listItem.find(
-        (item) =>
-          item.data.id === payload.data.id &&
-          item.selectedSize === payload.selectedSize
+      console.log('payload', payload.data.price);
+      const productIndex = state.listItem.findIndex(
+        (product) =>
+          product.data.id === payload.data.id &&
+          product.selectedSize === payload.selectedSize
       );
-      if (!product) {
+
+      if (!state.listItem[productIndex]) {
         state.listItem.push({
           data: payload.data,
           quantity: 1,
           selectedSize: payload.selectedSize,
         });
-        state.total += payload.price;
+        state.total += payload.data.price;
       } else {
-        product.quantity += 1;
-        state.total += payload.price;
+        state.listItem[productIndex].quantity += 1;
+        state.total += payload.data.price;
       }
     },
     deleteItemFromCart: (state, { payload }: { payload: any }) => {
       const productIndex = state.listItem.findIndex(
         (product) =>
-          product.data.id === payload.id &&
+          product.data.id === payload.data.id &&
+          product.selectedSize === payload.selectedSize
+      );
+
+      state.listItem.splice(productIndex, 1);
+
+      state.total -= payload.data.price * payload.quantity;
+    },
+    increaseItemFromCart: (state, { payload }: { payload: any }) => {
+      const productIndex = state.listItem.findIndex(
+        (product) =>
+          product.data.id === payload.data.id &&
+          product.selectedSize === payload.selectedSize
+      );
+      state.listItem[productIndex].quantity += 1;
+      state.total += payload.data.price;
+    },
+    decreaseItemFromCart: (state, { payload }: { payload: any }) => {
+      const productIndex = state.listItem.findIndex(
+        (product) =>
+          product.data.id === payload.data.id &&
           product.selectedSize === payload.selectedSize
       );
       if (state.listItem[productIndex].quantity === 1) {
@@ -57,7 +79,7 @@ const cartSlice = createSlice({
       } else {
         state.listItem[productIndex].quantity -= 1;
       }
-      state.total -= payload.price;
+      state.total -= payload.data.price;
     },
     reset: () => initialState,
   },
@@ -69,6 +91,8 @@ export const {
   reset,
   addToCart,
   deleteItemFromCart,
+  increaseItemFromCart,
+  decreaseItemFromCart,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
