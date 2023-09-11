@@ -23,8 +23,10 @@ import {
 } from '@/components/new-york/dropdown-menu';
 import AuthSvg from '@/assets/AuthSvg';
 import { MobileNav } from './MobileNavBar';
-import { CommonSvg } from '@/assets/CommonSvg';
+import { AiOutlineHeart } from 'react-icons/ai';
 import { CartSheet } from '../CartSheet';
+import { Badge } from '../new-york/badge';
+import Logo from '../logo';
 const NavigationMenuDemo = ({ session }) => {
   const [user] = useState(session?.user);
   const [show, setShow] = useState('translate-y-0');
@@ -38,7 +40,7 @@ const NavigationMenuDemo = ({ session }) => {
   const controlNavbar = () => {
     if (window.scrollY > 100) {
       if (window.scrollY > lastScrollY) {
-        setShow('-translate-y-[80px]');
+        setShow('-translate-y-[82px]');
       } else {
         setShow('shadow-sm');
       }
@@ -51,14 +53,14 @@ const NavigationMenuDemo = ({ session }) => {
     <div
       className={`w-full h-[50px] md:h-[80px] 
     bg-white  items-center justify-between z-20
-    sticky top-0 transition-transform duration-300 px-14
+    sticky top-0 transition-transform duration-300 px-14  
     ${show}
     `}
     >
-      <div>logo</div>
       <MobileNav />
-      <div className="hidden lg:flex">
+      <div className="hidden lg:flex py-2 items-center">
         {' '}
+        <Logo />
         <NavigationMenu.Root className="NavigationMenuRoot">
           <NavigationMenu.List className="NavigationMenuList">
             <NavigationMenu.Item>
@@ -215,6 +217,21 @@ const NavigationMenuDemo = ({ session }) => {
         </NavigationMenu.Root>
         {user ? (
           <div className="flex flex-row gap-5 items-center justify-center">
+            <Link href={'/favorite'}>
+              <Button variant="outline" size="icon" className="relative">
+                {1 > 0 && (
+                  <Badge
+                    variant="secondary"
+                    className="absolute -right-2 -top-2 h-6 w-6 justify-center rounded-full p-2.5"
+                  >
+                    7
+                  </Badge>
+                )}
+                {
+                  <AiOutlineHeart className="text-slate-600 stroke-zinc-950 w-4 h-4 " />
+                }
+              </Button>
+            </Link>
             <CartSheet />
             <DropdownMenu>
               <DropdownMenuTrigger>

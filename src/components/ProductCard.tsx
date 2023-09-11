@@ -1,7 +1,7 @@
+'use client';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-
 import { currencyFormat, parseJSON } from '@/lib/utils';
 
 import {
@@ -9,10 +9,13 @@ import {
   AiFillHeart,
   AiOutlineShoppingCart,
 } from 'react-icons/ai';
+import { useFavorite } from '@/hooks/useFavorite';
 export default function ProductCard({ product }) {
   console.log(product);
   const [isLiked, setIsLiked] = React.useState<boolean>(false);
   const [isAddToCart, setIsAddToCart] = React.useState<boolean>(false);
+  const { onAddFavorite, onDeleteFavorite } = useFavorite();
+
   return (
     <div>
       <div className="relative">
@@ -36,6 +39,13 @@ export default function ProductCard({ product }) {
 
         <div
           onClick={() => {
+            if (!isLiked) {
+              onAddFavorite({ data: product });
+            }
+            if (isLiked) {
+              onDeleteFavorite({ data: product });
+            }
+
             setIsLiked(!isLiked);
           }}
           className="transform duration-200 

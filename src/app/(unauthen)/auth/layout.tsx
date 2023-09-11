@@ -5,7 +5,7 @@ import { alreadyLoggedIn } from '@/lib/auth';
 async function layout({ children }: { children: React.ReactNode }) {
   await alreadyLoggedIn();
   return (
-    <div className="h-screen w-screen flex-row flex">
+    <div className="h-screen w-screen flex-row flex overflow-hidden">
       <AuthCarousel />
 
       <div className="h-screen w-screen lg:w-1/2">{children}</div>

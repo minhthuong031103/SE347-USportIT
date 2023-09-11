@@ -15,7 +15,6 @@ import {
   SheetTrigger,
 } from '@/components/new-york/sheet';
 // import { CartLineItems } from '@/components/checkout/cart-line-items';
-import { Icons } from '@/assets/Icons';
 
 import { useCart } from '@/hooks/useCart';
 import { CommonSvg } from '@/assets/CommonSvg';

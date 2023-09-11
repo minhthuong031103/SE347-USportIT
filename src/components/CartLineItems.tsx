@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import type { CartLineItem } from '@/types';
 import { Slot } from '@radix-ui/react-slot';
-import { RiDeleteBin6Line } from 'react-icons/ri';
 import { cn, currencyFormat, parseJSON } from '@/lib/utils';
 import { Button } from './new-york/button';
 import { Icons } from '@/assets/Icons';
@@ -142,8 +141,6 @@ const CartItem = ({ item }) => {
 export function CartLineItems({
   items,
   isScrollable = true,
-  isEditable = true,
-  variant = 'default',
   className,
   ...props
 }: CartLineItemsProps) {

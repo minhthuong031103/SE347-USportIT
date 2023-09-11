@@ -18,10 +18,9 @@ const page = () => {
       <HomeBanner />
 
       <ShopAll />
-      <Categories />
       <Image
         src={
-          'https://images.lifestyleasia.com/wp-content/uploads/sites/6/2020/08/03154422/2020_RTT_Sustainability_Zero-Collection_RN_GROUP_06539_R2_hd_1600-1600x900.jpg'
+          'https://static.nike.com/a/images/f_auto/dpr_2.0,cs_srgb/w_974,c_limit/79cf6b2d-1216-4d22-a3cd-e9fca50ddebe/nike-just-do-it.png'
         }
         className="relative"
         width={windowWidth.current}
@@ -32,6 +31,7 @@ const page = () => {
         alt="hero image"
       />
 
+      <ShopByCollection />
       <SalesProduct />
 
       <Image
@@ -60,8 +60,8 @@ const page = () => {
       </section>
       <FeaturedProduct />
 
-      <section className="mt-12 lg:mt-24">
-        <ShopByCollection />
+      <section>
+        <Categories />
       </section>
     </div>
   );
