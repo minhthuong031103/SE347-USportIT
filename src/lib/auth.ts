@@ -16,7 +16,7 @@ export async function getSession() {
 
 export async function alreadyLoggedIn() {
   const session = await getServerSession(options);
-  console.log('session: ', session);
+  console.log('sessionnnnn: ', session);
   if (session) {
     redirect('/');
   }

@@ -1,6 +1,8 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import numeral from 'numeral';
+import jwt from 'jsonwebtoken';
+import toast from 'react-hot-toast';
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -39,4 +41,27 @@ export const parseJSON = (str: string, out = []) => {
   } catch (error) {
     return out;
   }
+};
+
+export const verifyJwt = (token: string) => {
+  console.log(process.env.NEXT_PUBLIC_JWT_SECRET);
+  let email = '';
+  let name = '';
+  try {
+    jwt.verify(token, process.env.NEXT_PUBLIC_JWT_SECRET, (err, decoded) => {
+      if (err) {
+        console.log(err);
+        toast.error('Invalid token');
+        return;
+      }
+      email = decoded?.email;
+      name = decoded?.name;
+
+      toast.error('Your account is not registered yet');
+      return { email, name };
+    });
+  } catch (err) {
+    console.log(err);
+  }
+  return { email, name };
 };

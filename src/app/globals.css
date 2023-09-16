@@ -13,6 +13,7 @@
 }
 .productCarousel.carousel-root .carousel.carousel-slider {
   width: 100%;
+  height: 100%;
 }
 .productCarousel.carousel-root .carousel.carousel-slider .slider-wrapper {
   border-radius: 10px;
