@@ -3,19 +3,31 @@ import React from 'react';
 import { getProviders } from 'next-auth/react';
 
 import Register from './Register';
-
+import jwt from 'jsonwebtoken';
 import { getSession } from '@/lib/auth';
+import toast from 'react-hot-toast';
 
 export const metadata: Metadata = {
   title: 'Authentication',
   description: 'Authentication forms built using the components.',
 };
 
-const LoginPage = async () => {
-  const providers = await getProviders();
-  const session = await getSession();
-  console.log('ok');
-  console.log(session);
+const LoginPage = async ({ searchParams }) => {
+  let email = null;
+  let name = null;
+  jwt.verify(
+    searchParams.payload,
+    process.env.NEXT_PUBLIC_JWT_SECRET,
+    (err, decoded) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      email = decoded?.email;
+      name = decoded?.name;
+    }
+  );
+
   return (
     <>
       <div className="p-12 relative h-full w-full ">
@@ -30,7 +42,7 @@ const LoginPage = async () => {
                 of our products, inspiration and community.
               </p>
             </div>
-            <Register providers={providers} />
+            <Register payload={{ email, name }} />
           </div>
         </div>
       </div>

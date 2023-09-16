@@ -3,6 +3,9 @@ import DiscordProvider from 'next-auth/providers/discord';
 import GithubProvider from 'next-auth/providers/github';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import prisma from '@/lib/prisma';
+import { redirect } from 'next/navigation';
+import logger from '@/services/logger';
+import jwt from 'jsonwebtoken';
 const options: AuthOptions = {
   // Configure one or more authentication providers
   session: {
@@ -12,11 +15,32 @@ const options: AuthOptions = {
     DiscordProvider({
       clientId: String(process.env.DISCORD_CLIENT_ID),
       clientSecret: String(process.env.DISCORD_CLIENT_SECRET),
+      async profile(profile) {
+        logger.info(profile);
+        //cai profile nay se truyen xuong jwt function
+        return {
+          id: profile.id,
+          name: profile.global_name,
+          email: profile.email,
+          image: profile.picture,
+        };
+      },
     }),
 
     GithubProvider({
       clientId: String(process.env.GITHUB_CLIENT_ID),
       clientSecret: String(process.env.GITHUB_CLIENT_SECRET),
+      async profile(profile) {
+        logger.info(profile);
+        //cai profile nay se truyen xuong jwt function
+
+        return {
+          id: profile.id,
+          name: profile.name,
+          email: profile.email,
+          image: profile.avatar_url,
+        };
+      },
     }),
     CredentialsProvider({
       name: 'Credentials',
@@ -51,6 +75,9 @@ const options: AuthOptions = {
   callbacks: {
     //first it run the jwt function, the jwt function will return the token , then in the session function we can access the token
     async jwt({ token, user }) {
+      console.log('user in jwt: ');
+      console.log(user);
+
       //user is from the oauth config or in the credentials setting options
       if (user?.role) {
         token.role = user.role;
@@ -62,12 +89,40 @@ const options: AuthOptions = {
       return token;
     },
     async session({ token, session }) {
+      // if (!userFind) {
+      //   return {
+      //     redirectTo: `/auth/login?email=${session?.user.email}&name=${session?.user.name}`,
+      //   };
+      // }
+      console.log('token in sessionnnnnnnnnnnnnnnnn: ', token);
       if (session.user) {
         (session.user as { id: string }).id = token.id as string;
+        (session.user as { name: string }).name = token.name as string;
         (session.user as { role: string }).role = token.role as string;
         (session.user as { image: string }).image = token.image as string;
       }
       return session;
+    },
+    async signIn(params) {
+      console.log('paramssssssssssssssssssssssssssssssssssssssssssssss: ');
+      console.log(params);
+      if (params?.user?.email) {
+        const userFind = await prisma.user.findUnique({
+          where: {
+            email: params?.user?.email,
+          },
+        });
+        if (!userFind) {
+          const payload = jwt.sign(
+            { email: params?.user?.email, name: params?.user?.name },
+            process.env.NEXT_PUBLIC_JWT_SECRET,
+            { expiresIn: '1h' }
+          );
+          return `/auth/register/?payload=${payload}`;
+        } else return true;
+      }
+
+      return true;
     },
   },
   pages: {

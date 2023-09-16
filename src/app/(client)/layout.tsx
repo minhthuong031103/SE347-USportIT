@@ -1,13 +1,14 @@
 import { Footer } from '@/components/footer';
 import { Header } from '@/components/header';
 import { getServerSession } from 'next-auth';
+import options from '@/app/api/auth/[...nextauth]/options';
 
 export default async function Layout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession();
+  const session = await getServerSession(options);
   console.log(session);
   return (
     <div className="w-full h-full">
