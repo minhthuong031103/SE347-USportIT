@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation';
 import logger from '@/services/logger';
 import jwt from 'jsonwebtoken';
 const options: AuthOptions = {
+  //SIGN IN CHAY TRUOC JWT, TRONG SIGNIN SE RETURN 1 THANG USER, JWT CHAY TRUOC SESSION
   // Configure one or more authentication providers
   session: {
     strategy: 'jwt',
@@ -22,7 +23,7 @@ const options: AuthOptions = {
           id: profile.id,
           name: profile.global_name,
           email: profile.email,
-          image: profile.picture,
+          avatar: profile.picture,
         };
       },
     }),
@@ -31,6 +32,7 @@ const options: AuthOptions = {
       clientId: String(process.env.GITHUB_CLIENT_ID),
       clientSecret: String(process.env.GITHUB_CLIENT_SECRET),
       async profile(profile) {
+        console.log('inside prfileeeeeeeeeeeeeee');
         logger.info(profile);
         //cai profile nay se truyen xuong jwt function
 
@@ -38,7 +40,7 @@ const options: AuthOptions = {
           id: profile.id,
           name: profile.name,
           email: profile.email,
-          image: profile.avatar_url,
+          avatar: profile.avatar_url,
         };
       },
     }),
@@ -64,7 +66,7 @@ const options: AuthOptions = {
           email: user.email,
           role: user.role,
           id: user.id,
-          image: user.image,
+          avatar: user.avatar,
         };
       },
     }),
@@ -82,7 +84,7 @@ const options: AuthOptions = {
       if (user?.role) {
         token.role = user.role;
         token.id = user.id;
-        token.image = user.image;
+        token.avatar = user.avatar;
       }
 
       //return final token
@@ -99,7 +101,7 @@ const options: AuthOptions = {
         (session.user as { id: string }).id = token.id as string;
         (session.user as { name: string }).name = token.name as string;
         (session.user as { role: string }).role = token.role as string;
-        (session.user as { image: string }).image = token.image as string;
+        (session.user as { avatar: string }).avatar = token.avatar as string;
       }
       return session;
     },

@@ -22,7 +22,13 @@ const Login = ({ className }: { className?: string; providers: unknown }) => {
   const [show, setShow] = React.useState({
     showPass: false,
   });
-
+  const signInButtonRef = React.useRef(null);
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      // Trigger a click event on the "Sign in" button
+      signInButtonRef.current.click();
+    }
+  };
   async function onSubmit(data) {
     console.log(data);
     if (!data.email || !data.password) {
@@ -53,118 +59,121 @@ const Login = ({ className }: { className?: string; providers: unknown }) => {
     );
   return (
     <div className="w-full flex flex-col items-center justify-center">
-      <form
-        onSubmit={() => {
-          handleSubmit(onSubmit)();
-        }}
+      <div
+        className={cn('grid gap-6 w-[80%] md:w-[70%] lg:w-[60%] ', className)}
       >
-        <div
-          className={cn('grid gap-6 w-[80%] md:w-[70%] lg:w-[60%] ', className)}
-        >
-          <div className="grid gap-6">
-            <div className="gap-8 flex flex-col">
-              <div className="flex flex-col gap-3 ">
-                <Label>Email</Label>
-                <Controller
-                  control={control}
-                  name="email"
-                  defaultValue={''}
-                  render={({ field }) => (
-                    <Input
-                      value={field.value}
-                      onChange={field.onChange}
-                      id="email"
-                      placeholder="Enter your gmail"
-                      type="email"
-                      autoCapitalize="none"
-                      autoComplete="email"
-                      autoCorrect="off"
-                    />
-                  )}
-                />
-              </div>
-              <div className="flex flex-col gap-3 ">
-                <Label>Password</Label>
-                <Controller
-                  control={control}
-                  name="password"
-                  defaultValue={''}
-                  render={({ field }) => (
-                    <Input
-                      renderRight={
-                        <div
-                          onClick={() => {
-                            setShow({
-                              ...show,
-                              showPass: !show.showPass,
-                            });
-                          }}
-                          className="opacity-50 cursor-pointer hover:opacity-100"
-                        >
-                          {show.showPass ? (
-                            <AiFillEyeInvisible size={20} />
-                          ) : (
-                            <AiFillEye size={20} />
-                          )}
-                        </div>
-                      }
-                      value={field.value}
-                      onChange={field.onChange}
-                      id="password"
-                      placeholder="Enter your password"
-                      type={show.showPass ? 'text' : 'password'}
-                      autoCapitalize="none"
-                      autoComplete="password"
-                      autoCorrect="off"
-                    />
-                  )}
-                />
-              </div>
+        <div className="grid gap-6">
+          <div className="gap-8 flex flex-col">
+            <div className="flex flex-col gap-3 ">
+              <Label>Email</Label>
+              <Controller
+                control={control}
+                name="email"
+                defaultValue={''}
+                render={({ field }) => (
+                  <Input
+                    value={field.value}
+                    onChange={field.onChange}
+                    id="email"
+                    placeholder="Enter your gmail"
+                    type="email"
+                    autoCapitalize="none"
+                    autoComplete="email"
+                    autoCorrect="off"
+                    onKeyUp={handleKeyPress}
+                  />
+                )}
+              />
             </div>
-
-            <Button type="submit">Sign in</Button>
-          </div>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
-                Or continue with
-              </span>
+            <div className="flex flex-col gap-3 ">
+              <Label>Password</Label>
+              <Controller
+                control={control}
+                name="password"
+                defaultValue={''}
+                render={({ field }) => (
+                  <Input
+                    renderRight={
+                      <div
+                        onClick={() => {
+                          setShow({
+                            ...show,
+                            showPass: !show.showPass,
+                          });
+                        }}
+                        className="opacity-50 cursor-pointer hover:opacity-100"
+                      >
+                        {show.showPass ? (
+                          <AiFillEyeInvisible size={20} />
+                        ) : (
+                          <AiFillEye size={20} />
+                        )}
+                      </div>
+                    }
+                    value={field.value}
+                    onChange={field.onChange}
+                    id="password"
+                    placeholder="Enter your password"
+                    type={show.showPass ? 'text' : 'password'}
+                    autoCapitalize="none"
+                    autoComplete="password"
+                    autoCorrect="off"
+                    onKeyUp={handleKeyPress}
+                  />
+                )}
+              />
             </div>
           </div>
-          <div className="w-full flex gap-6">
-            <Button
-              className="w-1/2 "
-              onClick={() => {
-                signIn('github');
-              }}
-              variant="outline"
-              disabled={isLoading}
-            >
-              <div>
-                <Icons.gitHub className="mr-2 h-4 w-4" />
-              </div>{' '}
-              Github
-            </Button>
-            <Button
-              className="w-1/2"
-              onClick={() => {
-                signIn('discord');
-              }}
-              variant="outline"
-              disabled={isLoading}
-            >
-              <div>
-                <Icons.discord className="mr-2 h-4 w-4" />
-              </div>{' '}
-              Discord
-            </Button>
+
+          <Button
+            onClick={() => {
+              handleSubmit(onSubmit)();
+            }}
+            ref={signInButtonRef}
+          >
+            Sign in
+          </Button>
+        </div>
+
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">
+              Or continue with
+            </span>
           </div>
         </div>
-      </form>
+        <div className="w-full flex gap-6">
+          <Button
+            className="w-1/2 "
+            onClick={() => {
+              signIn('github');
+            }}
+            variant="outline"
+            disabled={isLoading}
+          >
+            <div>
+              <Icons.gitHub className="mr-2 h-4 w-4" />
+            </div>{' '}
+            Github
+          </Button>
+          <Button
+            className="w-1/2"
+            onClick={() => {
+              signIn('discord');
+            }}
+            variant="outline"
+            disabled={isLoading}
+          >
+            <div>
+              <Icons.discord className="mr-2 h-4 w-4" />
+            </div>{' '}
+            Discord
+          </Button>
+        </div>
+      </div>
 
       <p className="mt-10 px-8 text-center text-sm text-muted-foreground">
         Don't have an account?{' '}
