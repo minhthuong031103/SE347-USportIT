@@ -16,7 +16,7 @@ model User {
   name              String
   email             String            @unique
   password          String
-  role              String?           @default("user")// You can customize roles as needed
+  role              String?           @default("user") // You can customize roles as needed
   avatar            String?           @default("https://i0.wp.com/www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg?ssl=1") // Store the avatar image URL
   // Add any other user-related fields as needed
   orders            Order[]
@@ -30,7 +30,7 @@ model User {
 
 model Product {
   id          Int     @id @default(autoincrement())
-  description String  @db.LongText 
+  description String  @db.LongText
   price       Float
   sale        Float?
   thumbnail   String? @db.LongText // Store the thumbnail image URL
@@ -42,11 +42,11 @@ model Product {
   typeId     Int?
   genderId   Int?
   name       String
-  category   Category?      @relation(fields: [categoryId], references: [id])
-  type       ProductType?   @relation(fields: [typeId], references: [id])
-  gender     Gender?        @relation(fields: [genderId], references: [id])
+  category   Category?    @relation(fields: [categoryId], references: [id])
+  type       ProductType? @relation(fields: [typeId], references: [id])
+  gender     Gender?      @relation(fields: [genderId], references: [id])
   // sizes      ProductSize[]
-  sizes      String         @db.LongText
+  sizes      String       @db.LongText
   reviews    Review[]
   orderItems OrderItem[]
   sales      Sale[]
@@ -62,12 +62,26 @@ model Category {
   id       Int       @id @default(autoincrement())
   name     String // Example: "Basketball," "Football," "Running," "Gym"
   products Product[]
+
 }
 
 model ProductType {
-  id       Int       @id @default(autoincrement())
-  name     String // Example: "Shoes," "Clothes," "Accessories"
-  products Product[]
+  id          Int           @id @default(autoincrement())
+  name        String // Example: "Shoes," "Clothes," "Accessories"
+  products    Product[]
+  Subcategory Subcategory[]
+}
+
+model Subcategory { 
+//shoes: low, mid, high, sandals, slides
+//clothes: t-shirt, hoodie, sweatshirt, pants, shorts, jacket
+//accessories: socks, back-packs, hats, gloves, balls
+  id            Int         @id @default(autoincrement())
+  name          String // Example: "Low top," "High top," "T-shirt," etc.
+  productTypeId Int // Reference to the parent ProductType
+  productType   ProductType @relation(fields: [productTypeId], references: [id])
+
+  @@index([productTypeId])
 }
 
 model Gender {
@@ -77,7 +91,7 @@ model Gender {
 }
 
 model ProductSize {
-  id        Int       @id @default(autoincrement())
+  id        Int    @id @default(autoincrement())
   size      String // Example: "EU 35," "EU 40," "S," "2XL," etc.
   remaining Int // Remaining quantity in the shop storage
   // products  Product[]

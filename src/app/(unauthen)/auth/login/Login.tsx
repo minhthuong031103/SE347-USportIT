@@ -8,27 +8,47 @@ import { Button } from '@/components/new-york/button';
 import { Input } from '@/components/new-york/input';
 import { Label } from '@/components/new-york/label';
 import { signIn } from 'next-auth/react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import Loader from '@/components/Loader';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/new-york/form';
+import * as z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
+const formSchema = z.object({
+  email: z.string().min(1, {
+    message: 'Email is required',
+  }),
+  password: z.string().min(1, {
+    message: 'Password is required',
+  }),
+});
 const Login = ({ className }: { className?: string; providers: unknown }) => {
-  const { control, handleSubmit } = useForm();
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [show, setShow] = React.useState({
     showPass: false,
   });
 
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
   async function onSubmit(data) {
     console.log(data);
-    if (!data.email || !data.password) {
-      toast.error('Please fill in all fields');
-      return;
-    }
+
     setIsLoading(true);
     const res = await signIn('credentials', {
       email: data.email,
@@ -53,118 +73,115 @@ const Login = ({ className }: { className?: string; providers: unknown }) => {
     );
   return (
     <div className="w-full flex flex-col items-center justify-center">
-      <form
-        onSubmit={() => {
-          handleSubmit(onSubmit)();
-        }}
+      <div
+        className={cn('grid gap-6 w-[80%] md:w-[70%] lg:w-[60%] ', className)}
       >
-        <div
-          className={cn('grid gap-6 w-[80%] md:w-[70%] lg:w-[60%] ', className)}
-        >
-          <div className="grid gap-6">
-            <div className="gap-8 flex flex-col">
-              <div className="flex flex-col gap-3 ">
-                <Label>Email</Label>
-                <Controller
-                  control={control}
-                  name="email"
-                  defaultValue={''}
-                  render={({ field }) => (
-                    <Input
-                      value={field.value}
-                      onChange={field.onChange}
-                      id="email"
-                      placeholder="Enter your gmail"
-                      type="email"
-                      autoCapitalize="none"
-                      autoComplete="email"
-                      autoCorrect="off"
-                    />
-                  )}
-                />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="grid gap-6">
+              <div className="gap-8 flex flex-col">
+                <div className="flex flex-col gap-3 ">
+                  <Label>Email</Label>
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input placeholder="Enter Username" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="flex flex-col gap-3 ">
+                  <Label>Password</Label>
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            renderRight={
+                              <div
+                                onClick={() => {
+                                  setShow({
+                                    ...show,
+                                    showPass: !show.showPass,
+                                  });
+                                }}
+                                className="opacity-50 cursor-pointer hover:opacity-100"
+                              >
+                                {show.showPass ? (
+                                  <AiFillEyeInvisible size={20} />
+                                ) : (
+                                  <AiFillEye size={20} />
+                                )}
+                              </div>
+                            }
+                            value={field.value}
+                            onChange={field.onChange}
+                            id="password"
+                            placeholder="Enter your password"
+                            type={show.showPass ? 'text' : 'password'}
+                            autoCapitalize="none"
+                            autoComplete="password"
+                            autoCorrect="off"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
-              <div className="flex flex-col gap-3 ">
-                <Label>Password</Label>
-                <Controller
-                  control={control}
-                  name="password"
-                  defaultValue={''}
-                  render={({ field }) => (
-                    <Input
-                      renderRight={
-                        <div
-                          onClick={() => {
-                            setShow({
-                              ...show,
-                              showPass: !show.showPass,
-                            });
-                          }}
-                          className="opacity-50 cursor-pointer hover:opacity-100"
-                        >
-                          {show.showPass ? (
-                            <AiFillEyeInvisible size={20} />
-                          ) : (
-                            <AiFillEye size={20} />
-                          )}
-                        </div>
-                      }
-                      value={field.value}
-                      onChange={field.onChange}
-                      id="password"
-                      placeholder="Enter your password"
-                      type={show.showPass ? 'text' : 'password'}
-                      autoCapitalize="none"
-                      autoComplete="password"
-                      autoCorrect="off"
-                    />
-                  )}
-                />
-              </div>
-            </div>
 
-            <Button type="submit">Sign in</Button>
-          </div>
+              <Button type="submit">Sign in</Button>
+            </div>
+          </form>
+        </Form>
 
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
-                Or continue with
-              </span>
-            </div>
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
           </div>
-          <div className="w-full flex gap-6">
-            <Button
-              className="w-1/2 "
-              onClick={() => {
-                signIn('github');
-              }}
-              variant="outline"
-              disabled={isLoading}
-            >
-              <div>
-                <Icons.gitHub className="mr-2 h-4 w-4" />
-              </div>{' '}
-              Github
-            </Button>
-            <Button
-              className="w-1/2"
-              onClick={() => {
-                signIn('discord');
-              }}
-              variant="outline"
-              disabled={isLoading}
-            >
-              <div>
-                <Icons.discord className="mr-2 h-4 w-4" />
-              </div>{' '}
-              Discord
-            </Button>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">
+              Or continue with
+            </span>
           </div>
         </div>
-      </form>
+        <div className="w-full flex gap-6">
+          <Button
+            className="w-1/2 "
+            onClick={() => {
+              signIn('github');
+            }}
+            variant="outline"
+            disabled={isLoading}
+          >
+            <div>
+              <Icons.gitHub className="mr-2 h-4 w-4" />
+            </div>{' '}
+            Github
+          </Button>
+          <Button
+            className="w-1/2"
+            onClick={() => {
+              signIn('discord');
+            }}
+            variant="outline"
+            disabled={isLoading}
+          >
+            <div>
+              <Icons.discord className="mr-2 h-4 w-4" />
+            </div>{' '}
+            Discord
+          </Button>
+        </div>
+      </div>
 
       <p className="mt-10 px-8 text-center text-sm text-muted-foreground">
         Don't have an account?{' '}

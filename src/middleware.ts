@@ -3,15 +3,14 @@ import { NextResponse } from 'next/server';
 
 export default withAuth(
   function middleware(request: NextRequestWithAuth) {
-    console.log('inside the middleware');
-    console.log(request);
-    console.log('next auth:');
+    console.log('psaddddddddddddddddjqwjdriwijq');
     console.log(request.nextauth.token);
     if (
       request.nextUrl.pathname.startsWith('/api/admin') &&
       request.nextauth.token?.role !== 'admin'
     ) {
       return NextResponse.rewrite(new URL('denied', request.url));
+
       //rewrite means redirect to the url but the url shown will still be the same before
     }
   },
@@ -27,4 +26,5 @@ export default withAuth(
   }
 );
 
-export const config = { matcher: ['/api/user'] };
+export const config = { matcher: ['/api/user', '/api/admin'] };
+//authorization is done in the middleware

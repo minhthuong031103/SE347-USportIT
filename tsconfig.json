@@ -4,7 +4,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "checkJs": false,
-    "strict": true,
+    "strict": false,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "noEmit": true,
@@ -23,7 +23,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@components/*": ["./src/components/*"],
-      "@services/*": ["./src/services/*"]
+      "@services/*": ["./src/services/*"],
+      "@endpoints/*": ["./src/endpoints/*"]
     },
     "strictNullChecks": true
   },
