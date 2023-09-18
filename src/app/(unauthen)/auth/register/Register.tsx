@@ -2,7 +2,7 @@
 import { Controller, useForm } from 'react-hook-form';
 
 import toast from 'react-hot-toast';
-import { checkEmail, cn, verifyJwt } from '@/lib/utils';
+import { checkEmail, cn } from '@/lib/utils';
 import { Button } from '@/components/new-york/button';
 import { Input } from '@/components/new-york/input';
 import { Label } from '@/components/new-york/label';
@@ -11,8 +11,6 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import Loader from '@/components/Loader';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import jwt from 'jsonwebtoken';
 const Register = ({
   className,
   payload,

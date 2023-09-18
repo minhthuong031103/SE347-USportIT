@@ -5,7 +5,7 @@ import { useHelloWorld } from '@/hooks/useHelloWorld';
 import React, { useEffect } from 'react';
 
 function page() {
-  const [ok, setOk] = React.useState(0);
+  const [ok] = React.useState(0);
   const { onGetHelloWorld } = useHelloWorld();
   const [fetchAgain, setFetchAgain] = React.useState(false);
   const functionAdd = () => {

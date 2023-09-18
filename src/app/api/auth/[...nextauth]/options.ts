@@ -3,7 +3,6 @@ import DiscordProvider from 'next-auth/providers/discord';
 import GithubProvider from 'next-auth/providers/github';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import prisma from '@/lib/prisma';
-import { redirect } from 'next/navigation';
 import logger from '@/services/logger';
 import jwt from 'jsonwebtoken';
 const options: AuthOptions = {
