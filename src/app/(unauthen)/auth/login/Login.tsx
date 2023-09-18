@@ -8,33 +8,47 @@ import { Button } from '@/components/new-york/button';
 import { Input } from '@/components/new-york/input';
 import { Label } from '@/components/new-york/label';
 import { signIn } from 'next-auth/react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import Loader from '@/components/Loader';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/new-york/form';
+import * as z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
+const formSchema = z.object({
+  email: z.string().min(1, {
+    message: 'Email is required',
+  }),
+  password: z.string().min(1, {
+    message: 'Password is required',
+  }),
+});
 const Login = ({ className }: { className?: string; providers: unknown }) => {
-  const { control, handleSubmit } = useForm();
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [show, setShow] = React.useState({
     showPass: false,
   });
-  const signInButtonRef = React.useRef(null);
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      // Trigger a click event on the "Sign in" button
-      signInButtonRef.current.click();
-    }
-  };
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
   async function onSubmit(data) {
     console.log(data);
-    if (!data.email || !data.password) {
-      toast.error('Please fill in all fields');
-      return;
-    }
+
     setIsLoading(true);
     const res = await signIn('credentials', {
       email: data.email,
@@ -62,78 +76,72 @@ const Login = ({ className }: { className?: string; providers: unknown }) => {
       <div
         className={cn('grid gap-6 w-[80%] md:w-[70%] lg:w-[60%] ', className)}
       >
-        <div className="grid gap-6">
-          <div className="gap-8 flex flex-col">
-            <div className="flex flex-col gap-3 ">
-              <Label>Email</Label>
-              <Controller
-                control={control}
-                name="email"
-                defaultValue={''}
-                render={({ field }) => (
-                  <Input
-                    value={field.value}
-                    onChange={field.onChange}
-                    id="email"
-                    placeholder="Enter your gmail"
-                    type="email"
-                    autoCapitalize="none"
-                    autoComplete="email"
-                    autoCorrect="off"
-                    onKeyUp={handleKeyPress}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="grid gap-6">
+              <div className="gap-8 flex flex-col">
+                <div className="flex flex-col gap-3 ">
+                  <Label>Email</Label>
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input placeholder="Enter Username" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                )}
-              />
-            </div>
-            <div className="flex flex-col gap-3 ">
-              <Label>Password</Label>
-              <Controller
-                control={control}
-                name="password"
-                defaultValue={''}
-                render={({ field }) => (
-                  <Input
-                    renderRight={
-                      <div
-                        onClick={() => {
-                          setShow({
-                            ...show,
-                            showPass: !show.showPass,
-                          });
-                        }}
-                        className="opacity-50 cursor-pointer hover:opacity-100"
-                      >
-                        {show.showPass ? (
-                          <AiFillEyeInvisible size={20} />
-                        ) : (
-                          <AiFillEye size={20} />
-                        )}
-                      </div>
-                    }
-                    value={field.value}
-                    onChange={field.onChange}
-                    id="password"
-                    placeholder="Enter your password"
-                    type={show.showPass ? 'text' : 'password'}
-                    autoCapitalize="none"
-                    autoComplete="password"
-                    autoCorrect="off"
-                    onKeyUp={handleKeyPress}
+                </div>
+                <div className="flex flex-col gap-3 ">
+                  <Label>Password</Label>
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            renderRight={
+                              <div
+                                onClick={() => {
+                                  setShow({
+                                    ...show,
+                                    showPass: !show.showPass,
+                                  });
+                                }}
+                                className="opacity-50 cursor-pointer hover:opacity-100"
+                              >
+                                {show.showPass ? (
+                                  <AiFillEyeInvisible size={20} />
+                                ) : (
+                                  <AiFillEye size={20} />
+                                )}
+                              </div>
+                            }
+                            value={field.value}
+                            onChange={field.onChange}
+                            id="password"
+                            placeholder="Enter your password"
+                            type={show.showPass ? 'text' : 'password'}
+                            autoCapitalize="none"
+                            autoComplete="password"
+                            autoCorrect="off"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                )}
-              />
-            </div>
-          </div>
+                </div>
+              </div>
 
-          <Button
-            onClick={() => {
-              handleSubmit(onSubmit)();
-            }}
-            ref={signInButtonRef}
-          >
-            Sign in
-          </Button>
-        </div>
+              <Button type="submit">Sign in</Button>
+            </div>
+          </form>
+        </Form>
 
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
