@@ -29,7 +29,8 @@ const cartSlice = createSlice({
       };
     },
     addToCart: (state, { payload }: { payload: any }) => {
-      console.log('payload', payload.data.price);
+      console.log(state);
+      // console.log('payload', payload.data.price);
       const productIndex = state.listItem.findIndex(
         (product) =>
           product.data.id === payload.data.id &&
@@ -96,3 +97,5 @@ export const {
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
+
+//reducer, store, dispatch

@@ -23,7 +23,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@components/*": ["./src/components/*"],
-      "@services/*": ["./src/services/*"]
+      "@services/*": ["./src/services/*"],
+      "@endpoints/*": ["./src/endpoints/*"]
     },
     "strictNullChecks": true
   },

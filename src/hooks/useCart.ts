@@ -39,3 +39,5 @@ export const useCart = () => {
     cart,
   };
 };
+
+//trong hook se return functions va state global

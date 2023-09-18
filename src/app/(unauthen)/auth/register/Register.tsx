@@ -1,8 +1,12 @@
 'use client';
-import { Controller, useForm } from 'react-hook-form';
-
+import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { checkEmail, cn } from '@/lib/utils';
+import {
+  cn,
+  regexPasswordNumber,
+  regexPasswordSpecial,
+  regexPasswordUpperCase,
+} from '@/lib/utils';
 import { Button } from '@/components/new-york/button';
 import { Input } from '@/components/new-york/input';
 import { Label } from '@/components/new-york/label';
@@ -11,6 +15,50 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import Loader from '@/components/Loader';
 import Link from 'next/link';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/new-york/form';
+import * as z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+const formSchema = z
+  .object({
+    name: z.string().min(1, {
+      message: 'Name is required',
+    }),
+    password: z
+      .string()
+      .min(1, {
+        message: 'Password is required',
+      })
+      .min(8, { message: 'Password must be at least 8 characters' })
+      .regex(regexPasswordSpecial, {
+        message: 'Password must contain at least 1 special character',
+      })
+      .regex(regexPasswordNumber, {
+        message: 'Password must contain at least 1 number',
+      })
+      .regex(regexPasswordUpperCase, {
+        message: 'Password must contain at least 1 uppercase character',
+      }),
+    email: z
+      .string()
+      .min(1, {
+        message: 'Email is required',
+      })
+      .email({ message: 'Email is invalid' }),
+    confirmPassword: z.string().min(1, {
+      message: 'Confirm password is required',
+    }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Password doesn't match",
+    path: ['confirmPassword'],
+  });
 const Register = ({
   className,
   payload,
@@ -18,16 +66,17 @@ const Register = ({
   className?: string;
   payload: any;
 }) => {
-  const { onRegister } = useAuth();
-  console.log(payload);
-  const { control, handleSubmit } = useForm({
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
-      name: payload?.name || '',
-      email: payload?.email || '',
+      name: '',
+      email: '',
       password: '',
       confirmPassword: '',
     },
   });
+  const { onRegister } = useAuth();
+
   useEffect(() => {
     if (payload?.email && payload?.name) {
       toast.error(
@@ -43,22 +92,6 @@ const Register = ({
 
   async function onSubmit(data) {
     console.log(data);
-    if (!data.name || !data.email || !data.password || !data.confirmPassword) {
-      toast.error('Please fill in all fields');
-      return;
-    }
-    if (!checkEmail(data.email)) {
-      toast.error('Email is invalid');
-      return;
-    }
-    if (data.password.length < 6) {
-      toast.error('Password must be at least 6 characters');
-      return;
-    }
-    if (data.password !== data.confirmPassword) {
-      toast.error('Password and confirm password do not match');
-      return;
-    }
 
     setIsLoading(true);
     onRegister(data, () => {
@@ -76,121 +109,126 @@ const Register = ({
       <div
         className={cn('grid gap-6 w-[80%] md:w-[70%] lg:w-[60%] ', className)}
       >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid gap-6">
-            <div className="gap-8 flex flex-col">
-              <div className="flex flex-col gap-3 ">
-                <Label>Name</Label>
-                <Controller
-                  name="name"
-                  control={control}
-                  render={({ field }) => {
-                    return (
-                      <Input
-                        placeholder="Enter your name"
-                        autoCapitalize="none"
-                        autoCorrect="off"
-                        value={field.value}
-                        onChange={field.onChange}
-                      />
-                    );
-                  }}
-                />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="grid gap-6">
+              <div className="gap-8 flex flex-col">
+                <div className="flex flex-col gap-3 ">
+                  <Label>Name</Label>
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input placeholder="Enter Username" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="flex flex-col gap-3 ">
+                  <Label>Email</Label>
+                  <FormField
+                    name="email"
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input placeholder="Enter Email" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="flex flex-col gap-3 ">
+                  <Label>Password</Label>
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => {
+                      return (
+                        <FormItem>
+                          <FormControl>
+                            <Input
+                              placeholder="Enter your password"
+                              type={show.password ? 'text' : 'password'}
+                              value={field.value}
+                              onChange={field.onChange}
+                              renderRight={
+                                <div
+                                  onClick={() => {
+                                    setShow({
+                                      ...show,
+                                      password: !show.password,
+                                    });
+                                  }}
+                                  className="opacity-50 cursor-pointer hover:opacity-100"
+                                >
+                                  {show.password ? (
+                                    <AiFillEyeInvisible size={20} />
+                                  ) : (
+                                    <AiFillEye size={20} />
+                                  )}
+                                </div>
+                              }
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
+                  />
+                </div>
+                <div className="flex flex-col gap-3 ">
+                  <Label>Confirm password</Label>
+                  <FormField
+                    control={form.control}
+                    name="confirmPassword"
+                    render={({ field }) => {
+                      return (
+                        <FormItem>
+                          <FormControl>
+                            <Input
+                              placeholder="Enter your password"
+                              type={show.confirmPassword ? 'text' : 'password'}
+                              value={field.value}
+                              onChange={field.onChange}
+                              renderRight={
+                                <div
+                                  onClick={() => {
+                                    setShow({
+                                      ...show,
+                                      confirmPassword: !show.confirmPassword,
+                                    });
+                                  }}
+                                  className="opacity-50 cursor-pointer hover:opacity-100"
+                                >
+                                  {show.confirmPassword ? (
+                                    <AiFillEyeInvisible size={20} />
+                                  ) : (
+                                    <AiFillEye size={20} />
+                                  )}
+                                </div>
+                              }
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
+                  />
+                </div>
               </div>
-              <div className="flex flex-col gap-3 ">
-                <Label>Email</Label>
-                <Controller
-                  name="email"
-                  control={control}
-                  render={({ field }) => {
-                    return (
-                      <Input
-                        placeholder="Enter your email"
-                        autoCapitalize="none"
-                        defaultValue={''}
-                        type="text"
-                        autoCorrect="off"
-                        value={field.value}
-                        onChange={field.onChange}
-                      />
-                    );
-                  }}
-                />
-              </div>
-              <div className="flex flex-col gap-3 ">
-                <Label>Password</Label>
-                <Controller
-                  control={control}
-                  name="password"
-                  defaultValue={''}
-                  render={({ field }) => {
-                    return (
-                      <Input
-                        placeholder="Enter your password"
-                        type={show.password ? 'text' : 'password'}
-                        value={field.value}
-                        onChange={field.onChange}
-                        renderRight={
-                          <div
-                            onClick={() => {
-                              setShow({ ...show, password: !show.password });
-                            }}
-                            className="opacity-50 cursor-pointer hover:opacity-100"
-                          >
-                            {show.password ? (
-                              <AiFillEyeInvisible size={20} />
-                            ) : (
-                              <AiFillEye size={20} />
-                            )}
-                          </div>
-                        }
-                      />
-                    );
-                  }}
-                />
-              </div>
-              <div className="flex flex-col gap-3 ">
-                <Label>Confirm password</Label>
-                <Controller
-                  control={control}
-                  name="confirmPassword"
-                  defaultValue={''}
-                  render={({ field }) => {
-                    return (
-                      <Input
-                        placeholder="Enter your password"
-                        type={show.confirmPassword ? 'text' : 'password'}
-                        value={field.value}
-                        onChange={field.onChange}
-                        renderRight={
-                          <div
-                            onClick={() => {
-                              setShow({
-                                ...show,
-                                confirmPassword: !show.confirmPassword,
-                              });
-                            }}
-                            className="opacity-50 cursor-pointer hover:opacity-100"
-                          >
-                            {show.confirmPassword ? (
-                              <AiFillEyeInvisible size={20} />
-                            ) : (
-                              <AiFillEye size={20} />
-                            )}
-                          </div>
-                        }
-                      />
-                    );
-                  }}
-                />
-              </div>
-            </div>
 
-            <Button type="submit" className="">
-              Sign Up
-            </Button>
-          </div>
-        </form>
+              <Button type="submit" className="">
+                Sign Up
+              </Button>
+            </div>
+          </form>
+        </Form>
       </div>
       <p className=" mt-10 text-center text-sm text-muted-foreground">
         Already have an account?{' '}
