@@ -58,7 +58,7 @@ const NavigationMenuDemo = ({ session }) => {
     `}
     >
       <MobileNav />
-      <div className="hidden lg:flex py-2 items-center">
+      <div className="hidden lg:flex py-2  ">
         {' '}
         <Logo />
         <NavigationMenu.Root className="NavigationMenuRoot">
@@ -237,7 +237,7 @@ const NavigationMenuDemo = ({ session }) => {
               <DropdownMenuTrigger>
                 {' '}
                 <Avatar>
-                  <AvatarImage src={user.image} />
+                  <AvatarImage src={user.avatar} />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>

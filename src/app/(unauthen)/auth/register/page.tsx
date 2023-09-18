@@ -1,18 +1,14 @@
 import { Metadata } from 'next';
 import React from 'react';
-import { getProviders } from 'next-auth/react';
-
 import Register from './Register';
 import jwt from 'jsonwebtoken';
-import { getSession } from '@/lib/auth';
-import toast from 'react-hot-toast';
 
 export const metadata: Metadata = {
   title: 'Authentication',
   description: 'Authentication forms built using the components.',
 };
 
-const LoginPage = async ({ searchParams }) => {
+const LoginPage = async ({ searchParams }: { searchParams: unknown }) => {
   let email = null;
   let name = null;
   jwt.verify(
