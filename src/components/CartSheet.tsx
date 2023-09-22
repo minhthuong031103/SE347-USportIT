@@ -25,7 +25,6 @@ export function CartSheet() {
   const itemCount = cart.listItem.length;
   const cartLineItems = cart.listItem;
   const cartTotal = cart.total ?? 0;
-
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -72,7 +71,7 @@ export function CartSheet() {
                 <span className="flex-1">Taxes</span>
                 <span>Calculated at checkout</span>
               </div>
-              <Separator className="mt-2" />
+              <Separator className="mt-2" ok={ok} />
               <div className="flex">
                 <span className="flex-1">Total</span>
                 <span>{currencyFormat(cartTotal)}</span>

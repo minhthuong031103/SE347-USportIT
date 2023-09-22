@@ -36,7 +36,6 @@ const cartSlice = createSlice({
           product.data.id === payload.data.id &&
           product.selectedSize === payload.selectedSize
       );
-
       if (!state.listItem[productIndex]) {
         state.listItem.push({
           data: payload.data,
