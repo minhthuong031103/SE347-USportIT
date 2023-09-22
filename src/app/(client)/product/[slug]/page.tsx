@@ -3,6 +3,7 @@ import ProductDetailLeft from './ProductDetailLeft';
 import ProductDetailRight from './ProductDetailRight';
 import { CommonSvg } from '@/assets/CommonSvg';
 import { useProduct } from '@/hooks/useProduct';
+import ProductReviewLeft from './ProductReviewLeft';
 
 async function page({ params }) {
   const { slug } = params;
@@ -41,7 +42,11 @@ async function page({ params }) {
               return CommonSvg.startFilled();
             })}
           </div>
-          <div className="text-lg">(1234 Reviews)</div>
+        </div>
+        <div className="flex flex-col lg:flex-row gap-[50px] lg:gap-[60px]">
+          <div className="flex-[0.8] py-5">
+            <ProductReviewLeft />
+          </div>
         </div>
       </div>
     </div>
