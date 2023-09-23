@@ -4,6 +4,7 @@ import ProductDetailRight from './ProductDetailRight';
 import { CommonSvg } from '@/assets/CommonSvg';
 import { useProduct } from '@/hooks/useProduct';
 import ProductReviewLeft from './ProductReviewLeft';
+import ProductReviewRight from './ProductReviewRight';
 
 async function page({ params }) {
   const { slug } = params;
@@ -39,13 +40,16 @@ async function page({ params }) {
           Reviews
           <div className="flex gap-4 justify-center items-center">
             {[1, 2, 3, 4, 5].map(() => {
-              return CommonSvg.startFilled();
+              return CommonSvg.startFilled('black');
             })}
           </div>
         </div>
-        <div className="flex flex-col lg:flex-row gap-[50px] lg:gap-[60px]">
+        <div className="flex flex-col lg:flex-row gap-[20px] lg:gap-[60px]">
           <div className="flex-[0.8] py-5">
             <ProductReviewLeft />
+          </div>
+          <div className="flex-[1.2] py-5">
+            <ProductReviewRight />
           </div>
         </div>
       </div>

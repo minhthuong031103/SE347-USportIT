@@ -34,11 +34,11 @@ export const CommonSvg = {
       ></path>
     </svg>
   ),
-  startFilled: () => (
+  startFilled: (color) => (
     <svg
-      className="h-5 w-5 flex-shrink-0 text-primary"
+      className="h-5 w-5 flex-shrink-0"
       viewBox="0 0 20 20"
-      fill="currentColor"
+      fill={color || 'currentColor'}
       aria-hidden="true"
     >
       <path
