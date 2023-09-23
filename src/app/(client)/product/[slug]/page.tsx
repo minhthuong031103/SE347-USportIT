@@ -17,7 +17,6 @@ async function page({ params }) {
   // console.log(data);
   const res = await onGetProductDetail(slug);
 
-  console.log('resssssssss', res);
   const data = res;
   return (
     <div className="w-full md:py-20 ">

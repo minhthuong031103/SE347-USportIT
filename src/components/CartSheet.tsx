@@ -71,7 +71,7 @@ export function CartSheet() {
                 <span className="flex-1">Taxes</span>
                 <span>Calculated at checkout</span>
               </div>
-              <Separator className="mt-2" ok={ok} />
+              <Separator className="mt-2" />
               <div className="flex">
                 <span className="flex-1">Total</span>
                 <span>{currencyFormat(cartTotal)}</span>

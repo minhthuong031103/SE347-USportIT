@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
 import { SocketProvider } from '@components/providers/socket-provider';
+import { QueryProvider } from '@/components/providers/query-provider';
 const poppins = Poppins({
   subsets: ['latin'],
   weight: ['100', '200', '300', '400', '500', '600', '700', '800'],
@@ -27,8 +28,10 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       <body className={poppins.className}>
         <ReduxProvider>
           <SocketProvider>
-            <Toaster />
-            {children}
+            <QueryProvider>
+              <Toaster />
+              {children}
+            </QueryProvider>
           </SocketProvider>
         </ReduxProvider>
       </body>
