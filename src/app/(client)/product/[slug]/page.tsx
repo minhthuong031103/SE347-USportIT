@@ -3,8 +3,8 @@ import ProductDetailLeft from './ProductDetailLeft';
 import ProductDetailRight from './ProductDetailRight';
 import { CommonSvg } from '@/assets/CommonSvg';
 import { useProduct } from '@/hooks/useProduct';
-import ProductReviewLeft from './ProductReviewLeft';
-import ProductReviewRight from './ProductReviewRight';
+import ProductReviewRating from './ProductReviewRating';
+import ProductReview from './ProductReview';
 
 async function page({ params }) {
   const { slug } = params;
@@ -43,14 +43,16 @@ async function page({ params }) {
               return CommonSvg.startFilled('black');
             })}
           </div>
+          <div
+            className="w-full
+         py-5 gap-[20px] lg:gap-[30px]"
+          >
+            <ProductReviewRating />
+          </div>
         </div>
-        <div className="flex flex-col lg:flex-row gap-[20px] lg:gap-[60px]">
-          <div className="flex-[0.8] py-5">
-            <ProductReviewLeft />
-          </div>
-          <div className="flex-[1.2] py-5">
-            <ProductReviewRight />
-          </div>
+
+        <div className="w-full py-5 gap-[20px] lg:gap-[30px]">
+          <ProductReview />
         </div>
       </div>
     </div>

@@ -36,7 +36,7 @@ model Product {
   thumbnail   String? @db.LongText // Store the thumbnail image URL
   images      String? @db.LongText // Store multiple image URLs as an array
   // Add any other product-related fields as needed
-
+  
   // Define the relationships
   categoryId Int?
   typeId     Int?
@@ -103,12 +103,16 @@ model Review {
   rating    Int
   userId    Int
   productId Int
+  images    String @db.LongText // Store multiple image URLs as an arrayS
   user      User    @relation(fields: [userId], references: [id])
   product   Product @relation(fields: [productId], references: [id])
 
   @@index([userId])
   @@index([productId])
 }
+
+ 
+
 
 model Sale {
   id        Int       @id @default(autoincrement())
