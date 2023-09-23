@@ -12,20 +12,25 @@ datasource db {
 }
 
 model User {
-  id                Int               @id @default(autoincrement())
-  name              String
-  email             String            @unique
-  password          String
-  role              String?           @default("user") // You can customize roles as needed
-  avatar            String?           @default("https://i0.wp.com/www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg?ssl=1") // Store the avatar image URL
+  id                     Int               @id @default(autoincrement())
+  name                   String
+  email                  String            @unique
+  password               String
+  role                   String?           @default("user") // You can customize roles as needed
+  avatar                 String?           @default("https://i0.wp.com/www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg?ssl=1") // Store the avatar image URL
   // Add any other user-related fields as needed
-  orders            Order[]
-  reviews           Review[]
-  shoppingCarts     ShoppingCart[]
-  payments          Payment[]
-  shippingAddresses ShippingAddress[]
-  wishlists         Wishlist[]
-  Shipment          Shipment[]
+  orders                 Order[]
+  reviews                Review[]
+  shoppingCarts          ShoppingCart[]
+  payments               Payment[]
+  shippingAddresses      ShippingAddress[]
+  wishlists              Wishlist[]
+  Shipment               Shipment[]
+  directMessages         DirectMessage[]
+  conversationsInitiated Conversation[]    @relation("userOne")
+  conversationsReceived  Conversation[]    @relation("userTwo")
+
+  SeeenMessage           SeenMessage[]
 }
 
 model Product {
@@ -62,7 +67,6 @@ model Category {
   id       Int       @id @default(autoincrement())
   name     String // Example: "Basketball," "Football," "Running," "Gym"
   products Product[]
-
 }
 
 model ProductType {
@@ -72,10 +76,10 @@ model ProductType {
   Subcategory Subcategory[]
 }
 
-model Subcategory { 
-//shoes: low, mid, high, sandals, slides
-//clothes: t-shirt, hoodie, sweatshirt, pants, shorts, jacket
-//accessories: socks, back-packs, hats, gloves, balls
+model Subcategory {
+  //shoes: low, mid, high, sandals, slides
+  //clothes: t-shirt, hoodie, sweatshirt, pants, shorts, jacket
+  //accessories: socks, back-packs, hats, gloves, balls
   id            Int         @id @default(autoincrement())
   name          String // Example: "Low top," "High top," "T-shirt," etc.
   productTypeId Int // Reference to the parent ProductType
@@ -241,4 +245,54 @@ model Wishlist {
   products Product[]
 
   @@index([userId])
+}
+
+model Conversation {
+  id String @id @default(uuid())
+
+  userOneId Int
+  userOne   User @relation("userOne", fields: [userOneId], references: [id], onDelete: Cascade)
+
+  userTwoId Int
+  userTwo   User @relation("userTwo", fields: [userTwoId], references: [id], onDelete: Cascade)
+
+  directMessages DirectMessage[]
+  lastMessageAt  DateTime        @default(now())
+
+  @@unique([userOneId, userTwoId])
+  @@index([userTwoId])
+}
+
+model DirectMessage {
+  id      String  @id @default(uuid())
+  content String  @db.Text
+  fileUrl String? @db.Text
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  deleted Boolean @default(false)
+
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  SeeenMessage SeenMessage[]
+
+  @@index([userId])
+  @@index([conversationId])
+}
+
+model SeenMessage {
+  id String @id @default(uuid())
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  directMessageId String
+  directMessage   DirectMessage @relation(fields: [directMessageId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, directMessageId])
+  @@index([directMessageId])
 }

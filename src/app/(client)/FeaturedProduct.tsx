@@ -11,6 +11,7 @@ import ProductCard from '@/components/ProductCard';
 import Loader from '@/components/Loader';
 function FeaturedProduct() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
+  console.log(featuredProducts);
   useEffect(() => {
     const getFeaturedProducts = async () => {
       const res = await fetch('/api/product/featured');
