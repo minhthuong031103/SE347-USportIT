@@ -18,7 +18,7 @@ function Chat({ session }) {
   const [message, setMessage] = React.useState('');
   const onSubmit = async () => {
     const data = await postRequest({
-      endPoint: '/api/socket/directMessage',
+      endPoint: `${process.env.NEXT_PUBLIC_SOCKET_URL}/directMessage/sendMessage`,
       formData: { content: message, session },
       isFormData: false,
     });
