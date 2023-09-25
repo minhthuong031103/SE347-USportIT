@@ -45,13 +45,12 @@ async function page({ params }) {
           </div>
           <div
             className="w-full
-         py-5 gap-[20px] lg:gap-[30px]"
+         py-5"
           >
             <ProductReviewRating />
           </div>
         </div>
-
-        <div className="w-full py-5 gap-[20px] lg:gap-[30px]">
+        <div className="w-full pb-5">
           <ProductReview />
         </div>
       </div>

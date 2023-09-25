@@ -1,6 +1,9 @@
 'use client';
 import { CommonSvg } from '@/assets/CommonSvg';
+import { parseJSON } from '@/lib/utils';
+import Image from 'next/image';
 import React, { useLayoutEffect, useRef, useState } from 'react';
+import { Zoom } from './new-york/zoom-image';
 
 // Hook for checking if element is truncated or not
 const useTruncatedElement = ({ ref }) => {
@@ -29,7 +32,7 @@ const useTruncatedElement = ({ ref }) => {
   };
 };
 
-const ReviewDetail = () => {
+const ReviewDetail = ({ data }) => {
   const ref = useRef(null);
 
   const { isTruncated, isShowingMore, toggleIsShowingMore } =
@@ -37,42 +40,25 @@ const ReviewDetail = () => {
       ref,
     });
 
-  //Create mock data
-  const mockData = {
-    title: "C'est magnifique",
-    date: '23 Sept 2023',
-    rating: 2,
-    name: 'Minh Quan',
-    content: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sit amet
-        leo dapibus, gravida enim eu, molestie ex. Vestibulum sit amet ante
-        vitae ante venenatis hendrerit. Mauris malesuada sem nec lectus sodales
-        tristique. Sed scelerisque neque non erat imperdiet posuere. Donec at
-        massa vitae mauris luctus venenatis. Integer blandit ut velit sed
-        imperdiet. Morbi a lectus nulla. Nam scelerisque nisl eget lorem
-        porttitor finibus. Donec ullamcorper gravida placerat. Phasellus
-        scelerisque pellentesque eros, et consequat nunc posuere in. Phasellus
-        ultricies aliquam ligula non tincidunt. Maecenas a ultrices metus. Ut
-        laoreet eget quam non mattis. Vivamus eget enim vel ex vehicula
-        porttitor.`,
-  };
+  //Check images json string
+  //console.log(' ==> ' + JSON.parse(data.images));
   //Create star array
   const starArray = Array.from(
-    { length: mockData.rating },
+    { length: data.rating },
     (_, index) => index + 1
   );
   const blankStarArray = Array.from(
-    { length: 5 - mockData.rating },
+    { length: 5 - data.rating },
     (_, index) => index + 1
   );
   return (
-    <div className="flex flex-col gap-[8px] lg:gap-[16px] border rounded-xl p-4 py-6">
+    <div className="flex w-full flex-col gap-[8px] lg:gap-[16px] border rounded-xl p-4 py-6">
       <div className="flex flex-row relative items-center">
-        <span className="font-bold text-xl">{mockData.title}</span>
+        <span className="font-bold text-xl">{data.title}</span>
         <span className="absolute inset-y-0 right-0 font-light fill-slate-400 ">
-          {mockData.date}
+          {data.date}
         </span>
       </div>
-
       <div className="flex gap-4 mb-0.5 mx-1">
         {' '}
         {starArray.map(() => {
@@ -82,13 +68,30 @@ const ReviewDetail = () => {
           return CommonSvg.startFilled('gray');
         })}
       </div>
-      <span className="font-semibold text-xl">Minh Quan</span>
+      <span className="font-semibold text-xl">{data.name}</span>
+
+      <div className="flex flex-row w-full h-fill gap-[10px]">
+        {parseJSON(data.images).map((item, index) => (
+          <div key={`${item.id}-${index}`}>
+            <Zoom>
+              <Image
+                src={item.url}
+                alt={item.name}
+                className="h-12 sm:h-16 w-12 sm:w-16 shrink-0 rounded-md object-cover object-center"
+                width={500}
+                height={500}
+              />
+            </Zoom>
+          </div>
+        ))}
+      </div>
+
       <div>
         <p
           ref={ref}
           className={`break-words ${!isShowingMore && 'line-clamp-3'}`}
         >
-          {mockData.content}
+          {data.content}
         </p>
         {isTruncated && (
           <button className="font-semibold" onClick={toggleIsShowingMore}>
