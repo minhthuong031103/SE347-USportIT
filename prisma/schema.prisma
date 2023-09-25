@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,27 +9,31 @@ datasource db {
 }
 
 model User {
-  id                Int               @id @default(autoincrement())
-  name              String
-  email             String            @unique
-  password          String
-  role              String?           @default("user") // You can customize roles as needed
-  avatar            String?           @default("https://i0.wp.com/www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg?ssl=1") // Store the avatar image URL
-  // Add any other user-related fields as needed
-  orders            Order[]
-  reviews           Review[]
-  shoppingCarts     ShoppingCart[]
-  payments          Payment[]
-  shippingAddresses ShippingAddress[]
-  wishlists         Wishlist[]
-  Shipment          Shipment[]
+  id                     Int               @id @default(autoincrement())
+  name                   String
+  email                  String            @unique
+  password               String
+  role                   String?           @default("user")
+  avatar                 String?           @default("https://i0.wp.com/www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg?ssl=1")
+  orders                 Order[]
+  reviews                Review[]
+  shoppingCarts          ShoppingCart[]
+  payments               Payment[]
+  shippingAddresses      ShippingAddress[]
+  wishlists              Wishlist[]
+  Shipment               Shipment[]
+  directMessages         DirectMessage[]
+  conversationsInitiated Conversation[]    @relation("userOne")
+  conversationsReceived  Conversation[]    @relation("userTwo")
+  SeeenMessage           SeenMessage[]
 }
 
 model Product {
-  id          Int     @id @default(autoincrement())
-  description String  @db.LongText
+  id          Int          @id @default(autoincrement())
+  description String       @db.LongText
   price       Float
   sale        Float?
+<<<<<<< HEAD
   thumbnail   String? @db.LongText // Store the thumbnail image URL
   images      String? @db.LongText // Store multiple image URLs as an array
   // Add any other product-related fields as needed
@@ -52,6 +53,23 @@ model Product {
   sales      Sale[]
   wishlists  Wishlist[]
   CartItem   CartItem[]
+=======
+  thumbnail   String?      @db.LongText
+  images      String?      @db.LongText
+  categoryId  Int?
+  typeId      Int?
+  genderId    Int?
+  name        String
+  sizes       String       @db.LongText
+  category    Category?    @relation(fields: [categoryId], references: [id])
+  type        ProductType? @relation(fields: [typeId], references: [id])
+  gender      Gender?      @relation(fields: [genderId], references: [id])
+  reviews     Review[]
+  orderItems  OrderItem[]
+  sales       Sale[]
+  wishlists   Wishlist[]
+  CartItem    CartItem[]
+>>>>>>> main
 
   @@index([categoryId])
   @@index([typeId])
@@ -60,25 +78,21 @@ model Product {
 
 model Category {
   id       Int       @id @default(autoincrement())
-  name     String // Example: "Basketball," "Football," "Running," "Gym"
+  name     String
   products Product[]
-
 }
 
 model ProductType {
   id          Int           @id @default(autoincrement())
-  name        String // Example: "Shoes," "Clothes," "Accessories"
+  name        String
   products    Product[]
   Subcategory Subcategory[]
 }
 
-model Subcategory { 
-//shoes: low, mid, high, sandals, slides
-//clothes: t-shirt, hoodie, sweatshirt, pants, shorts, jacket
-//accessories: socks, back-packs, hats, gloves, balls
+model Subcategory {
   id            Int         @id @default(autoincrement())
-  name          String // Example: "Low top," "High top," "T-shirt," etc.
-  productTypeId Int // Reference to the parent ProductType
+  name          String
+  productTypeId Int
   productType   ProductType @relation(fields: [productTypeId], references: [id])
 
   @@index([productTypeId])
@@ -86,15 +100,14 @@ model Subcategory {
 
 model Gender {
   id       Int       @id @default(autoincrement())
-  name     String // Example: "Men," "Women," "Kids"
+  name     String
   products Product[]
 }
 
 model ProductSize {
   id        Int    @id @default(autoincrement())
-  size      String // Example: "EU 35," "EU 40," "S," "2XL," etc.
-  remaining Int // Remaining quantity in the shop storage
-  // products  Product[]
+  size      String
+  remaining Int
 }
 
 model Review {
@@ -118,7 +131,7 @@ model Sale {
   id        Int       @id @default(autoincrement())
   startDate DateTime
   endDate   DateTime
-  products  Product[] // Products on sale
+  products  Product[]
 }
 
 model Order {
@@ -245,4 +258,63 @@ model Wishlist {
   products Product[]
 
   @@index([userId])
+}
+
+model Conversation {
+  id             String          @id @default(uuid())
+  userOneId      Int
+  userTwoId      Int
+  lastMessageAt  DateTime        @default(now())
+  userOne        User            @relation("userOne", fields: [userOneId], references: [id], onDelete: Cascade)
+  userTwo        User            @relation("userTwo", fields: [userTwoId], references: [id], onDelete: Cascade)
+  directMessages DirectMessage[]
+
+  @@unique([userOneId, userTwoId])
+  @@index([userTwoId])
+}
+
+model DirectMessage {
+  id             String        @id @default(uuid())
+  content        String        @db.Text
+  fileUrl        String?       @db.Text
+  userId         Int
+  conversationId String
+  deleted        Boolean       @default(false)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversation   Conversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  SeeenMessage   SeenMessage[]
+
+  @@index([userId])
+  @@index([conversationId])
+}
+
+model SeenMessage {
+  id              String        @id @default(uuid())
+  userId          Int
+  directMessageId String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  directMessage   DirectMessage @relation(fields: [directMessageId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, directMessageId])
+  @@index([directMessageId])
+}
+
+model ProductToSale {
+  A Int
+  B Int
+
+  @@unique([A, B], map: "_ProductToSale_AB_unique")
+  @@index([B], map: "_ProductToSale_B_index")
+  @@map("_ProductToSale")
+}
+
+model ProductToWishlist {
+  A Int
+  B Int
+
+  @@unique([A, B], map: "_ProductToWishlist_AB_unique")
+  @@index([B], map: "_ProductToWishlist_B_index")
+  @@map("_ProductToWishlist")
 }

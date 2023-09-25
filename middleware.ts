@@ -9,7 +9,7 @@ export default withAuth(
       request.nextUrl.pathname.startsWith('/api/admin') &&
       request.nextauth.token?.role !== 'admin'
     ) {
-      return NextResponse.rewrite(new URL('denied', request.url));
+      return NextResponse.redirect(new URL('/', request.url));
 
       //rewrite means redirect to the url but the url shown will still be the same before
     }
@@ -26,5 +26,5 @@ export default withAuth(
   }
 );
 
-export const config = { matcher: ['/api/user', '/api/admin'] };
+export const config = { matcher: ['/api/user', '/api/admin/product/create'] };
 //authorization is done in the middleware

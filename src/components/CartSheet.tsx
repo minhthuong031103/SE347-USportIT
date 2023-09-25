@@ -25,7 +25,6 @@ export function CartSheet() {
   const itemCount = cart.listItem.length;
   const cartLineItems = cart.listItem;
   const cartTotal = cart.total ?? 0;
-
   return (
     <Sheet>
       <SheetTrigger asChild>
