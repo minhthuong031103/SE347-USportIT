@@ -23,7 +23,10 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const socketInstance = ClientIO(
-      `${process.env.NEXT_PUBLIC_SOCKET_URL}/socket`
+      `${process.env.NEXT_PUBLIC_SOCKET_URL}/socket`,
+      {
+        withCredentials: true,
+      }
     );
     socketInstance.on('connect', () => {
       setIsConnected(true);
