@@ -39,7 +39,7 @@ export const useChatSocket = ({
     const socketInstance = ClientIO(
       `${process.env.NEXT_PUBLIC_SOCKET_URL}/socket`,
       {
-        withCredentials: true,
+        // withCredentials: true,
         query: {
           userId: session.user.id,
           conversationId,
