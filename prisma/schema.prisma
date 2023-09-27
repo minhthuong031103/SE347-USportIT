@@ -33,27 +33,6 @@ model Product {
   description String       @db.LongText
   price       Float
   sale        Float?
-<<<<<<< HEAD
-  thumbnail   String? @db.LongText // Store the thumbnail image URL
-  images      String? @db.LongText // Store multiple image URLs as an array
-  // Add any other product-related fields as needed
-  
-  // Define the relationships
-  categoryId Int?
-  typeId     Int?
-  genderId   Int?
-  name       String
-  category   Category?    @relation(fields: [categoryId], references: [id])
-  type       ProductType? @relation(fields: [typeId], references: [id])
-  gender     Gender?      @relation(fields: [genderId], references: [id])
-  // sizes      ProductSize[]
-  sizes      String       @db.LongText
-  reviews    Review[]
-  orderItems OrderItem[]
-  sales      Sale[]
-  wishlists  Wishlist[]
-  CartItem   CartItem[]
-=======
   thumbnail   String?      @db.LongText
   images      String?      @db.LongText
   categoryId  Int?
@@ -69,7 +48,6 @@ model Product {
   sales       Sale[]
   wishlists   Wishlist[]
   CartItem    CartItem[]
->>>>>>> main
 
   @@index([categoryId])
   @@index([typeId])
@@ -112,20 +90,17 @@ model ProductSize {
 
 model Review {
   id        Int     @id @default(autoincrement())
-  text      String
+  text      String  @db.LongText
   rating    Int
   userId    Int
   productId Int
-  images    String @db.LongText // Store multiple image URLs as an arrayS
+  images    String? @db.LongText
   user      User    @relation(fields: [userId], references: [id])
   product   Product @relation(fields: [productId], references: [id])
 
   @@index([userId])
   @@index([productId])
 }
-
- 
-
 
 model Sale {
   id        Int       @id @default(autoincrement())
