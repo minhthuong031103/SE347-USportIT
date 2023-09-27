@@ -25,6 +25,9 @@ import {
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+//quan ly form: react-hook-form
+//validate form: zod
+
 const formSchema = z
   .object({
     name: z.string().min(1, {

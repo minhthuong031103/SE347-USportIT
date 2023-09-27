@@ -54,3 +54,7 @@ export async function POST(request: Request) {
   });
   console.log(res);
 }
+
+export async function GET() {
+  return new Response('hello');
+}
