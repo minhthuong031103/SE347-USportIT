@@ -1,7 +1,7 @@
+import { getSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { NextApiResponseServerIo } from '@/types/typeIo';
 import { NextApiRequest } from 'next';
-import { getServerSession } from 'next-auth';
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,7 +12,7 @@ export default async function handler(
   }
 
   try {
-    const session = getServerSession();
+    const session = getSession();
     if (!session) return res.status(401).json({ message: 'Unauthorized' });
     const { content } = req.body;
     if (!content) return res.status(400).json({ message: 'Bad request' });

@@ -2,19 +2,24 @@
 
 import { Button } from '@/components/new-york/button';
 import { Input } from '@/components/new-york/input';
-import { useSocket } from '@/components/providers/socket-provider';
 import { SocketIndicator } from '@/components/socket-indicator';
 import { useChatSocket } from '@/hooks/useChatSocket';
 import { postRequest } from '@/lib/fetch';
 import React from 'react';
+
 const queryKey = `chat:${'5a84bf0e-2e29-4a75-981e-03f32bef41bc'}`;
 const addKey = `chat:${'5a84bf0e-2e29-4a75-981e-03f32bef41bc'}:messages`;
 const updateKey = `chat:${'5a84bf0e-2e29-4a75-981e-03f32bef41bc'}:messages:update`;
 
 function Chat({ session }) {
-  useChatSocket({ queryKey, addKey, updateKey });
-  const { socket } = useSocket();
-  console.log(socket);
+  const { isConnected, onlineUsers, goToConversation } = useChatSocket({
+    queryKey,
+    addKey,
+    updateKey,
+    session,
+  });
+  console.log(onlineUsers);
+
   const [message, setMessage] = React.useState('');
   const onSubmit = async () => {
     const data = await postRequest({
@@ -26,7 +31,7 @@ function Chat({ session }) {
   };
   return (
     <div>
-      <SocketIndicator />
+      <SocketIndicator isConnected={isConnected} />
       <div>
         <Input
           value={message}
@@ -35,6 +40,25 @@ function Chat({ session }) {
           }}
         />
         <Button onClick={onSubmit}>send</Button>
+      </div>
+      <div>
+        Online user right now:
+        {onlineUsers?.map((user) => {
+          if (user !== session?.user?.id) {
+            return (
+              <div>
+                {user}{' '}
+                <Button
+                  onClick={() => {
+                    goToConversation(session?.user?.id, user);
+                  }}
+                >
+                  go chat with
+                </Button>
+              </div>
+            );
+          }
+        })}
       </div>
     </div>
   );

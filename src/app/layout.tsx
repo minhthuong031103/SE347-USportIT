@@ -3,7 +3,6 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
-import { SocketProvider } from '@components/providers/socket-provider';
 import { QueryProvider } from '@/components/providers/query-provider';
 const poppins = Poppins({
   subsets: ['latin'],
@@ -27,12 +26,10 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     <html lang="en">
       <body className={poppins.className}>
         <ReduxProvider>
-          <SocketProvider>
-            <QueryProvider>
-              <Toaster />
-              {children}
-            </QueryProvider>
-          </SocketProvider>
+          <QueryProvider>
+            <Toaster />
+            {children}
+          </QueryProvider>
         </ReduxProvider>
       </body>
     </html>
