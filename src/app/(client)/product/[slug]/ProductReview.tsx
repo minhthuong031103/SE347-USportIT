@@ -1,5 +1,4 @@
 'use client';
-import page from '@/app/(authenticated)/user/page';
 import Loader from '@/components/Loader';
 import ReviewDetail from '@/components/ReviewDetail';
 import ProductReviewPaginationBar from '@/components/new-york/pagination';
@@ -41,9 +40,6 @@ const ProductReview = ({ product }) => {
           })
         );
         setData(reviewWithUserData);
-        console.log(
-          '=> + ' + parseJSON(JSON.stringify(fetchedReviewData)).user.name
-        );
         //router.push(`?reviewPage=1`);
       };
       getReviewData();

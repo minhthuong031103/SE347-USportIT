@@ -52,14 +52,14 @@ const ReviewDetail = ({ data }) => {
     (_, index) => index + 1
   );
   return (
-    <div className="flex w-full flex-col gap-[8px] lg:gap-[16px] border rounded-xl p-4 py-6">
+    <div className="flex w-full flex-col gap-[8px] lg:gap-[16px] border rounded-xl px-5 py-6">
       <div className="flex flex-row relative items-center">
         <span className="font-bold text-xl">{data.title}</span>
-        {/* <span className="absolute inset-y-0 right-0 font-light fill-slate-400 ">
-          {data.date}
-        </span> */}
+        <span className="absolute inset-y-0 right-0 font-extralight text-sm text-neutral-500 ">
+          {new Date(data.reviewDate).toLocaleString()}
+        </span>
       </div>
-      <div className="flex gap-4 mb-0.5 mx-1">
+      <div className="flex gap-4 mb-0.5">
         {' '}
         {starArray.map(() => {
           return CommonSvg.startFilled('black');
