@@ -3,13 +3,13 @@
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { io as ClientIO } from 'socket.io-client';
-import { postRequest } from '@/lib/fetch';
+import { getRequest, postRequest } from '@/lib/fetch';
 import { useRouter } from 'next/navigation';
 
 type ChatSocketProps = {
-  addKey: string;
-  updateKey: string;
-  queryKey: string;
+  addKey?: string;
+  updateKey?: string;
+  queryKey?: string;
   session: any;
   conversationId?: string;
   callback?: (data: any) => void;
@@ -31,7 +31,7 @@ export const useChatSocket = ({
     setOnlineUsers(data);
     console.log(data, 'dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
   };
-
+  console.log(session, 'sessionsssssssssssssssssssssssssssss');
   const [onlineUsers, setOnlineUsers] = useState();
   const [socket, setSocket] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
@@ -74,61 +74,6 @@ export const useChatSocket = ({
       return;
     }
 
-    socket.on(updateKey, (message) => {
-      console.log('send messssssssssssssssssssage');
-      console.log('in update key');
-      queryClient.setQueryData([queryKey], (oldData: any) => {
-        if (!oldData || !oldData.pages || oldData.pages.length === 0) {
-          return oldData;
-        }
-
-        const newData = oldData.pages.map((page: any) => {
-          return {
-            ...page,
-            items: page.items.map((item) => {
-              if (item.id === message.id) {
-                return message;
-              }
-              return item;
-            }),
-          };
-        });
-
-        return {
-          ...oldData,
-          pages: newData,
-        };
-      });
-    });
-
-    socket.on(addKey, (message) => {
-      console.log('send messssssssssssssssssssage');
-      console.log(message);
-      console.log('in add key');
-      queryClient.setQueryData([queryKey], (oldData: any) => {
-        if (!oldData || !oldData.pages || oldData.pages.length === 0) {
-          return {
-            pages: [
-              {
-                items: [message],
-              },
-            ],
-          };
-        }
-
-        const newData = [...oldData.pages];
-
-        newData[0] = {
-          ...newData[0],
-          items: [message, ...newData[0].items],
-        };
-
-        return {
-          ...oldData,
-          pages: newData,
-        };
-      });
-    });
     socket.on('onMessage', (message) => {
       // Handle the received message, e.g., by updating the state
       callback(message);
@@ -153,10 +98,20 @@ export const useChatSocket = ({
     router.push(`/user/chat/conversation?conversationId=${conversationId}`);
   };
 
+  const getConversations = async ({ userId, page }) => {
+    const limit = 2;
+    const conversations = await getRequest({
+      endPoint: `/conversations/all?userId=${userId}&page=${page}&limit=${limit}`,
+    });
+    console.log(conversations, 'conversations');
+    return conversations;
+  };
+
   return {
     socket,
     isConnected,
     onlineUsers,
     goToConversation,
+    getConversations,
   };
 };
