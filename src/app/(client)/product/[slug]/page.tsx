@@ -46,7 +46,7 @@ async function page({ params }) {
             className="w-full
          py-5"
           >
-            <ProductReviewRating />
+            <ProductReviewRating product={data} />
           </div>
         </div>
         <div className="w-full pb-5">

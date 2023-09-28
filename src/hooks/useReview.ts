@@ -9,17 +9,12 @@ export const useReview = () => {
     return productReview;
   };
 
-  return { onGetProductReview };
-};
-
-export const useReviewCount = () => {
-  const onGetProductReviewCount = async (productId) => {
-    const productReview = await getRequest({
+  const onGetProductReviewRating = async (productId) => {
+    const productReviewRating = await getRequest({
       endPoint: `/api/product/user-review?productId=${productId}`,
     });
 
-    return productReview;
+    return productReviewRating;
   };
-
-  return { onGetProductReviewCount };
+  return { onGetProductReview, onGetProductReviewRating };
 };

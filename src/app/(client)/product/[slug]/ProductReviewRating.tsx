@@ -1,7 +1,86 @@
+'use client';
 import { CommonSvg } from '@/assets/CommonSvg';
-import React from 'react';
+import { useReview } from '@/hooks/useReview';
+import { parseJSON } from '@/lib/utils';
+import React, { useLayoutEffect, useState } from 'react';
 
-const ProductReviewLeft = () => {
+interface TotalReviewRating {
+  totalReview: number;
+  totalFiveStar: number;
+  totalFourStar: number;
+  totalThreeStar: number;
+  totalTwoStar: number;
+  totalOneStar: number;
+}
+
+const ProductReviewRating = ({ product }) => {
+  //Create review rating state
+  const [reviewRating, setReviewRating] = useState<any | TotalReviewRating>([]);
+  const { onGetProductReviewRating } = useReview();
+
+  //Fetch review rating data when first render
+  useLayoutEffect(() => {
+    try {
+      const getReviewData = async () => {
+        const fetchedReviewData = await onGetProductReviewRating(product.id);
+        const ret = parseJSON(JSON.stringify(fetchedReviewData));
+        setReviewRating(ret);
+      };
+      getReviewData();
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
+  const averageRating = () => {
+    if (reviewRating) {
+      const totalStar =
+        reviewRating?.totalFiveStar * 5 +
+        reviewRating?.totalFourStar * 4 +
+        reviewRating?.totalThreeStar * 3 +
+        reviewRating?.totalTwoStar * 2 +
+        reviewRating?.totalOneStar;
+      return totalStar / reviewRating?.totalReview;
+    }
+  };
+
+  const fiveStarPercentage = () => {
+    if (reviewRating) {
+      return (
+        (reviewRating?.totalFiveStar / reviewRating?.totalReview) * 100 + '%'
+      );
+    }
+  };
+  console.log(fiveStarPercentage());
+  const fourStarPercentage = () => {
+    if (reviewRating) {
+      return (
+        (reviewRating?.totalFourStar / reviewRating?.totalReview) * 100 + '%'
+      );
+    }
+  };
+  const threeStarPercentage = () => {
+    if (reviewRating) {
+      return (
+        (reviewRating?.totalThreeStar / reviewRating?.totalReview) * 100 + '%'
+      );
+    }
+  };
+  const twoStarPercentage = () => {
+    if (reviewRating) {
+      return (
+        (reviewRating?.totalTwoStar / reviewRating?.totalReview) * 100 + '%'
+      );
+    }
+  };
+  const oneStarPercentage = () => {
+    if (reviewRating) {
+      return (
+        (reviewRating?.totalOneStar / reviewRating?.totalReview) * 100 + '%'
+      );
+    }
+  };
+
   return (
     <div className="flex flex-col overflow-auto items-start w-auto space-y-6 pb-16">
       <div className="flex flex-row p-1 w-full items-center justify-center">
@@ -11,65 +90,96 @@ const ProductReviewLeft = () => {
           })}
         </div>
         <span className="flex flex-d text-2xl font-bold items-center justify-center">
-          4.8
+          {averageRating()}
         </span>
         <span className="inline-block text-xl ml-8 font-semibold">
-          10000 reviews
+          {reviewRating?.totalReview} reviews
         </span>
       </div>
       <div className="flex flex-row w-full justify-center items-center ">
         <ul className="w-full justify-center items-center">
-          <li className="flex flex-row ml-1 border-collapse pb-2 items-center justify-evenly">
+          <li
+            key="five-star"
+            className="flex flex-row ml-1 border-collapse pb-2 items-center justify-evenly"
+          >
             <div className="w-14 text-xs lg:text-sm pr-1 font-bold">
               5 Stars
             </div>
             <div className="h-4 xl:w-[75%] md:w-[60%] w-[55%] bg-slate-400 border-1 rounded-lg">
-              <div className="h-4 w-[90%] bg-slate-800 border-1 rounded-xl"></div>
+              <div
+                className={`h-4 bg-slate-800 border-1 rounded-xl`}
+                style={{ width: fiveStarPercentage() }}
+              ></div>
             </div>
             <span className="lg:w-[10%] w-[5%] inline-block text-xs lg:text-sm pl-1 text-center">
-              90%
+              {(reviewRating?.totalFiveStar / reviewRating?.totalReview) * 100}%
             </span>
           </li>
-          <li className="flex flex-row ml-1 border-collapse pb-2 items-center justify-evenly">
+          <li
+            key="four-star"
+            className="flex flex-row ml-1 border-collapse pb-2 items-center justify-evenly"
+          >
             <div className="w-14 text-xs lg:text-sm pr-1 font-bold">
               4 Stars
             </div>
             <div className="h-4 xl:w-[75%] md:w-[60%] w-[55%] bg-slate-400 border-1 rounded-lg">
-              <div className="h-4 w-[0%] bg-slate-800 border-1 rounded-xl"></div>
+              <div
+                className={`h-4 bg-slate-800 border-1 rounded-xl`}
+                style={{ width: fourStarPercentage() }}
+              ></div>
             </div>
             <span className="lg:w-[10%] w-[5%] inline-block text-xs lg:text-sm pl-1 text-center">
-              0%
+              {(reviewRating?.totalFourStar / reviewRating?.totalReview) * 100}%
             </span>
           </li>
-          <li className="flex flex-row ml-1 border-collapse pb-2 items-center justify-evenly">
+          <li
+            key="three-star"
+            className="flex flex-row ml-1 border-collapse pb-2 items-center justify-evenly"
+          >
             <div className="w-14 text-xs lg:text-sm pr-1 font-bold">
               3 Stars
             </div>
             <div className="h-4 xl:w-[75%] md:w-[60%] w-[55%] bg-slate-400 border-1 rounded-lg">
-              <div className="h-4 w-[100%] bg-slate-800 border-1 rounded-xl"></div>
+              <div
+                className={`h-4 bg-slate-800 border-1 rounded-xl`}
+                style={{ width: threeStarPercentage() }}
+              ></div>
             </div>
             <span className="lg:w-[10%] w-[5%] inline-block text-xs lg:text-sm pl-1 text-center">
-              100%
+              {(reviewRating?.totalThreeStar / reviewRating?.totalReview) * 100}
+              %
             </span>
           </li>
-          <li className="flex flex-row ml-1 border-collapse pb-2 items-center justify-evenly">
+          <li
+            key="two-star"
+            className="flex flex-row ml-1 border-collapse pb-2 items-center justify-evenly"
+          >
             <div className="w-14 text-xs lg:text-sm pr-1 font-bold">
               2 Stars
             </div>
             <div className="h-4 xl:w-[75%] md:w-[60%] w-[55%] bg-slate-400 border-1 rounded-lg">
-              <div className="h-4 w-[50%] bg-slate-800 border-1 rounded-xl"></div>
+              <div
+                className={`h-4 bg-slate-800 border-1 rounded-xl`}
+                style={{ width: twoStarPercentage() }}
+              ></div>
             </div>
             <span className="lg:w-[10%] w-[5%] inline-block text-xs lg:text-sm pl-1 text-center">
-              50%
+              {(reviewRating?.totalTwoStar / reviewRating?.totalReview) * 100}%
             </span>
           </li>
-          <li className="flex flex-row ml-1 border-collapse pb-2 items-center justify-evenly">
+          <li
+            key="one-star"
+            className="flex flex-row ml-1 border-collapse pb-2 items-center justify-evenly"
+          >
             <div className="w-14 text-xs lg:text-sm pr-1 font-bold">1 Star</div>
             <div className="h-4 xl:w-[75%] md:w-[60%] w-[55%] bg-slate-400 border-1 rounded-lg">
-              <div className="h-4  w-[10%] bg-slate-800 border-1 rounded-xl"></div>
+              <div
+                className={`h-4 bg-slate-800 border-1 rounded-xl`}
+                style={{ width: oneStarPercentage() }}
+              ></div>
             </div>
             <span className="lg:w-[10%] w-[5%] inline-block text-xs lg:text-sm pl-1 text-center">
-              10%
+              {(reviewRating?.totalOneStar / reviewRating?.totalReview) * 100}%
             </span>
           </li>
         </ul>
@@ -78,4 +188,4 @@ const ProductReviewLeft = () => {
   );
 };
 
-export default ProductReviewLeft;
+export default ProductReviewRating;
