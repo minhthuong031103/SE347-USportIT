@@ -55,9 +55,9 @@ const ReviewDetail = ({ data }) => {
     <div className="flex w-full flex-col gap-[8px] lg:gap-[16px] border rounded-xl p-4 py-6">
       <div className="flex flex-row relative items-center">
         <span className="font-bold text-xl">{data.title}</span>
-        <span className="absolute inset-y-0 right-0 font-light fill-slate-400 ">
+        {/* <span className="absolute inset-y-0 right-0 font-light fill-slate-400 ">
           {data.date}
-        </span>
+        </span> */}
       </div>
       <div className="flex gap-4 mb-0.5 mx-1">
         {' '}
@@ -68,7 +68,9 @@ const ReviewDetail = ({ data }) => {
           return CommonSvg.startFilled('gray');
         })}
       </div>
-      <span className="font-semibold text-xl">{data.name}</span>
+      <span className="font-semibold text-xl">
+        {data.user ? data.user.name : 'Anonymous'}
+      </span>
 
       <div className="flex flex-row w-full h-fill gap-[10px]">
         {parseJSON(data.images).map((item, index) => (
@@ -91,7 +93,7 @@ const ReviewDetail = ({ data }) => {
           ref={ref}
           className={`break-words ${!isShowingMore && 'line-clamp-3'}`}
         >
-          {data.content}
+          {data.text}
         </p>
         {isTruncated && (
           <button className="font-semibold" onClick={toggleIsShowingMore}>

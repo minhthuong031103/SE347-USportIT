@@ -94,14 +94,12 @@ model Review {
   rating    Int
   userId    Int
   productId Int
-  images    String? @db.LongText
   user      User    @relation(fields: [userId], references: [id])
   product   Product @relation(fields: [productId], references: [id])
-
+  images      String?      @db.LongText
   @@index([userId])
   @@index([productId])
 }
-
 model Sale {
   id        Int       @id @default(autoincrement())
   startDate DateTime

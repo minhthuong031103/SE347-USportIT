@@ -71,7 +71,7 @@ export default function ProductCard({ product }) {
       <Link
         className="
     "
-        href={`/product/${product?.id}}`}
+        href={`/product/${product?.id}`}
       >
         <div className="text-start p-4 text-black/[0.9]">
           <h2 className="text-lg font-medium">{product?.name}</h2>

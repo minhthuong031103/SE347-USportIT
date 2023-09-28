@@ -50,7 +50,7 @@ async function page({ params }) {
           </div>
         </div>
         <div className="w-full pb-5">
-          <ProductReview />
+          <ProductReview product={data} />
         </div>
       </div>
     </div>
