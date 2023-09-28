@@ -125,6 +125,7 @@
     @apply rounded-md lg:rounded-2xl;
   }
 }
+<<<<<<< HEAD
 .no-scroll {
 <<<<<<< HEAD
   overflow: hidden;
@@ -134,6 +135,8 @@
   overflow: hidden;
   padding-right: var(--scrollbar-width);
 }
+=======
+>>>>>>> 9215fd0 (Test skeleton loading)
 
 .products-grid {
   display: grid;
@@ -240,4 +243,5 @@
 
   overflow: hidden;
   padding-right: var(--scrollbar-width);
+
 }
