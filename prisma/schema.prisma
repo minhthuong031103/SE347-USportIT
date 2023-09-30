@@ -25,7 +25,7 @@ model User {
   directMessages         DirectMessage[]
   conversationsInitiated Conversation[]    @relation("userOne")
   conversationsReceived  Conversation[]    @relation("userTwo")
-  SeeenMessage           SeenMessage[]
+  seenMessages           SeenMessage[]   
 }
 
 model Product {
@@ -252,32 +252,43 @@ model Conversation {
 }
 
 model DirectMessage {
-  id             String        @id @default(uuid())
-  content        String        @db.Text
-  fileUrl        String?       @db.Text
+  id             String         @id @default(uuid())
+  content        String         @db.Text
+  fileUrl        String?        @db.Text
   userId         Int
   conversationId String
-  deleted        Boolean       @default(false)
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  conversation   Conversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  SeeenMessage   SeenMessage[]
+  deleted        Boolean        @default(false)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversation   Conversation   @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  seenBy         SeenMessage[]
 
   @@index([userId])
   @@index([conversationId])
 }
 
 model SeenMessage {
-  id              String        @id @default(uuid())
-  userId          Int
+  userId         Int
   directMessageId String
-  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  directMessage   DirectMessage @relation(fields: [directMessageId], references: [id], onDelete: Cascade)
+  seenAt         DateTime      @default(now())
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  directMessage  DirectMessage @relation(fields: [directMessageId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, directMessageId])
+  @@id([userId, directMessageId])
   @@index([directMessageId])
+  @@index([userId])
 }
+// model SeenMessage {
+//   id              String        @id @default(uuid())
+//   userId          Int
+//   directMessageId String
+//   user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   directMessage   DirectMessage @relation(fields: [directMessageId], references: [id], onDelete: Cascade)
+
+//   @@unique([userId, directMessageId])
+//   @@index([directMessageId])
+// }
 
 model ProductToSale {
   A Int

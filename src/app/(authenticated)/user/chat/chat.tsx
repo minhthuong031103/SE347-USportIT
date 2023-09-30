@@ -1,47 +1,117 @@
 'use client';
 
-import { Button } from '@/components/new-york/button';
-import { Input } from '@/components/new-york/input';
+import { Button } from '@/components/ui/button';
 import { SocketIndicator } from '@/components/socket-indicator';
 import { useChatSocket } from '@/hooks/useChatSocket';
-import { postRequest } from '@/lib/fetch';
-import React from 'react';
-
-const queryKey = `chat:${'5a84bf0e-2e29-4a75-981e-03f32bef41bc'}`;
-const addKey = `chat:${'5a84bf0e-2e29-4a75-981e-03f32bef41bc'}:messages`;
-const updateKey = `chat:${'5a84bf0e-2e29-4a75-981e-03f32bef41bc'}:messages:update`;
-
+import { useInfiniteQuery } from '@tanstack/react-query';
+import React, { useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 function Chat({ session }) {
-  const { isConnected, onlineUsers, goToConversation } = useChatSocket({
-    queryKey,
-    addKey,
-    updateKey,
-    session,
-  });
-  console.log(onlineUsers);
-
-  const [message, setMessage] = React.useState('');
-  const onSubmit = async () => {
-    const data = await postRequest({
-      endPoint: `${process.env.NEXT_PUBLIC_SOCKET_URL}/directMessage/sendMessage`,
-      formData: { content: message, session },
-      isFormData: false,
+  const { isConnected, onlineUsers, goToConversation, getConversations } =
+    useChatSocket({
+      session,
     });
-    console.log(data);
-  };
+
+  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery(
+    ['conversations', session?.user?.id],
+    ({ pageParam = 0 }) =>
+      getConversations({ page: pageParam, userId: session?.user?.id }),
+
+    {
+      refetchOnWindowFocus: false,
+      getNextPageParam: (lastPage, pages) => {
+        //pages is an array of all the pages fetched so far
+        //last page is the last page fetched
+        console.log('lastPage', lastPage);
+        if (lastPage.page === 0 && pages.length < lastPage.totalPages) return 1;
+        if (pages.length < lastPage.totalPages) return pages.length;
+        else return undefined;
+      },
+    }
+  );
+  const [isFetchingMore] = useState(false);
+
+  console.log(data);
   return (
-    <div>
-      <SocketIndicator isConnected={isConnected} />
-      <div>
-        <Input
-          value={message}
-          onChange={(e) => {
-            setMessage(e.target.value);
-          }}
-        />
-        <Button onClick={onSubmit}>send</Button>
+    <div className="w-full flex flex-row">
+      <div className="w-[30%]">
+        <div className="w-full flex justify-start items-start flex-col">
+          <SocketIndicator isConnected={isConnected} />
+          {data ? (
+            <InfiniteScroll
+              dataLength={data?.pages?.[0]?.totalItems || 1} //This is important field to render the next data
+              next={() => {
+                fetchNextPage();
+              }}
+              hasMore={hasNextPage || false}
+              height={400}
+              loader={<h4>Loading...</h4>}
+              endMessage={
+                <p style={{ textAlign: 'center' }}>
+                  <b>Yay! You have seen it all</b>
+                </p>
+              }
+              // below props only if you need pull down functionality
+              // refreshFunction={() => {
+              //   fetchNextPage();
+              // }}
+              // pullDownToRefresh
+              // pullDownToRefreshThreshold={50}
+              // pullDownToRefreshContent={
+              //   <h3 style={{ textAlign: 'center' }}>
+              //     &#8595; Pull down to refresh
+              //   </h3>
+              // }
+              // releaseToRefreshContent={
+              //   <h3 style={{ textAlign: 'center' }}>
+              //     &#8593; Release to refresh
+              //   </h3>
+              // }
+            >
+              {data?.pages.map((page, pageIndex) => {
+                console.log(page);
+                return (
+                  <div className="Conversation Sidebar" key={pageIndex}>
+                    <div className="Conversation Page">
+                      {page?.conversations?.map((conversation) => {
+                        console.log(conversation);
+                        return (
+                          <div key={conversation.id} className="mb-2">
+                            <div key={conversation.id} className="mb-2">
+                              <div key={conversation.id} className="mb-2">
+                                <div className="w-96 h-96 bg-slate-400">
+                                  <strong>
+                                    {conversation?.message?.user.name}
+                                  </strong>
+                                  <img
+                                    src={conversation?.message?.user.avatar}
+                                    alt="User avatar"
+                                    width="40"
+                                    height="40"
+                                  />
+                                  <p>{conversation.lastMessage}</p>
+                                  <p>
+                                    {new Date(
+                                      conversation.lastMessageAt
+                                    ).toLocaleString()}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {isFetchingMore && <p>Loading more conversations...</p>}
+                  </div>
+                );
+              })}
+            </InfiniteScroll>
+          ) : null}
+        </div>
       </div>
-      <div>
+      <div className="w=[70%]w-full">
         Online user right now:
         {onlineUsers?.map((user) => {
           if (user !== session?.user?.id) {
