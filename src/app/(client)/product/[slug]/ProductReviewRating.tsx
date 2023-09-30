@@ -92,8 +92,9 @@ const ProductReviewRating = ({ product }) => {
         <span className="flex flex-d text-2xl font-bold items-center justify-center">
           {averageRating()}
         </span>
-        <span className="inline-block text-xl ml-8 font-semibold">
-          {reviewRating?.totalReview} reviews
+        <span className="inline-block text-2xl ml-8 font-semibold">
+          {reviewRating?.totalReview}{' '}
+          {reviewRating?.totalReview > 1 ? 'Reviews' : 'Review'}
         </span>
       </div>
       <div className="flex flex-row w-full justify-center items-center ">

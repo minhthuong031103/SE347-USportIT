@@ -89,16 +89,16 @@ model ProductSize {
 }
 
 model Review {
-  id        Int     @id @default(autoincrement())
-  title     String
-  text      String  @db.LongText
-  rating    Int
+  id         Int      @id @default(autoincrement())
+  text       String   @db.LongText
+  rating     Int
+  userId     Int
+  productId  Int
+  images     String?  @db.LongText
   reviewDate DateTime
-  userId    Int
-  productId Int
-  images    String? @db.LongText
-  user      User    @relation(fields: [userId], references: [id])
-  product   Product @relation(fields: [productId], references: [id])
+  title      String
+  user       User     @relation(fields: [userId], references: [id])
+  product    Product  @relation(fields: [productId], references: [id])
 
   @@index([userId])
   @@index([productId])
@@ -242,6 +242,7 @@ model Conversation {
   userOneId      Int
   userTwoId      Int
   lastMessageAt  DateTime        @default(now())
+  lastMessage    String?
   userOne        User            @relation("userOne", fields: [userOneId], references: [id], onDelete: Cascade)
   userTwo        User            @relation("userTwo", fields: [userTwoId], references: [id], onDelete: Cascade)
   directMessages DirectMessage[]

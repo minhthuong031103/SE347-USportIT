@@ -50,7 +50,7 @@ const ProductReview = ({ product }) => {
   }, [currentPage]);
 
   return (
-    <div className="space-y-2 pb-16 flex flex-col items-center">
+    <div className="z-40 space-y-2 pb-16 flex flex-col items-center">
       <div>
         {data ? (
           data?.map((item, index) => (

@@ -55,7 +55,7 @@ const ReviewDetail = ({ data }) => {
     <div className="flex w-full flex-col gap-[8px] lg:gap-[16px] border rounded-xl px-5 py-6">
       <div className="flex flex-row relative items-center">
         <span className="font-bold text-xl">{data.title}</span>
-        <span className="absolute inset-y-0 right-0 font-extralight text-sm text-neutral-500 ">
+        <span className="ml-auto font-extralight text-sm text-neutral-500 ">
           {new Date(data.reviewDate).toLocaleString()}
         </span>
       </div>

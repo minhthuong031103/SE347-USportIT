@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import ProductDetailLeft from './ProductDetailLeft';
 import ProductDetailRight from './ProductDetailRight';
 import { CommonSvg } from '@/assets/CommonSvg';
 import { useProduct } from '@/hooks/useProduct';
 import ProductReviewRating from './ProductReviewRating';
 import ProductReview from './ProductReview';
+import ProductReviewForm from './ProductReviewForm';
+import ProductUserMayLike from './ProductUserMayLike';
 
 async function page({ params }) {
   const { slug } = params;
@@ -21,7 +23,7 @@ async function page({ params }) {
 
   const data = res;
   return (
-    <div className="w-full md:py-20 ">
+    <div className="w-full md:py-20 overflow-hidden">
       <div
         className="w-full flex-col max-w-[1280px] px-5
   md:px-10 mx-auto"
@@ -35,22 +37,25 @@ async function page({ params }) {
             <ProductDetailRight data={data} />
           </div>
         </div>
-        <div className=" flex-col gap-3 mt-20 lg:mt-32 justify-center items-center flex text-[34px] font-semibold mb-2 leading-tight">
+        <div className=" flex-col gap-1 mt-20 lg:mt-25 justify-center items-center flex text-[34px] font-semibold mb-2 leading-tight">
           Reviews
           <div className="flex gap-4 justify-center items-center">
             {[1, 2, 3, 4, 5].map(() => {
               return CommonSvg.startFilled('black');
             })}
           </div>
-          <div
-            className="w-full
-         py-5"
-          >
+          <div className="w-full pt-5">
             <ProductReviewRating product={data} />
           </div>
+          <div className="w-full">
+            <ProductReviewForm></ProductReviewForm>
+          </div>
         </div>
-        <div className="w-full pb-5">
+        <div className="w-full py-5">
           <ProductReview product={data} />
+        </div>
+        <div>
+          <ProductUserMayLike data={data} />
         </div>
       </div>
     </div>
