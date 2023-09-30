@@ -1,6 +1,6 @@
 'use client';
 
-import { Badge } from './new-york/badge';
+import { Badge } from './ui/badge';
 
 export const SocketIndicator = ({ isConnected }) => {
   if (!isConnected) {

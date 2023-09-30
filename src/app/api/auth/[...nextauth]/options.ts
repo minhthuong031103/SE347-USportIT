@@ -18,11 +18,21 @@ const options: AuthOptions = {
       async profile(profile) {
         logger.info(profile);
         //cai profile nay se truyen xuong jwt function
+        const user = await prisma.user.findUnique({
+          where: {
+            email: profile.email,
+          },
+        });
+        if (!user)
+          return {
+            name: profile.name,
+            email: profile.email,
+          };
         return {
-          id: profile.id,
-          name: profile.global_name,
-          email: profile.email,
-          avatar: profile.picture,
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          avatar: user.avatar,
         };
       },
     }),
@@ -34,12 +44,22 @@ const options: AuthOptions = {
         console.log('inside prfileeeeeeeeeeeeeee');
         logger.info(profile);
         //cai profile nay se truyen xuong jwt function
-
+        const user = await prisma.user.findUnique({
+          where: {
+            email: profile.email,
+          },
+        });
+        if (!user)
+          return {
+            name: profile.name,
+            email: profile.email,
+          };
         return {
-          id: profile.id,
-          name: profile.name,
-          email: profile.email,
-          avatar: profile.avatar_url,
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          avatar: user.avatar,
+          role: user.role,
         };
       },
     }),
@@ -74,6 +94,20 @@ const options: AuthOptions = {
   ],
 
   callbacks: {
+    async signIn(params) {
+      console.log('paramssssssssssssssssssssssssssssssssssssssssssssss: ');
+      console.log(params);
+      if (!params?.user?.id) {
+        const payload = jwt.sign(
+          { email: params?.user?.email, name: params?.user?.name },
+          process.env.NEXT_PUBLIC_JWT_SECRET,
+          { expiresIn: '1h' }
+        );
+        return `/auth/register/?payload=${payload}`;
+      }
+
+      return true;
+    },
     //first it run the jwt function, the jwt function will return the token , then in the session function we can access the token
     async jwt({ token, user }) {
       console.log('user in jwt: ');
@@ -84,6 +118,7 @@ const options: AuthOptions = {
         token.role = user.role;
         token.id = user.id;
         token.avatar = user.avatar;
+        token.name = user.name;
       }
 
       //return final token
@@ -103,27 +138,6 @@ const options: AuthOptions = {
         (session.user as { avatar: string }).avatar = token.avatar as string;
       }
       return session;
-    },
-    async signIn(params) {
-      console.log('paramssssssssssssssssssssssssssssssssssssssssssssss: ');
-      console.log(params);
-      if (params?.user?.email) {
-        const userFind = await prisma.user.findUnique({
-          where: {
-            email: params?.user?.email,
-          },
-        });
-        if (!userFind) {
-          const payload = jwt.sign(
-            { email: params?.user?.email, name: params?.user?.name },
-            process.env.NEXT_PUBLIC_JWT_SECRET,
-            { expiresIn: '1h' }
-          );
-          return `/auth/register/?payload=${payload}`;
-        } else return true;
-      }
-
-      return true;
     },
   },
   pages: {
