@@ -7,7 +7,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/new-york/card';
+} from '@/components/ui/card';
 
 function page() {
   return (

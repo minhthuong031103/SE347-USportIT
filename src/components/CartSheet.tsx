@@ -3,9 +3,9 @@
 import Link from 'next/link';
 
 import { cn, currencyFormat } from '@/lib/utils';
-import { Badge } from './new-york/badge';
-import { Button, buttonVariants } from '@/components/new-york/button';
-import { Separator } from '@/components/new-york/separator';
+import { Badge } from './ui/badge';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import {
   Sheet,
   SheetContent,
@@ -13,7 +13,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/components/new-york/sheet';
+} from '@/components/ui/sheet';
 // import { CartLineItems } from '@/components/checkout/cart-line-items';
 
 import { useCart } from '@/hooks/useCart';
