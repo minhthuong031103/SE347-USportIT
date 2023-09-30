@@ -48,15 +48,19 @@ const ProductReview = ({ product }) => {
             <Loader />
           )}
         </div>
-        <Pagination
-          showControls
-          total={data?.totalPages}
-          initialPage={1}
-          onChange={(page) => {
-            onPageChange(page);
-          }}
-          page={currentPage}
-        />
+        {data?.data?.length == 0 && data != null ? (
+          <div></div>
+        ) : (
+          <Pagination
+            showControls
+            total={data?.totalPages}
+            initialPage={1}
+            onChange={(page) => {
+              onPageChange(page);
+            }}
+            page={currentPage}
+          />
+        )}
       </div>
     </div>
   );

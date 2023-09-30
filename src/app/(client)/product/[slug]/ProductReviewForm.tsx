@@ -1,6 +1,8 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogTrigger, DialogContent } from '@components/ui/dialog';
+import { Input } from '@nextui-org/react';
+import { cn } from '@/lib/utils';
 import React from 'react';
 
 const ProductReviewForm = () => {
@@ -17,8 +19,15 @@ const ProductReviewForm = () => {
           </Button>
         </DialogTrigger>
 
-        <DialogContent>
-          <div>hello</div>
+        <DialogContent className="flex w-[60%] h-[80%]">
+          <div className="flex w-[40%] flex-wrap md:flex-nowrap gap-4">
+            <Input
+              type="text"
+              label="Title"
+              labelPlacement={'outside'}
+              placeholder="Enter review title"
+            />
+          </div>
         </DialogContent>
       </Dialog>
     </div>

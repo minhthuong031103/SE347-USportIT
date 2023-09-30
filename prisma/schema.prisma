@@ -15,6 +15,8 @@ model User {
   password               String
   role                   String?           @default("user")
   avatar                 String?           @default("https://i0.wp.com/www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg?ssl=1")
+  isEmailVerified        Boolean           @default(false)
+  otp                    String?
   orders                 Order[]
   reviews                Review[]
   shoppingCarts          ShoppingCart[]
@@ -86,7 +88,7 @@ model ProductSize {
   id   Int    @id @default(autoincrement())
   size String
 }
-  
+
 model Review {
   id         Int      @id @default(autoincrement())
   text       String   @db.LongText
@@ -271,6 +273,7 @@ model SeenMessage {
   id              String        @id
   userId          Int
   directMessageId String
+  seenAt          DateTime?
   user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   directMessage   DirectMessage @relation(fields: [directMessageId], references: [id], onDelete: Cascade)
 
