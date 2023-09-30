@@ -1,52 +1,64 @@
-import Image from 'next/image';
+import { type Metadata } from 'next';
 
-export const getData = async () => {
-  const res = await fetch('https://dummyjson.com/products');
-  if (!res.ok) {
-    throw new Error('Failed to fetch data');
-  }
+import {
+  PageHeader,
+  PageHeaderDescription,
+  PageHeaderHeading,
+} from '@/components/page-header';
+import { Products } from '@/components/products';
+import { Shell } from '@/components/shells/shell';
+import { useProduct } from '@/hooks/useProduct';
 
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(res.json());
-    }, 2110);
+export const metadata: Metadata = {
+  title: 'Products',
+  description: 'Buy products from our stores',
+};
+
+interface ProductsPageProps {
+  searchParams: {
+    [key: string]: string | string[] | undefined;
+  };
+}
+
+export default async function ProductsPage({
+  searchParams,
+}: ProductsPageProps) {
+  const { page, per_page, sort, categories, subcategories, price_range } =
+    searchParams ?? {};
+
+  // Products transaction
+  const limit = typeof per_page === 'string' ? parseInt(per_page) : 8;
+  const offset = typeof page === 'string' ? (parseInt(page) - 1) * limit : 0;
+  const { getProductsAction } = useProduct();
+  const productsTransaction = await getProductsAction({
+    limit,
+    offset,
+    sort: typeof sort === 'string' ? sort : null,
+    categories: typeof categories === 'number' ? categories : null,
+    subcategories: typeof subcategories === 'string' ? subcategories : null,
+    price_range: typeof price_range === 'string' ? price_range : null,
   });
-};
 
-const priceBar = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  margin: '10px 0',
-};
-
-export default async function Products() {
-  const data = await getData();
+  const pageCount = Math.ceil(productsTransaction.count / limit);
 
   return (
-    <main>
-      <div className="products-grid">
-        {data.products.map((p) => (
-          <article key={p.id} className="card">
-            <div className="card-img">
-              <Image src={p.thumbnail} alt="product image" fill />
-            </div>
-            <div className="card-text">
-              <h2 className="card-title">{p.title}</h2>
-              <h4 className="card-brand">
-                By <span className="brand-red">{p.brand}</span>
-              </h4>
-              <p className="card-description">{p.description}</p>
-              <div style={priceBar}>
-                <p>${p.price}</p>
-                <p>
-                  <b>Rating:</b> {p.rating}
-                </p>
-              </div>
-            </div>
-          </article>
-        ))}
-      </div>
-    </main>
+    <Shell>
+      <PageHeader
+        id="products-page-header"
+        aria-labelledby="products-page-header-heading"
+      >
+        <PageHeaderHeading size="sm">Products</PageHeaderHeading>
+        <PageHeaderDescription size="sm">
+          Buy products from our stores
+        </PageHeaderDescription>
+      </PageHeader>
+      <Products
+        id="products-page-products"
+        aria-labelledby="products-page-products-heading"
+        products={productsTransaction.items}
+        pageCount={pageCount}
+        categories={[1, 2, 3]}
+      />
+    </Shell>
   );
 }

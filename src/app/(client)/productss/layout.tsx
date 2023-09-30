@@ -1,12 +1,4 @@
-interface ProductsLayoutProps {
-  children: React.ReactNode;
-  modal: React.ReactNode;
-}
-
-export default function ProductsLayout({
-  children,
-  modal,
-}: ProductsLayoutProps) {
+export default function ProductssPageLayout({ children }) {
   const mainStyles = {
     margin: '0 auto',
     padding: '6rem',
@@ -17,7 +9,6 @@ export default function ProductsLayout({
       style={mainStyles}
     >
       {children}
-      {modal}
     </div>
   );
 }
