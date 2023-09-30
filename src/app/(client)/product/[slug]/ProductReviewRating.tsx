@@ -1,8 +1,9 @@
 'use client';
 import { CommonSvg } from '@/assets/CommonSvg';
+import Loader from '@/components/Loader';
 import { useReview } from '@/hooks/useReview';
 import { parseJSON } from '@/lib/utils';
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface TotalReviewRating {
   totalReview: number;
@@ -15,11 +16,11 @@ interface TotalReviewRating {
 
 const ProductReviewRating = ({ product }) => {
   //Create review rating state
-  const [reviewRating, setReviewRating] = useState<any | TotalReviewRating>([]);
+  const [reviewRating, setReviewRating] = useState<TotalReviewRating>();
   const { onGetProductReviewRating } = useReview();
-
+  console.log(reviewRating);
   //Fetch review rating data when first render
-  useLayoutEffect(() => {
+  useEffect(() => {
     try {
       const getReviewData = async () => {
         const fetchedReviewData = await onGetProductReviewRating(product.id);
@@ -80,7 +81,12 @@ const ProductReviewRating = ({ product }) => {
       );
     }
   };
-
+  if (!reviewRating)
+    return (
+      <div className="flex items-center justify-center">
+        <Loader />
+      </div>
+    );
   return (
     <div className="flex flex-col overflow-auto items-start w-auto space-y-6 pb-16">
       <div className="flex flex-row p-1 w-full items-center justify-center">

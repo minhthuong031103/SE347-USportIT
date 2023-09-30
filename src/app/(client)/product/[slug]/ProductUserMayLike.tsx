@@ -3,7 +3,9 @@ import Loader from '@/components/Loader';
 import { parseJSON } from '@/lib/utils';
 import Image from 'next/image';
 import React from 'react';
-import { Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 const ProductUserMayLike = ({ data }) => {
   console.log(JSON.stringify(data?.images));
@@ -14,12 +16,12 @@ const ProductUserMayLike = ({ data }) => {
       <Swiper
         style={
           {
-            '--swiper-pagination-bullet-inactive-color': '#999999',
-            '--swiper-pagination-bullet-inactive-opacity': '1',
-            '--swiper-pagination-color': '#000000',
-            '--swiper-pagination-bullet-size': '12px',
-            '--swiper-pagination-bullet-width': '10px',
-            '--swiper-pagination-bullet-height': '10px',
+            '--swiper-navigation-size': '44px',
+            '--swiper-navigation-top-offset': '50%',
+            '--swiper-navigation-sides-offset': '10px',
+            '--swiper-navigation-color': '#000000',
+            '--swiper-navigation-color-hover': '#000000',
+            '--swiper-button-next': '12px',
           } as React.CSSProperties
         }
         slidesPerView={4}
@@ -43,7 +45,7 @@ const ProductUserMayLike = ({ data }) => {
             spaceBetween: 10,
           },
         }}
-        modules={[Pagination]}
+        modules={[Navigation]}
         className="w-full h-auto overflow-visible relative"
       >
         {parseJSON(data?.images) ? (
