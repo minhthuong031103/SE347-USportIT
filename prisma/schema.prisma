@@ -86,7 +86,7 @@ model ProductSize {
   id   Int    @id @default(autoincrement())
   size String
 }
-
+  
 model Review {
   id         Int      @id @default(autoincrement())
   text       String   @db.LongText

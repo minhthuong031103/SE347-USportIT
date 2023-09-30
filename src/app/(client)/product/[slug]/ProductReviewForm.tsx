@@ -6,20 +6,22 @@ import React from 'react';
 const ProductReviewForm = () => {
   const [isVisible, setIsVisible] = React.useState(false);
   return (
-    <Dialog>
-      <DialogTrigger>
-        <Button
-          className="border-transparent hover:scale-105 hover:transition hover:duration-200 font-semibold text-white"
-          onClick={() => setIsVisible(!isVisible)}
-        >
-          Write a Review
-        </Button>
-      </DialogTrigger>
+    <div className="flex items-center justify-center">
+      <Dialog>
+        <DialogTrigger>
+          <Button
+            className="border-transparent hover:scale-105 hover:transition hover:duration-200 font-semibold text-white"
+            onClick={() => setIsVisible(!isVisible)}
+          >
+            Write a Review
+          </Button>
+        </DialogTrigger>
 
-      <DialogContent>
-        <div>hello</div>
-      </DialogContent>
-    </Dialog>
+        <DialogContent>
+          <div>hello</div>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 };
 

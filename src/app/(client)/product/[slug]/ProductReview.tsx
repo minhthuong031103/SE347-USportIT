@@ -1,72 +1,63 @@
 'use client';
 import Loader from '@/components/Loader';
 import ReviewDetail from '@/components/ReviewDetail';
-import ProductReviewPaginationBar from '@/components/ui/pagination';
 import { useReview } from '@/hooks/useReview';
-import { useUser } from '@/hooks/useUser';
-import { parseJSON } from '@/lib/utils';
-import React, { useEffect, useState } from 'react';
 
+import React from 'react';
+import { Pagination } from '@nextui-org/react';
+import { useQuery } from '@tanstack/react-query';
 const ProductReview = ({ product }) => {
-  //Total page size (5 pages in total)
-  const pageSize = 5;
-
   //Get review data from useReview hook
   const { onGetProductReview } = useReview();
-  //Get user data from useUser hook
-  const { onGetUserDetail } = useUser();
-
   //State of current page for pagination
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [data, setData] = useState<any | null>(null);
-  //const router = useRouter();
+
+  const ref = React.useRef(null);
 
   //Set page state when change review page index
   const onPageChange = (page) => {
+    ref.current?.scrollIntoView({ behavior: 'smooth' });
     setCurrentPage(page);
   };
+  //Get review data from API
+  const getReviewData = async () => {
+    const fetchedReviewData = await onGetProductReview(product.id, currentPage);
+    return fetchedReviewData;
+  };
   //Update page when change review page index
-  useEffect(() => {
-    try {
-      const getReviewData = async () => {
-        const fetchedReviewData = await onGetProductReview(
-          product.id,
-          currentPage
-        );
-        const reviewWithUserData = await Promise.all(
-          parseJSON(JSON.stringify(fetchedReviewData)).map(async (review) => {
-            const userData = await onGetUserDetail(review.userId);
-            return { ...review, user: userData };
-          })
-        );
-        setData(reviewWithUserData);
-        //router.push(`?reviewPage=1`);
-      };
-      getReviewData();
-    } catch (err) {
-      console.log(err);
+  const { data, isFetched } = useQuery(
+    ['productReview', product.id, currentPage],
+    () => getReviewData(),
+    {
+      staleTime: 1000 * 60 * 1,
+      keepPreviousData: true,
     }
-    //router.replace(`?reviewPage=${currentPage}`, { scroll: false });
-  }, [currentPage]);
+  );
 
   return (
-    <div className="z-40 space-y-2 pb-16 flex flex-col items-center">
-      <div>
-        {data ? (
-          data?.map((item, index) => (
-            <div className="p-1">
-              <ReviewDetail key={item + index} data={item} />
-            </div>
-          ))
-        ) : (
-          <Loader />
-        )}
+    <div ref={ref} className="pt-4">
+      <div className="z-40 space-y-2 pt-4 flex flex-col items-center">
+        <div className="flex flex-col gap-y-3">
+          {isFetched ? (
+            data?.data?.map((item) => (
+              <div className="p-1" key={item.id}>
+                <ReviewDetail data={item} />
+              </div>
+            ))
+          ) : (
+            <Loader />
+          )}
+        </div>
+        <Pagination
+          showControls
+          total={data?.totalPages}
+          initialPage={1}
+          onChange={(page) => {
+            onPageChange(page);
+          }}
+          page={currentPage}
+        />
       </div>
-      <ProductReviewPaginationBar
-        pageSize={pageSize}
-        currentPage={currentPage}
-        onPageChange={onPageChange}
-      ></ProductReviewPaginationBar>
     </div>
   );
 };

@@ -8,7 +8,6 @@ import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 const ProductUserMayLike = ({ data }) => {
-  console.log(JSON.stringify(data?.images));
   return (
     <div>
       <div>You may also like:</div>

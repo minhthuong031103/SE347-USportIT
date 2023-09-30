@@ -52,7 +52,7 @@ const ReviewDetail = ({ data }) => {
     (_, index) => index + 1
   );
   return (
-    <div className="flex w-full flex-col gap-[8px] lg:gap-[16px] border rounded-xl px-5 py-6">
+    <div className="flex w-full flex-col gap-[8px] lg:gap-[16px] border-b-2 border-x-zinc-900 px-5 py-6">
       <div className="flex flex-row relative items-center">
         <span className="font-bold text-xl">{data.title}</span>
         <span className="ml-auto font-extralight text-sm text-neutral-500 ">
@@ -61,11 +61,21 @@ const ReviewDetail = ({ data }) => {
       </div>
       <div className="flex gap-4 mb-0.5">
         {' '}
-        {starArray.map(() => {
-          return CommonSvg.startFilled('black');
+        {starArray.map((item) => {
+          return (
+            <div key={starArray.indexOf(item)}>
+              {' '}
+              {CommonSvg.startFilled('black', 5, 5)}
+            </div>
+          );
         })}
-        {blankStarArray.map(() => {
-          return CommonSvg.startFilled('gray');
+        {blankStarArray.map((item) => {
+          return (
+            <div key={starArray.indexOf(item)}>
+              {' '}
+              {CommonSvg.startFilled('gray', 5, 5)}
+            </div>
+          );
         })}
       </div>
       <span className="font-semibold text-xl">
