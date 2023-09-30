@@ -3,7 +3,7 @@ import { CommonSvg } from '@/assets/CommonSvg';
 import { parseJSON } from '@/lib/utils';
 import Image from 'next/image';
 import React, { useLayoutEffect, useRef, useState } from 'react';
-import { Zoom } from './new-york/zoom-image';
+import { Zoom } from './ui/zoom-image';
 
 // Hook for checking if element is truncated or not
 const useTruncatedElement = ({ ref }) => {

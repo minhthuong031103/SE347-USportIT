@@ -1,7 +1,7 @@
 'use client';
 import Loader from '@/components/Loader';
 import ReviewDetail from '@/components/ReviewDetail';
-import ProductReviewPaginationBar from '@/components/new-york/pagination';
+import ProductReviewPaginationBar from '@/components/ui/pagination';
 import { useReview } from '@/hooks/useReview';
 import { useUser } from '@/hooks/useUser';
 import { parseJSON } from '@/lib/utils';

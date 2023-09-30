@@ -10,6 +10,7 @@ const ProductUserMayLike = ({ data }) => {
   return (
     <div>
       <div>You may also like:</div>
+
       <Swiper
         style={
           {

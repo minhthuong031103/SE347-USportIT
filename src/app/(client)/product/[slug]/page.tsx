@@ -1,4 +1,3 @@
-import React, { Fragment } from 'react';
 import ProductDetailLeft from './ProductDetailLeft';
 import ProductDetailRight from './ProductDetailRight';
 import { CommonSvg } from '@/assets/CommonSvg';
