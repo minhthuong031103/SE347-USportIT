@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/components/new-york/button';
+import { Button } from '@/components/ui/button';
 import { SocketIndicator } from '@/components/socket-indicator';
 import { useChatSocket } from '@/hooks/useChatSocket';
 import { useInfiniteQuery } from '@tanstack/react-query';

@@ -1,7 +1,7 @@
 'use client';
 
-import { buttonVariants } from '@/components/new-york/button';
-import { Separator } from '@/components/new-york/separator';
+import { buttonVariants } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import { useCart } from '@/hooks/useCart';
 import { currencyFormat } from '@/lib/utils';
 import Link from 'next/link';
