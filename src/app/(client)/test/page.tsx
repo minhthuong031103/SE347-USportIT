@@ -1,22 +1,36 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { useTest } from '@/hooks/useTest';
-import React from 'react';
+import React, { useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
-function page() {
-  const onClickAddtoCart = () => {
-    onAddtoCart({
-      data: { id: '1', name: 'test', price: 100, quantity: 1 },
-      selectedSize: 'US 39',
-    });
+const page = () => {
+  const [data, setData] = useState(Array.from({ length: 20 }));
+  const [hasMore] = useState(true);
+  const fetchMoreData = () => {
+    setTimeout(() => {
+      setData(data.concat(Array.from({ length: 20 })));
+    }, 500);
   };
-  const { onAddtoCart } = useTest();
   return (
     <div>
-      <Button onClick={onClickAddtoCart}>add to cart</Button>
+      <InfiniteScroll
+        dataLength={data.length}
+        next={() => {
+          fetchMoreData();
+        }}
+        hasMore={hasMore}
+        loader={<h4>Loading...</h4>}
+        height={500}
+      >
+        {data.map((item, index) => {
+          return (
+            <div className="border-2 border-solid bg-slate-500 p-12">
+              this is a div {index}
+            </div>
+          );
+        })}
+      </InfiniteScroll>
     </div>
   );
-}
-
+};
 export default page;

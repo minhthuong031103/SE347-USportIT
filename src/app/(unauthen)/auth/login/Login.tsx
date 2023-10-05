@@ -56,12 +56,15 @@ const Login = ({ className }: { className?: string; providers: unknown }) => {
       redirect: false,
     });
     setIsLoading(false);
+
     if (res?.error) {
       toast.error(res?.error);
+
       return;
     }
 
-    if (!res?.error) router.replace('/');
+    console.log(res);
+    if (!res?.error) router.refresh();
     setIsLoading(false);
     console.log(res);
   }
@@ -179,6 +182,19 @@ const Login = ({ className }: { className?: string; providers: unknown }) => {
               <Icons.discord className="mr-2 h-4 w-4" />
             </div>{' '}
             Discord
+          </Button>
+          <Button
+            className="w-1/2"
+            onClick={() => {
+              signIn('google');
+            }}
+            variant="outline"
+            disabled={isLoading}
+          >
+            <div>
+              <Icons.discord className="mr-2 h-4 w-4" />
+            </div>{' '}
+            Google
           </Button>
         </div>
       </div>
