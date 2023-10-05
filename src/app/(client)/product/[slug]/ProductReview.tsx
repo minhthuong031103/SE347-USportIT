@@ -37,10 +37,10 @@ const ProductReview = ({ product }) => {
   return (
     <div ref={ref} className="pt-4">
       <div className="z-40 space-y-2 pt-4 flex flex-col items-center">
-        <div className="flex flex-col gap-y-3">
+        <div className="flex flex-col w-full gap-y-3 items-center">
           {isFetched ? (
             data?.data?.map((item) => (
-              <div className="p-1" key={item.id}>
+              <div className="p-1 w-full" key={item.id}>
                 <ReviewDetail data={item} />
               </div>
             ))

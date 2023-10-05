@@ -38,7 +38,7 @@
     "@tanstack/react-query-devtools": "^4.35.3",
     "@types/bunyan": "^1.8.8",
     "@types/node": "20.5.7",
-    "@types/react": "18.2.21",
+    "@types/react": "^18.2.24",
     "@types/react-dom": "18.2.7",
     "@types/socket.io": "^3.0.2",
     "@uploadthing/react": "^5.5.0",

@@ -41,4 +41,21 @@ export async function GET(request: Request) {
   return new Response(JSON.stringify(data), { status: 200 });
 }
 
-//
+export async function POST(request: Request) {
+  const re = await request.json();
+  const res = await prisma.review.create({
+    data: {
+      title: re.title,
+      rating: re.rating,
+      userId: re.userId,
+      productId: re.productId,
+      reviewDate: re.reviewDate,
+      text: re.text,
+      images: JSON.stringify(re.image),
+    },
+  });
+  if (!res) {
+    return new Response(JSON.stringify({}), { status: 404 });
+  }
+  return new Response(JSON.stringify(res), { status: 200 });
+}

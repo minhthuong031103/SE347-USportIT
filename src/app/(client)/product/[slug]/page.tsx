@@ -41,7 +41,7 @@ async function page({ params }) {
             <ProductReviewRating product={data} />
           </div>
           <div className="w-full">
-            <ProductReviewForm></ProductReviewForm>
+            <ProductReviewForm product={data}></ProductReviewForm>
           </div>
         </div>
         <div className="w-full py-5">

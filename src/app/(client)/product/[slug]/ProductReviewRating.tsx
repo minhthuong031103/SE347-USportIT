@@ -42,43 +42,53 @@ const ProductReviewRating = ({ product }) => {
         reviewRating?.totalThreeStar * 3 +
         reviewRating?.totalTwoStar * 2 +
         reviewRating?.totalOneStar;
-      return totalStar / reviewRating?.totalReview;
+      return (totalStar / reviewRating?.totalReview).toFixed(2);
     }
   };
 
   const fiveStarPercentage = () => {
     if (reviewRating) {
-      return (
-        (reviewRating?.totalFiveStar / reviewRating?.totalReview) * 100 + '%'
-      );
+      const percentage = (
+        (reviewRating.totalFiveStar / reviewRating.totalReview) *
+        100
+      ).toFixed(2);
+      return `${percentage}%`;
     }
   };
   const fourStarPercentage = () => {
     if (reviewRating) {
-      return (
-        (reviewRating?.totalFourStar / reviewRating?.totalReview) * 100 + '%'
-      );
+      const percentage = (
+        (reviewRating.totalFourStar / reviewRating.totalReview) *
+        100
+      ).toFixed(2);
+      return `${percentage}%`;
     }
   };
   const threeStarPercentage = () => {
     if (reviewRating) {
-      return (
-        (reviewRating?.totalThreeStar / reviewRating?.totalReview) * 100 + '%'
-      );
+      const percentage = (
+        (reviewRating.totalThreeStar / reviewRating.totalReview) *
+        100
+      ).toFixed(2);
+      return `${percentage}%`;
     }
   };
   const twoStarPercentage = () => {
     if (reviewRating) {
-      return (
-        (reviewRating?.totalTwoStar / reviewRating?.totalReview) * 100 + '%'
-      );
+      const percentage = (
+        (reviewRating.totalTwoStar / reviewRating.totalReview) *
+        100
+      ).toFixed(2);
+      return `${percentage}%`;
     }
   };
   const oneStarPercentage = () => {
     if (reviewRating) {
-      return (
-        (reviewRating?.totalOneStar / reviewRating?.totalReview) * 100 + '%'
-      );
+      const percentage = (
+        (reviewRating.totalOneStar / reviewRating.totalReview) *
+        100
+      ).toFixed(2);
+      return `${percentage}%`;
     }
   };
 
@@ -170,10 +180,7 @@ const ProductReviewRating = ({ product }) => {
 
                     {reviewRating?.totalReview ? (
                       <span className="lg:w-[10%] w-[5%] inline-block text-xs lg:text-sm pl-1 text-center">
-                        {(reviewRating?.totalFiveStar /
-                          reviewRating?.totalReview) *
-                          100}
-                        %
+                        {fiveStarPercentage()}
                       </span>
                     ) : (
                       <span className="lg:w-[10%] w-[5%] inline-block text-xs lg:text-sm pl-1 text-center">
@@ -201,10 +208,7 @@ const ProductReviewRating = ({ product }) => {
 
                     {reviewRating?.totalReview ? (
                       <span className="lg:w-[10%] w-[5%] inline-block text-xs lg:text-sm pl-1 text-center">
-                        {(reviewRating?.totalFourStar /
-                          reviewRating?.totalReview) *
-                          100}
-                        %
+                        {fourStarPercentage()}
                       </span>
                     ) : (
                       <span className="lg:w-[10%] w-[5%] inline-block text-xs lg:text-sm pl-1 text-center">
@@ -232,10 +236,7 @@ const ProductReviewRating = ({ product }) => {
 
                     {reviewRating?.totalReview ? (
                       <span className="lg:w-[10%] w-[5%] inline-block text-xs lg:text-sm pl-1 text-center">
-                        {(reviewRating?.totalThreeStar /
-                          reviewRating?.totalReview) *
-                          100}
-                        %
+                        {threeStarPercentage()}
                       </span>
                     ) : (
                       <span className="lg:w-[10%] w-[5%] inline-block text-xs lg:text-sm pl-1 text-center">
@@ -263,10 +264,7 @@ const ProductReviewRating = ({ product }) => {
 
                     {reviewRating?.totalReview ? (
                       <span className="lg:w-[10%] w-[5%] inline-block text-xs lg:text-sm pl-1 text-center">
-                        {(reviewRating?.totalTwoStar /
-                          reviewRating?.totalReview) *
-                          100}
-                        %
+                        {twoStarPercentage()}
                       </span>
                     ) : (
                       <span className="lg:w-[10%] w-[5%] inline-block text-xs lg:text-sm pl-1 text-center">
@@ -294,10 +292,7 @@ const ProductReviewRating = ({ product }) => {
 
                     {reviewRating?.totalReview ? (
                       <span className="lg:w-[10%] w-[5%] inline-block text-xs lg:text-sm pl-1 text-center">
-                        {(reviewRating?.totalOneStar /
-                          reviewRating?.totalReview) *
-                          100}
-                        %
+                        {oneStarPercentage()}
                       </span>
                     ) : (
                       <span className="lg:w-[10%] w-[5%] inline-block text-xs lg:text-sm pl-1 text-center">

@@ -31,25 +31,26 @@ model User {
 }
 
 model Product {
-  id          Int          @id @default(autoincrement())
-  description String       @db.LongText
-  price       Float
-  sale        Float?
-  thumbnail   String?      @db.LongText
-  images      String?      @db.LongText
-  categoryId  Int?
-  typeId      Int?
-  genderId    Int?
-  name        String
-  sizes       String       @db.LongText
-  category    Category?    @relation(fields: [categoryId], references: [id])
-  type        ProductType? @relation(fields: [typeId], references: [id])
-  gender      Gender?      @relation(fields: [genderId], references: [id])
-  reviews     Review[]
-  orderItems  OrderItem[]
-  sales       Sale[]
-  wishlists   Wishlist[]
-  CartItem    CartItem[]
+  id            Int          @id @default(autoincrement())
+  description   String       @db.LongText
+  price         Float
+  sale          Float?
+  thumbnail     String?      @db.LongText
+  images        String?      @db.LongText
+  categoryId    Int?
+  typeId        Int?
+  subcategoryId Int?
+  genderId      Int?
+  name          String
+  sizes         String       @db.LongText
+  category      Category?    @relation(fields: [categoryId], references: [id])
+  type          ProductType? @relation(fields: [typeId], references: [id])
+  gender        Gender?      @relation(fields: [genderId], references: [id])
+  reviews       Review[]
+  orderItems    OrderItem[]
+  sales         Sale[]
+  wishlists     Wishlist[]
+  CartItem      CartItem[]
 
   @@index([categoryId])
   @@index([typeId])
