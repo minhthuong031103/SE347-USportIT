@@ -23,7 +23,7 @@ const LoginPage = async ({ searchParams }: { searchParams: unknown }) => {
       name = decoded?.name;
     }
   );
-
+  console.log(email, name);
   return (
     <>
       <div className="p-12 relative h-full w-full ">

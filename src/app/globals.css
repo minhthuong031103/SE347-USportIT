@@ -63,11 +63,11 @@
  * @format
  */
 
-.button {
+.buttonCus {
   transition: transform 0.3s ease;
 }
 
-.button:active {
+.buttonCus:active {
   transform: scale(0.95);
 }
 /** @format */
