@@ -1,0 +1,14 @@
+/** @format */
+
+.animate-out {
+  animation: fadeOut 0.2s ease;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.8;
+  }
+}

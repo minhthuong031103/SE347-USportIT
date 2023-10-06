@@ -1,7 +1,7 @@
 'use client';
-import { Button } from '@/components/new-york/button';
-import { Input } from '@/components/new-york/input';
-import { Label } from '@/components/new-york/label';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FileDialog } from './FileDialog';
@@ -9,9 +9,9 @@ import { OurFileRouter } from '@/app/api/uploadthing/core';
 import { type FileWithPath } from 'react-dropzone';
 
 import { generateReactHelpers } from '@uploadthing/react/hooks';
-import { Zoom } from '@/components/new-york/zoom-image';
+import { Zoom } from '@/components/ui/zoom-image';
 import Image from 'next/image';
-import { Textarea } from '@/components/new-york/text-area';
+import { Textarea } from '@/components/ui/text-area';
 type FileWithPreview = FileWithPath & {
   preview: string;
 };

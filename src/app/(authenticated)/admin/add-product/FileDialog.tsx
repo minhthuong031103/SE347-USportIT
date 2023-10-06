@@ -20,14 +20,10 @@ import 'cropperjs/dist/cropper.css';
 import Image from 'next/image';
 
 import { cn, formatBytes } from '@/lib/utils';
-import { Button } from '@/components/new-york/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from '@/components/new-york/dialog';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Icons } from '@/assets/Icons';
-import { ScrollArea } from '@/components/new-york/scroll-area';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 // FIXME Your proposed upload exceeds the maximum allowed size, this should trigger toast.error too
 type FileWithPreview = FileWithPath & {

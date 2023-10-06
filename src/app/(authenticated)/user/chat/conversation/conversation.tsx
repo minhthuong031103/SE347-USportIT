@@ -6,7 +6,7 @@ import { useChatSocket } from '@/hooks/useChatSocket';
 import { SocketIndicator } from '@/components/socket-indicator';
 import Loader from '@/components/Loader';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
-import { Button } from '@/components/new-york/button';
+import { Button } from '@/components/ui/button';
 
 const ConversationPage = ({ session }) => {
   const queryClient = useQueryClient();
