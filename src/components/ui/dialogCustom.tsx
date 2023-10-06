@@ -112,11 +112,10 @@ function DialogCustom({
             }  ${isClosing ? 'animate-out fade-out-0 ' : ''}
   `}
           ></div>
-
           <div
             className={cn(
               `fixed left-[50%] top-[50%] z-50 max-w-full translate-x-[-50%] 
-      translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 ww-[90%] lg:w-[30%] h-[40%] lg:h-[50%]  ${
+      translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200   ${
         isModalOpen
           ? `animate-in fade-in-0 zoom-in-95 slide-in-from-left-1/2 slide-in-from-top-[48%]`
           : ''
