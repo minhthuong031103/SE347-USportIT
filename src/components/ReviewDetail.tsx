@@ -53,9 +53,9 @@ const ReviewDetail = ({ data }) => {
   );
   return (
     <div className="flex w-full flex-col gap-[8px] lg:gap-[16px] border-b-2 border-x-zinc-900 px-5 py-6">
-      <div className="flex flex-row relative items-center">
-        <span className="font-bold text-xl">{data.title}</span>
-        <span className="ml-auto font-extralight text-sm text-neutral-500 ">
+      <div className="flex flex-col sm:flex-row relative sm:items-center">
+        <span className="font-bold text-sm md:text-xl">{data.title}</span>
+        <span className="sm:ml-auto font-extralight text-[11px] md:text-sm xs:mt-1 mt-2 text-neutral-500">
           {new Date(data.reviewDate).toLocaleString()}
         </span>
       </div>
@@ -78,7 +78,7 @@ const ReviewDetail = ({ data }) => {
           );
         })}
       </div>
-      <span className="font-semibold text-xl">
+      <span className="font-semibold text-sm md:text-lg">
         {data.user ? data.user.name : 'Anonymous'}
       </span>
 
@@ -101,12 +101,17 @@ const ReviewDetail = ({ data }) => {
       <div>
         <p
           ref={ref}
-          className={`break-words ${!isShowingMore && 'line-clamp-3'}`}
+          className={`break-words ${
+            !isShowingMore && 'text-sm md:text-lg line-clamp-3'
+          }`}
         >
           {data.text}
         </p>
         {isTruncated && (
-          <button className="font-semibold" onClick={toggleIsShowingMore}>
+          <button
+            className="font-semibold text-sm md:text-lg"
+            onClick={toggleIsShowingMore}
+          >
             {isShowingMore ? 'Show less' : 'Show more'}
           </button>
         )}
