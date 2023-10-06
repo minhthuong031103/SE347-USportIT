@@ -126,6 +126,7 @@
   }
 }
 .no-scroll {
+<<<<<<< HEAD
   overflow: hidden;
   padding-right: var(--scrollbar-width);
 }
@@ -236,4 +237,7 @@
   100% {
     background-color: hsl(200, 20%, 95%);
   }
+
+  overflow: hidden;
+  padding-right: var(--scrollbar-width);
 }
