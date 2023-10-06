@@ -54,11 +54,11 @@ const NavigationMenuDemo = ({ session }) => {
     <div
       className={`w-full h-[50px] md:h-[80px] 
     bg-white  items-center justify-between z-20
-    sticky top-0 transition-transform duration-300 px-14  
+    sticky top-0 transition-transform duration-300 px-5 lg:px-20
     ${show}
     `}
     >
-      <MobileNav />
+      <MobileNav session={session} />
       <div className="hidden lg:flex py-2  ">
         {' '}
         <Logo />
@@ -67,17 +67,17 @@ const NavigationMenuDemo = ({ session }) => {
           <NavigationMenu.List className="NavigationMenuList">
             <NavigationMenu.Item>
               <NavigationMenu.Trigger className="NavigationMenuTrigger">
-                Learn <CaretDownIcon className="CaretDown" aria-hidden />
+                Sports <CaretDownIcon className="CaretDown" aria-hidden />
               </NavigationMenu.Trigger>
               <NavigationMenu.Content className="NavigationMenuContent">
                 <ul className="List one">
-                  <li style={{ gridRow: 'span 3' }}>
+                  <li style={{ gridRow: 'span 4' }}>
                     <NavigationMenu.Link asChild>
                       <a className="Callout" href="/">
                         <svg
                           aria-hidden
-                          width="38"
-                          height="38"
+                          width="58"
+                          height="58"
                           viewBox="0 0 25 25"
                           fill="white"
                         >
@@ -85,21 +85,25 @@ const NavigationMenuDemo = ({ session }) => {
                           <path d="M12 0H4V8H12V0Z"></path>
                           <path d="M17 8C19.2091 8 21 6.20914 21 4C21 1.79086 19.2091 0 17 0C14.7909 0 13 1.79086 13 4C13 6.20914 14.7909 8 17 8Z"></path>
                         </svg>
-                        <div className="CalloutHeading">Radix Primitives</div>
+                        <div className="CalloutHeading">All</div>
                         <p className="CalloutText">
-                          Unstyled, accessible components for React.
+                          An open source e-commerce UIT Sport build with
+                          everything new in Next.js 13.
                         </p>
                       </a>
                     </NavigationMenu.Link>
                   </li>
 
-                  <ListItem href="https://stitches.dev/" title="Stitches">
+                  <ListItem href="https://stitches.dev/" title="Football">
                     CSS-in-JS with best-in-class developer experience.
                   </ListItem>
-                  <ListItem href="/colors" title="Colors">
+                  <ListItem href="/colors" title="Basketball">
                     Beautiful, thought-out palettes with auto dark mode.
                   </ListItem>
-                  <ListItem href="https://icons.radix-ui.com/" title="Icons">
+                  <ListItem href="https://icons.radix-ui.com/" title="Running">
+                    A crisp set of 15x15 icons, balanced and consistent.
+                  </ListItem>
+                  <ListItem href="https://icons.radix-ui.com/" title="Gym">
                     A crisp set of 15x15 icons, balanced and consistent.
                   </ListItem>
                 </ul>
@@ -107,46 +111,28 @@ const NavigationMenuDemo = ({ session }) => {
             </NavigationMenu.Item>
             <NavigationMenu.Item>
               <NavigationMenu.Trigger className="NavigationMenuTrigger">
-                Overview <CaretDownIcon className="CaretDown" aria-hidden />
+                Men <CaretDownIcon className="CaretDown" aria-hidden />
               </NavigationMenu.Trigger>
               <NavigationMenu.Content className="NavigationMenuContent">
                 <ul className="List two">
                   <ListItem
-                    title="Introduction"
+                    title="Shoes"
                     href="/primitives/docs/overview/introduction"
                   >
                     Build high-quality, accessible design systems and web apps.
                   </ListItem>
                   <ListItem
-                    title="Getting started"
+                    title="Clothing"
                     href="/primitives/docs/overview/getting-started"
                   >
                     A quick tutorial to get you up and running with Radix
                     Primitives.
                   </ListItem>
                   <ListItem
-                    title="Styling"
+                    title="Accessories and Equipment"
                     href="/primitives/docs/guides/styling"
                   >
                     Unstyled and compatible with any styling solution.
-                  </ListItem>
-                  <ListItem
-                    title="Animation"
-                    href="/primitives/docs/guides/animation"
-                  >
-                    Use CSS keyframes or any animation library of your choice.
-                  </ListItem>
-                  <ListItem
-                    title="Accessibility"
-                    href="/primitives/docs/overview/accessibility"
-                  >
-                    Tested in a range of browsers and assistive technologies.
-                  </ListItem>
-                  <ListItem
-                    title="Releases"
-                    href="/primitives/docs/overview/releases"
-                  >
-                    Radix Primitives releases and their changelogs.
                   </ListItem>
                 </ul>
               </NavigationMenu.Content>
@@ -154,59 +140,70 @@ const NavigationMenuDemo = ({ session }) => {
 
             <NavigationMenu.Item>
               <NavigationMenu.Trigger className="NavigationMenuTrigger">
-                Overview <CaretDownIcon className="CaretDown" aria-hidden />
+                Women <CaretDownIcon className="CaretDown" aria-hidden />
               </NavigationMenu.Trigger>
               <NavigationMenu.Content className="NavigationMenuContent">
                 <ul className="List two">
                   <ListItem
-                    title="Introduction"
+                    title="Shoes"
                     href="/primitives/docs/overview/introduction"
                   >
                     Build high-quality, accessible design systems and web apps.
                   </ListItem>
                   <ListItem
-                    title="Getting started"
+                    title="Clothing"
                     href="/primitives/docs/overview/getting-started"
                   >
                     A quick tutorial to get you up and running with Radix
                     Primitives.
                   </ListItem>
                   <ListItem
-                    title="Styling"
+                    title="Accessories and Equipment"
                     href="/primitives/docs/guides/styling"
                   >
                     Unstyled and compatible with any styling solution.
-                  </ListItem>
-                  <ListItem
-                    title="Animation"
-                    href="/primitives/docs/guides/animation"
-                  >
-                    Use CSS keyframes or any animation library of your choice.
-                  </ListItem>
-                  <ListItem
-                    title="Accessibility"
-                    href="/primitives/docs/overview/accessibility"
-                  >
-                    Tested in a range of browsers and assistive technologies.
-                  </ListItem>
-                  <ListItem
-                    title="Releases"
-                    href="/primitives/docs/overview/releases"
-                  >
-                    Radix Primitives releases and their changelogs.
                   </ListItem>
                 </ul>
               </NavigationMenu.Content>
             </NavigationMenu.Item>
 
             <NavigationMenu.Item>
+              <NavigationMenu.Trigger className="NavigationMenuTrigger">
+                Kids <CaretDownIcon className="CaretDown" aria-hidden />
+              </NavigationMenu.Trigger>
+              <NavigationMenu.Content className="NavigationMenuContent">
+                <ul className="List two">
+                  <ListItem
+                    title="Shoes"
+                    href="/primitives/docs/overview/introduction"
+                  >
+                    Build high-quality, accessible design systems and web apps.
+                  </ListItem>
+                  <ListItem
+                    title="Clothing"
+                    href="/primitives/docs/overview/getting-started"
+                  >
+                    A quick tutorial to get you up and running with Radix
+                    Primitives.
+                  </ListItem>
+                  <ListItem
+                    title="Accessories and Equipment"
+                    href="/primitives/docs/guides/styling"
+                  >
+                    Unstyled and compatible with any styling solution.
+                  </ListItem>
+                </ul>
+              </NavigationMenu.Content>
+            </NavigationMenu.Item>
+
+            {/* <NavigationMenu.Item>
               <NavigationMenu.Link
                 className="NavigationMenuLink"
                 href="https://github.com/radix-ui"
               >
                 Github
               </NavigationMenu.Link>
-            </NavigationMenu.Item>
+            </NavigationMenu.Item> */}
 
             <NavigationMenu.Indicator className="NavigationMenuIndicator">
               <div className="Arrow" />
