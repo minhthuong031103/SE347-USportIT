@@ -1,4 +1,6 @@
 {
-  "cSpell.words": ["nextui", "persistor", "tanstack", "uploadthing"],
+  "cSpell.words": [
+    "tanstack"
+  ],
   "WillLuke.nextjs.hasPrompted": true
 }
