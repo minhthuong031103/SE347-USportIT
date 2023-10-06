@@ -126,6 +126,7 @@
   }
 }
 .no-scroll {
+<<<<<<< HEAD
   overflow: hidden;
   padding-right: var(--scrollbar-width);
 }
@@ -240,4 +241,8 @@
 >>>>>>> Stashed changes
 =======
 >>>>>>> 9215fd0 (Test skeleton loading)
+=======
+  overflow: hidden;
+  padding-right: var(--scrollbar-width);
+>>>>>>> d5e50d7 (Complete ReviewForm)
 }
