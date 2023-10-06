@@ -15,6 +15,7 @@ import { type FileWithPath } from 'react-dropzone';
 import { FileDialog } from '@/app/(authenticated)/admin/add-product/FileDialog';
 import { getSession } from 'next-auth/react';
 import { useReview } from '@/hooks/useReview';
+import { useRouter } from 'next/navigation';
 
 type FileWithPreview = FileWithPath & {
   preview: string;
@@ -28,6 +29,8 @@ const ProductReviewForm = ({ product }) => {
   const [rating, setRating] = React.useState(0);
   const [hover, setHover] = React.useState(0);
   const [isVisible, setIsVisible] = React.useState(false);
+
+  const router = useRouter();
 
   const onGetSession = async () => {
     const session = await getSession();
@@ -61,19 +64,30 @@ const ProductReviewForm = ({ product }) => {
     console.log(ret);
   };
   return (
-    <div className="w-full overflow-hidden">
+    <div className="w-full">
       <div className="flex items-center justify-center">
         <Dialog>
           <DialogTrigger>
             <Button
               className="z-70 border-transparent hover:scale-105 hover:transition hover:duration-200 font-semibold text-white"
-              onClick={() => setIsVisible(!isVisible)}
+              onClick={() => {
+                const getSession = async () => {
+                  const session = await onGetSession();
+                  if (!session) {
+                    console.log('no session');
+                    router.push('/auth/login');
+                  } else {
+                    setIsVisible(!isVisible);
+                  }
+                };
+                getSession();
+              }}
             >
               Write a Review
             </Button>
           </DialogTrigger>
 
-          <DialogContent className="flex flex-col lg:w-[60%] w-[80%] h-[95%]">
+          <DialogContent className="flex flex-col lg:w-[60%] w-[80%] h-[80%] sm:h-[95%] pr-6 overflow-scroll">
             <div className="w-full h-fit flex flex-col pt-2 items-center">
               <span className="text-[12px] sm:text-sm md:text-base font-semibold">
                 Write a Review
@@ -165,7 +179,7 @@ const ProductReviewForm = ({ product }) => {
               />
             </div>
 
-            <div className="flex flex-col w-full h-[40%] gap-1 sm:gap-2">
+            <div className="flex flex-col w-full h-fit gap-1 sm:gap-2">
               <Label className="font-semibold text-[10px] sm:text-[14px]">
                 Content
               </Label>
@@ -188,7 +202,7 @@ const ProductReviewForm = ({ product }) => {
               />
             </div>
 
-            <div className="flex flex-col gap-1 sm:gap-3">
+            <div className="flex flex-col sm:gap-3">
               <Label className="font-semibold text-[10px] sm:text-[14px]">
                 Image
               </Label>
