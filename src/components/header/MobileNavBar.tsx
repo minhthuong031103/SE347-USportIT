@@ -13,6 +13,7 @@ import { usePathname } from 'next/navigation';
 import React, { useState } from 'react';
 import { CommonSvg } from '@/assets/CommonSvg';
 import Link from 'next/link';
+
 const sidebarNavItems = [
   {
     title: 'Account',
@@ -41,30 +42,76 @@ const sidebarNavItems = [
 ];
 const mainNavItems = [
   {
-    title: 'Lobby',
+    title: 'Men',
     items: [
       {
-        title: 'Products',
-        href: '/products',
+        title: 'Shoes',
+        href: '/shoes',
         description: 'All the products we have to offer.',
         items: [],
       },
       {
-        title: 'Build a Board',
-        href: '/build-a-board',
+        title: 'Clothing',
+        href: '/clothes',
         description: 'Build your own custom skateboard.',
         items: [],
       },
       {
-        title: 'Blog',
-        href: '/blog',
+        title: 'Accessories and Equipment',
+        href: '/accessories',
+        description: 'Read our latest blog posts.',
+        items: [],
+      },
+    ],
+  },
+  {
+    title: 'Women',
+    items: [
+      {
+        title: 'Shoes',
+        href: '/shoes',
+        description: 'All the products we have to offer.',
+        items: [],
+      },
+      {
+        title: 'Clothing',
+        href: '/clothes',
+        description: 'Build your own custom skateboard.',
+        items: [],
+      },
+      {
+        title: 'Accessories and Equipment',
+        href: '/accessories',
+        description: 'Read our latest blog posts.',
+        items: [],
+      },
+    ],
+  },
+  {
+    title: 'Kids',
+    items: [
+      {
+        title: 'Shoes',
+        href: '/shoes',
+        description: 'All the products we have to offer.',
+        items: [],
+      },
+      {
+        title: 'Clothing',
+        href: '/clothes',
+        description: 'Build your own custom skateboard.',
+        items: [],
+      },
+      {
+        title: 'Accessories and Equipment',
+        href: '/accessories',
         description: 'Read our latest blog posts.',
         items: [],
       },
     ],
   },
 ];
-export function MobileNav() {
+export function MobileNav({ session }) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -89,7 +136,9 @@ export function MobileNav() {
             className="flex items-center"
             onClick={() => setIsOpen(false)}
           >
-            <span className="font-bold">{'thuong'}</span>
+            <span className="font-bold">
+              {session?.user ? `Hi, ${session?.user.name}` : 'Hi'}
+            </span>
           </Link>
         </div>
         <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">

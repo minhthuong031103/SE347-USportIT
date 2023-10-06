@@ -3,7 +3,7 @@
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-//disptach, seclector
+//dispatch, selector
 import {
   addToCart,
   increaseItemFromCart,
