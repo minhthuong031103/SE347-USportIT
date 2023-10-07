@@ -3,8 +3,10 @@
 import { ScrollArea } from '@components/ui/scroll-area';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
+import { Label } from './label';
 import { Label } from './label';
 function DialogCustom({
   isModalOpen,
@@ -138,14 +140,11 @@ function DialogCustom({
           >
             <div className="h-full w-full ">
               <ScrollArea className="h-full w-full px-3">
-                {!notShowClose ? (
-                  <div className="flex items-end justify-end mb-3">
-                    <Button variant={'outline'} onClick={handleClose}>
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ) : null}
-
+                <div className="flex items-end justify-end mb-3">
+                  <Button variant={'outline'} onClick={handleClose}>
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
                 <div className="w-full h-full py-3">
                   {/* CHILDREN */}
                   {children}
