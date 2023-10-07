@@ -1,4 +1,4 @@
-/* @format */
+/** @format */
 
 import { ScrollArea } from '@components/ui/scroll-area';
 import { X } from 'lucide-react';
@@ -12,6 +12,7 @@ function DialogCustom({
   children,
   warningOnClose,
   className,
+  callBack,
 }: {
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void;
