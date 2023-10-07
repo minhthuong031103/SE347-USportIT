@@ -1,10 +1,8 @@
 import ProductDetailLeft from './ProductDetailLeft';
 import ProductDetailRight from './ProductDetailRight';
 import { useProduct } from '@/hooks/useProduct';
-import ProductReviewRating from './ProductReviewRating';
-import ProductReview from './ProductReview';
-import ProductReviewForm from './ProductReviewForm';
 import ProductUserMayLike from './ProductUserMayLike';
+import ProductReview from './ProductReview';
 
 async function page({ params }) {
   const { slug } = params;
@@ -35,16 +33,7 @@ async function page({ params }) {
             <ProductDetailRight data={data} />
           </div>
         </div>
-        <div className=" flex-col gap-1 mt-20 lg:mt-25 justify-center items-center flex text-[34px] font-semibold mb-2 leading-tight">
-          Reviews
-          <div className="w-full pt-2">
-            <ProductReviewRating product={data} />
-          </div>
-          <div className="container w-full">
-            <ProductReviewForm product={data}></ProductReviewForm>
-          </div>
-        </div>
-        <div className="w-full py-5">
+        <div>
           <ProductReview product={data} />
         </div>
         <div>
