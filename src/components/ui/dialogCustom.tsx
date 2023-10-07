@@ -1,8 +1,7 @@
-/** @format */
+/* @format */
 
 import { ScrollArea } from '@components/ui/scroll-area';
 import { X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
@@ -117,26 +116,26 @@ function DialogCustom({
   return (
     isVisible && (
       <div className="w-full h-full">
-        <div className="absolute">
-          <div
-            className={`fixed inset-0 z-50 bg-background/80 backdrop-blur-sm ${
-              isModalOpen ? `animate-in fade-in-0` : ''
-            }  ${isClosing ? 'animate-out fade-out-0 ' : ''}
+        <div
+          className={`fixed inset-0 z-50 bg-background/80 backdrop-blur-sm ${
+            isModalOpen ? `animate-in fade-in-0` : ''
+          }  ${isClosing ? 'animate-out fade-out-0 ' : ''}
   `}
-          ></div>
+        ></div>
 
-          <div
-            className={cn(
-              `fixed left-[50%] top-[50%] z-50 max-w-full translate-x-[-50%] 
-      translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 ww-[90%] lg:w-[30%] h-[40%] lg:h-[50%]  ${
-        isModalOpen
-          ? `animate-in fade-in-0 zoom-in-95 slide-in-from-left-1/2 slide-in-from-top-[48%]`
-          : ''
-      } ${
-                isClosing
-                  ? 'animate-out fade-out-10 zoom-out-95 slide-out-to-left-1/2  slide-out-to-top-[48%] '
-                  : ''
-              }
+        <div
+          className={cn(
+            `fixed left-[50%] top-[50%] z-50 max-w-full translate-x-[-50%] 
+      translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 w-[90%] h-[90%]
+       lg:w-[60%]   ${
+         isModalOpen
+           ? `animate-in fade-in-0 zoom-in-95 slide-in-from-left-1/2 slide-in-from-top-[48%]`
+           : ''
+       } ${
+              isClosing
+                ? 'animate-out fade-out-10 zoom-out-95 slide-out-to-left-1/2  slide-out-to-top-[48%] '
+                : ''
+            }
        `,
               className
             )}
