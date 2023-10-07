@@ -28,6 +28,9 @@ export async function GET(request: Request) {
     },
     skip: (page - 1) * limit,
     take: limit,
+    orderBy: {
+      reviewDate: 'desc',
+    },
   });
 
   const data = {
