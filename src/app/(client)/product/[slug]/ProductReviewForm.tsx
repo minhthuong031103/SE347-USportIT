@@ -131,14 +131,13 @@ const ProductReviewForm = ({
         >
           Write a Review
         </Button>
-      </div>{' '}
+      </div>
       {isShowDialog ? (
         <DialogCustom
-          className="flex justify-center items-center"
+          warningOnClose={true}
+          className="flex justify-center items-center w-[90%] lg:w-[60%] h-[90%]"
           isModalOpen={isShowDialog}
-          onClose={() => {
-            setIsShowDialog(false);
-          }}
+          setIsModalOpen={setIsShowDialog}
         >
           <div className="flex flex-col w-full h-auto pr-4 gap-3">
             <div className="w-full h-fit flex flex-col pt-2 items-center">
@@ -312,7 +311,7 @@ const ProductReviewForm = ({
             </div>
             <div>
               <DialogCustom
-                className="w-[60%] lg:w-[50%] h-fit items-center justify-center"
+                className="w-[90%] lg:w-[50%] h-fit items-center justify-center"
                 isModalOpen={isLoading}
                 onClose={() => {
                   setIsLoading(false);
