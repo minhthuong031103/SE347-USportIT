@@ -15,6 +15,7 @@ function DialogCustom({
   warningOnClose,
   className,
   callBack,
+  notShowClose,
 }: {
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void;
@@ -24,6 +25,7 @@ function DialogCustom({
   children: React.ReactNode;
   className?: string;
   callBack?: () => void;
+  notShowClose?: boolean;
 }) {
   const [isVisible, setIsVisible] = useState(isModalOpen);
   const [isClosing, setIsClosing] = useState(false);
@@ -143,11 +145,14 @@ function DialogCustom({
           >
             <div className="h-full w-full ">
               <ScrollArea className="h-full w-full px-3">
-                <div className="flex items-end justify-end mb-3">
-                  <Button variant={'outline'} onClick={handleClose}>
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
+                {!notShowClose ? (
+                  <div className="flex items-end justify-end mb-3">
+                    <Button variant={'outline'} onClick={handleClose}>
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ) : null}
+
                 <div className="w-full h-full py-3">
                   {/* CHILDREN */}
                   {children}
