@@ -38,15 +38,17 @@ const ProductReviewForm = ({
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [isVisible, setIsVisible] = React.useState(false);
-  //Loading and success
+  //Loading, success, invalid
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [isInvalid, setIsInvalid] = useState(false);
   //Show dialog
   const [isShowDialog, setIsShowDialog] = useState(false);
   //Invalid input
   const [isTitleValid, setIsTitleValid] = useState(false);
   const [isContentValid, setIsContentValid] = useState(false);
 
+  //Get session
   const onGetSession = async () => {
     const session = await getSession();
     const userId = parseInt(session?.user?.id);
@@ -54,22 +56,42 @@ const ProductReviewForm = ({
   };
 
   const { handleSubmit, control, reset } = useForm();
+  //Submit function
   const onSubmit = async (data) => {
+    await setIsInvalid(false);
+    console.log(
+      'isInvalid = ' +
+        isInvalid +
+        ' rating = ' +
+        rating +
+        ' isTitleValid = ' +
+        isTitleValid +
+        ' isContentValid = ' +
+        isContentValid
+    );
+    // Reset isInvalid to false when the dialog is opened
     if (rating === 0) {
+      setIsInvalid(true); // Set isInvalid to true if rating is 0
       return;
     }
     if (data.title === '') {
       setIsTitleValid(false);
+      setIsInvalid(true); // Set isInvalid to true if title is empty
       return;
     } else {
       setIsTitleValid(true);
     }
     if (data.text === '') {
       setIsContentValid(false);
+      setIsInvalid(true); // Set isInvalid to true if content is empty
       return;
     } else {
       setIsContentValid(true);
     }
+    //If all input is valid, then submit
+    // Set loading state to true when submitting for submiting dialog
+
+    setIsLoading(true);
     const userId = await onGetSession();
     const images = await startUpload([...files]).then((res) => {
       const formattedImages = res?.map((image) => ({
@@ -80,6 +102,7 @@ const ProductReviewForm = ({
       return formattedImages ?? null;
     });
 
+    // const [data] = useQuery('key', func(), {});
     const ret = await onPostProductReview(
       JSON.stringify({
         ...data,
@@ -93,6 +116,8 @@ const ProductReviewForm = ({
 
     if (ret) {
       console.log(ret);
+      // Set loading state to false and show success dialog
+      setIsLoading(false);
       setShowSuccess(true);
 
       // Reset form and other state variables after submission after 2sec
@@ -102,9 +127,9 @@ const ProductReviewForm = ({
         setRating(0);
         setHover(0);
         setIsShowDialog(false);
-        setIsVisible(false);
         setIsLoading(false);
         setShowSuccess(false);
+        setIsInvalid(false);
       }, 2000);
       reviewItemRefetch();
       reviewRatingRefetch();
@@ -132,15 +157,25 @@ const ProductReviewForm = ({
           Write a Review
         </Button>
       </div>
+      {/* Check condition to open dialog */}
       {isShowDialog ? (
         <DialogCustom
           warningOnClose={true}
           className="flex justify-center items-center w-[90%] lg:w-[60%] h-[90%]"
           isModalOpen={isShowDialog}
           setIsModalOpen={setIsShowDialog}
+          callBack={() => {
+            // Reset form details and state varibles
+            // when the dialog is closed
+            reset();
+            setRating(0);
+            setHover(0);
+            setFiles([]);
+            setIsInvalid(false);
+          }}
         >
-          <div className="flex flex-col w-full h-auto pr-4 gap-3">
-            <div className="w-full h-fit flex flex-col pt-2 items-center">
+          <div className="flex flex-col w-full h-auto pr-4 gap-6">
+            <div className="w-full h-fit flex flex-col pt-2 items-center gap-3">
               <span className="text-[12px] sm:text-sm md:text-base font-semibold">
                 Write a Review
               </span>
@@ -161,7 +196,7 @@ const ProductReviewForm = ({
               </div>
             </div>
 
-            <div className="flex w-full h-fit mt-3 flex-col gap-1 sm:gap-3">
+            <div className="flex w-full h-fit mt-3 flex-col gap-3">
               <Label className="font-semibold text-[10px] sm:text-[14px]">
                 Overall Rating
               </Label>
@@ -210,7 +245,7 @@ const ProductReviewForm = ({
               </div>
             </div>
 
-            <div className="flex w-full flex-col flex-wrap md:flex-nowrap gap-1 sm:gap-3">
+            <div className="flex w-full flex-col flex-wrap md:flex-nowrap gap-3">
               <Label className="font-semibold text-[10px] sm:text-[14px]">
                 Title
               </Label>
@@ -232,7 +267,7 @@ const ProductReviewForm = ({
               />
             </div>
 
-            <div className="flex flex-col w-full h-fit gap-1 sm:gap-2">
+            <div className="flex flex-col w-full h-fit gap-2">
               <Label className="font-semibold text-[10px] sm:text-[14px]">
                 Content
               </Label>
@@ -255,7 +290,7 @@ const ProductReviewForm = ({
               />
             </div>
 
-            <div className="flex flex-col sm:gap-3">
+            <div className="flex flex-col gap-3">
               <Label className="font-semibold text-[10px] sm:text-[14px]">
                 Image
               </Label>
@@ -293,11 +328,10 @@ const ProductReviewForm = ({
                   );
                 }}
               />
-              <div className="flex w-full justify-center items-center">
+              <div className="flex w-full mt-5 justify-center items-center">
                 <Button
                   className="w-[50%] inset-0 border-transparent hover:scale-105 hover:transition text-[13px] sm:text-[16px] hover:duration-200 font-semibold text-white rounded-md"
                   onClick={async () => {
-                    setIsLoading(true); // Set loading state to true when submitting
                     try {
                       await handleSubmit(onSubmit)();
                     } catch (error) {
@@ -309,69 +343,84 @@ const ProductReviewForm = ({
                 </Button>
               </div>
             </div>
-            <div>
-              <DialogCustom
-                className="w-[90%] lg:w-[50%] h-fit items-center justify-center"
-                isModalOpen={isLoading}
-                onClose={() => {
-                  setIsLoading(false);
-                }}
-              >
-                <div className="flex flex-col gap-3 items-center justify-center">
-                  {isLoading &&
-                  !showSuccess &&
-                  rating !== 0 &&
-                  isTitleValid &&
-                  isContentValid ? (
+            <div className="flex flex-col gap-3 items-center justify-center">
+              {/* Loading Dialog */}
+              {isLoading &&
+                !showSuccess &&
+                rating !== 0 &&
+                isTitleValid &&
+                isContentValid && (
+                  <DialogCustom
+                    className="w-[90%] lg:w-[50%] h-fit items-center justify-center"
+                    isModalOpen={isLoading}
+                    notShowClose={true}
+                  >
                     <div className="flex flex-col gap-3 items-center justify-center">
                       <Spinner size="lg" />
                       <div className="text-center font-semibold text-xs sm:text-sm">
                         Submitting Review...
                       </div>
                     </div>
-                  ) : rating === 0 ? (
-                    <div className="flex flex-col gap-3 items-center justify-center">
-                      <FaExclamationTriangle
-                        className="text-gray-700"
-                        size={35}
-                      />
-                      <div className="text-center font-semibold text-xs sm:text-sm">
-                        Please type in your rating!
-                      </div>
+                  </DialogCustom>
+                )}
+
+              {/* Invalid Dialog */}
+              {isInvalid ? (
+                <DialogCustom
+                  className="w-[90%] lg:w-[50%] h-fit items-center justify-center"
+                  isModalOpen={!isLoading}
+                >
+                  <div className="flex flex-col gap-3 items-center justify-center">
+                    {rating === 0 ? (
+                      <>
+                        <FaExclamationTriangle
+                          className="text-gray-700"
+                          size={35}
+                        />
+                        <div className="text-center font-semibold text-xs sm:text-sm">
+                          Please type in your rating!
+                        </div>
+                      </>
+                    ) : !isTitleValid ? (
+                      <>
+                        <FaExclamationTriangle
+                          className="text-gray-700"
+                          size={35}
+                        />
+                        <div className="text-center font-semibold text-xs sm:text-sm">
+                          Please type in your title!
+                        </div>
+                      </>
+                    ) : !isContentValid ? (
+                      <>
+                        <FaExclamationTriangle
+                          className="text-gray-700"
+                          size={35}
+                        />
+                        <div className="text-center font-semibold text-xs sm:text-sm">
+                          Please type in your content!
+                        </div>
+                      </>
+                    ) : null}
+                  </div>
+                </DialogCustom>
+              ) : null}
+
+              {/* Success Dialog */}
+              {showSuccess && (
+                <DialogCustom
+                  className="w-[90%] lg:w-[50%] h-fit items-center justify-center"
+                  isModalOpen={!isLoading}
+                  notShowClose={true}
+                >
+                  <div className="flex flex-col gap-3 items-center justify-center">
+                    <FaCheckCircle className="text-gray-700" size={35} />
+                    <div className="text-center font-semibold text-xs sm:text-sm">
+                      Review Submitted!
                     </div>
-                  ) : !isTitleValid ? (
-                    <div className="flex flex-col gap-3 items-center justify-center">
-                      <FaExclamationTriangle
-                        className="text-gray-700"
-                        size={35}
-                      />
-                      <div className="text-center font-semibold text-xs sm:text-sm">
-                        Please type in your title!
-                      </div>
-                    </div>
-                  ) : !isContentValid ? (
-                    <div className="flex flex-col gap-3 items-center justify-center">
-                      <FaExclamationTriangle
-                        className="text-gray-700"
-                        size={35}
-                      />
-                      <div className="text-center font-semibold text-xs sm:text-sm">
-                        Please type in your content!
-                      </div>
-                    </div>
-                  ) : (
-                    <></>
-                  )}
-                  {showSuccess && (
-                    <div className="flex flex-col gap-3 items-center justify-center">
-                      <FaCheckCircle className="text-gray-700" size={35} />
-                      <div className="text-center font-semibold text-xs sm:text-sm">
-                        Review Submitted!
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </DialogCustom>
+                  </div>
+                </DialogCustom>
+              )}
             </div>
           </div>
         </DialogCustom>
