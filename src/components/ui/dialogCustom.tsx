@@ -12,12 +12,16 @@ function DialogCustom({
   children,
   warningOnClose,
   className,
+  callBack,
+  notShowClose,
 }: {
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void;
   warningOnClose?: boolean;
   children: React.ReactNode;
   className?: string;
+  callBack?: () => void;
+  notShowClose?: boolean;
 }) {
   const [isVisible, setIsVisible] = useState(isModalOpen);
   const [isClosing, setIsClosing] = useState(false);
@@ -66,7 +70,7 @@ function DialogCustom({
     if (isModalOpen) {
       setIsVisible(true);
     } else {
-      setIsModalOpen(false);
+      setIsModalOpen?.(false);
     }
   }, [isModalOpen]);
   useEffect(() => {
@@ -75,7 +79,7 @@ function DialogCustom({
     } else {
       setIsWarningOpen(false);
     }
-  }, [isModalOpen]);
+  }, [isWarningOpen]);
 
   const handleClose = () => {
     if (warningOnClose && !isWarningOpen) {
@@ -85,7 +89,7 @@ function DialogCustom({
       setTimeout(() => {
         setIsClosing(false);
         setIsVisible(false);
-        setIsModalOpen(false);
+        setIsModalOpen?.(false);
       }, 120);
     }
   };
@@ -108,11 +112,10 @@ function DialogCustom({
             }  ${isClosing ? 'animate-out fade-out-0 ' : ''}
   `}
           ></div>
-
           <div
             className={cn(
               `fixed left-[50%] top-[50%] z-50 max-w-full translate-x-[-50%] 
-      translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 ww-[90%] lg:w-[30%] h-[40%] lg:h-[50%]  ${
+      translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200   ${
         isModalOpen
           ? `animate-in fade-in-0 zoom-in-95 slide-in-from-left-1/2 slide-in-from-top-[48%]`
           : ''
@@ -127,11 +130,14 @@ function DialogCustom({
           >
             <div className="h-full w-full ">
               <ScrollArea className="h-full w-full px-3">
-                <div className="flex items-end justify-end mb-3">
-                  <Button variant={'outline'} onClick={handleClose}>
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
+                {!notShowClose ? (
+                  <div className="flex items-end justify-end mb-3">
+                    <Button variant={'outline'} onClick={handleClose}>
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ) : null}
+
                 <div className="w-full h-full py-3">
                   {/* CHILDREN */}
                   {children}
@@ -144,11 +150,10 @@ function DialogCustom({
                         }  ${isWarningClosing ? 'animate-out fade-out-0 ' : ''}
   `}
                       ></div>
-
                       <div
                         className={cn(
                           `fixed left-[50%] top-[50%] z-50 max-w-full translate-x-[-50%] 
-      translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 w-[90%] lg:w-[30%] h-[40%] lg:h-[50%]   ${
+      translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 w-[90%] lg:w-[50%] ${
         isWarningOpen
           ? `animate-in fade-in-0 zoom-in-95 slide-in-from-left-1/2 slide-in-from-top-[48%]`
           : ''
@@ -177,6 +182,7 @@ function DialogCustom({
                                       // setDanhMucValue(null);
                                       // setThue(false);
                                       // setBan(false);
+                                      callBack?.();
                                       handleClose();
                                     }}
                                   >
