@@ -4,6 +4,8 @@ import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
 import { QueryProvider } from '@/components/providers/query-provider';
+
+import Link from 'next/link';
 const poppins = Poppins({
   subsets: ['latin'],
   weight: ['100', '200', '300', '400', '500', '600', '700', '800'],
@@ -28,6 +30,18 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <ReduxProvider>
           <QueryProvider>
             <Toaster />
+            <header className="py-8">
+              <nav className="container">
+                <ul className="flex space-x-6">
+                  <li>
+                    <Link href="/">Home</Link>
+                  </li>
+                  <li>
+                    <Link href="/products">Products</Link>
+                  </li>
+                </ul>
+              </nav>
+            </header>
             {children}
           </QueryProvider>
         </ReduxProvider>
