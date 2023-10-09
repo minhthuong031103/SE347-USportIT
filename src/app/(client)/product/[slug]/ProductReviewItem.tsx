@@ -35,7 +35,7 @@ const ProductReviewItem = ({
                 </div>
               ))}
         </div>
-        {reviewItemData?.data?.length == 0 && data != null ? (
+        {reviewItemData?.data?.length == 0 ? (
           <div></div>
         ) : (
           <Pagination
