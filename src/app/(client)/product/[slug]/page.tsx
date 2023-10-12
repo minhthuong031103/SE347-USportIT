@@ -40,7 +40,7 @@ async function page({ params }) {
           <div className="w-full pt-2">
             <ProductReviewRating product={data} />
           </div>
-          <div className="w-full">
+          <div className="w-full h-screen">
             <ProductReviewForm product={data}></ProductReviewForm>
           </div>
         </div>

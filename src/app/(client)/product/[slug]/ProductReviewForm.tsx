@@ -72,7 +72,7 @@ const ProductReviewForm = ({ product }) => {
           </Button>
         </DialogTrigger>
 
-        <DialogContent className="container flex flex-col w-[60%] h-[95%] overflow-scroll">
+        <DialogContent className="container flex flex-col w-[60%] h-[95%] max-h-[90vh] overflow-y-auto scroll-py-50">
           <div className="w-full h-fit flex flex-col items-center">
             <span>Write a Review</span>
             <span>Share your thoughts with the community.</span>
