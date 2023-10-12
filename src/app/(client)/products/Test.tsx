@@ -42,19 +42,10 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@nextui-org/react';
 
-const genderNavItems = [
-  {
-    title: 'men',
-  },
-  {
-    title: 'women',
-  },
-  {
-    title: 'kids',
-  },
-];
+
 interface TestProps {
   sort: string | null;
+  gender: string | null;
   categories: string | null;
   subcategories: string | null;
   price_range: string | null;
@@ -62,14 +53,19 @@ interface TestProps {
 
 export default function Test({
   sort,
+  gender,
   categories,
   subcategories,
   price_range,
   ...props
 }: TestProps) {
   const { fetchProduct } = useProduct();
-  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery(
-    ['products'],
+  const { data, fetchNextPage, hasNextPage, refetch: refetchData, } = useInfiniteQuery(
+    ['products',sort,
+    gender,
+    categories,
+    subcategories,
+    price_range,],
     ({ pageParam = 0 }) =>
       fetchProduct({
         page: pageParam,
@@ -79,6 +75,8 @@ export default function Test({
         price_range,
       }),
     {
+      staleTime: 1000 * 60 * 1,
+      keepPreviousData: true,
       refetchOnWindowFocus: false,
       getNextPageParam: (lastPage, pages) => {
         if (lastPage.page === 0 && pages.length < lastPage.totalPages) return 1;
@@ -98,13 +96,15 @@ export default function Test({
   // const page = searchParams?.get('page') ?? '1';
   // const per_page = searchParams?.get('per_page') ?? '8';
   // const sort = searchParams?.get('sort') ?? 'id.desc';
+  const [genderNavItems, setGenderNavItems] = useState([]);
   const [shoesNavItems, setShoesNavItems] = useState([]);
   const [clothNavItems, SetClothNavItems] = useState([]);
   const [accessoryNavItems, SetAccessoryNavItems] = useState([]);
+  const [sportNavItems, setSportNavItems] = useState([]);
   //Query Shoes Categories
   useEffect(() => {
     const getShoesNavItems = async () => {
-      const res = await fetch('/api/lib/shoes');
+      const res = await fetch('/api/lib/subcategory?productTypeId=1');
       const data = await res.json();
       console.log(res);
       console.log(data);
@@ -129,7 +129,7 @@ export default function Test({
     getClothNavItems();
   }, []);
 
-  //Query Clothes Categories
+  //Query Accessory Categories
   useEffect(() => {
     const getAccessoryNavItems = async () => {
       const res = await fetch('/api/lib/subcategory?productTypeId=3');
@@ -142,7 +142,34 @@ export default function Test({
     };
     getAccessoryNavItems();
   }, []);
+    //Query Gender
+    useEffect(() => {
+      const getGenderNavItems = async () => {
+        const res = await fetch('/api/lib/gender');
+        const data = await res.json();
+        console.log(res);
+        console.log(data);
+        if (data) {
+          setGenderNavItems(data);
+        }
+      };
+      getGenderNavItems();
+    }, []);
 
+        //Query Sport
+        useEffect(() => {
+          const getSportNavItems = async () => {
+            const res = await fetch('/api/lib/sports');
+            const data = await res.json();
+            console.log(res);
+            console.log(data);
+            if (data) {
+              setSportNavItems(data);
+            }
+          };
+          getSportNavItems();
+        }, []);
+    
   // Create query string
   const createQueryString = React.useCallback(
     (params: Record<string, string | number | null>) => {
@@ -179,6 +206,7 @@ export default function Test({
         }
       );
     });
+    refetchData();
   }, [debouncedPrice]);
 
   // Category filter
@@ -200,6 +228,7 @@ export default function Test({
         }
       );
     });
+    refetchData();
   }, [selectedCategories]);
 
   // Subcategory filter
@@ -317,16 +346,16 @@ export default function Test({
                     type="multiple"
                     className="w-full overflow-auto no-scrollbar"
                   >
-                    <AccordionItem value="Gender">
-                      <AccordionTrigger className="text-sm capitalize">
+                     <AccordionItem value="genders">
+                      <AccordionTrigger className="text-sm">
                         Gender
                       </AccordionTrigger>
                       <AccordionContent>
                         <div className="flex flex-col">
                           {genderNavItems?.map((subItem, index) =>
-                            subItem.title ? (
+                            subItem.name ? (
                               <Checkbox key={index} defaultChecked>
-                                {subItem.title}
+                                {subItem.name}
                               </Checkbox>
                             ) : null
                           )}
@@ -366,6 +395,7 @@ export default function Test({
                         </div>
                       </AccordionContent>
                     </AccordionItem>
+
                     <AccordionItem value="Accessory">
                       <AccordionTrigger className="text-sm">
                         Accessories
@@ -373,6 +403,23 @@ export default function Test({
                       <AccordionContent>
                         <div className="flex flex-col">
                           {accessoryNavItems?.map((subItem, index) =>
+                            subItem.name ? (
+                              <Checkbox key={index} defaultChecked>
+                                {subItem.name}
+                              </Checkbox>
+                            ) : null
+                          )}
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem value="Sport">
+                      <AccordionTrigger className="text-sm">
+                        Sport
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="flex flex-col">
+                          {sportNavItems?.map((subItem, index) =>
                             subItem.name ? (
                               <Checkbox key={index} defaultChecked>
                                 {subItem.name}

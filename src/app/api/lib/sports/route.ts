@@ -1,10 +1,7 @@
 import prisma from '@/lib/prisma';
 export async function GET() {
   try {
-    const gender = await prisma.subcategory.findMany({
-      where: {
-        productTypeId: 1,
-      },
+    const gender = await prisma.category.findMany({
     });
     if (gender) return new Response(JSON.stringify(gender), { status: 200 });
   } catch (e) {
