@@ -15,12 +15,14 @@ model User {
   password               String
   role                   String?           @default("user")
   avatar                 String?           @default("https://i0.wp.com/www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg?ssl=1")
+  isEmailVerified        Boolean           @default(false)
+  otp                    String?
   orders                 Order[]
   reviews                Review[]
-  shoppingCarts          ShoppingCart[]
+  shoppingCart          ShoppingCart?
   payments               Payment[]
   shippingAddresses      ShippingAddress[]
-  wishlists              Wishlist[]
+  wishlist              Wishlist?
   Shipment               Shipment[]
   directMessages         DirectMessage[]
   conversationsInitiated Conversation[]    @relation("userOne")
@@ -29,28 +31,31 @@ model User {
 }
 
 model Product {
-  id          Int          @id @default(autoincrement())
-  description String       @db.LongText
-  price       Float
-  sale        Float?
-  thumbnail   String?      @db.LongText
-  images      String?      @db.LongText
-  categoryId  Int?
-  typeId      Int?
-  genderId    Int?
-  name        String
-  sizes       String       @db.LongText
-  category    Category?    @relation(fields: [categoryId], references: [id])
-  type        ProductType? @relation(fields: [typeId], references: [id])
-  gender      Gender?      @relation(fields: [genderId], references: [id])
-  reviews     Review[]
-  orderItems  OrderItem[]
-  sales       Sale[]
-  wishlists   Wishlist[]
-  CartItem    CartItem[]
+  id            Int          @id @default(autoincrement())
+  description   String       @db.LongText
+  price         Float
+  sale          Float?
+  thumbnail     String?      @db.LongText
+  images        String?      @db.LongText
+  categoryId    Int?
+  typeId        Int?
+  subcategoryId Int?
+  genderId      Int?
+  name          String
+  category      Category?    @relation(fields: [categoryId], references: [id])
+  type          ProductType? @relation(fields: [typeId], references: [id])
+  subcategory Subcategory? @relation(fields: [subcategoryId], references: [id])
+  gender        Gender?      @relation(fields: [genderId], references: [id])
+  reviews       Review[]
+  orderItems    OrderItem[]
+  sales         Sale[]
+  wishlists     Wishlist[]
+  CartItem      CartItem[]
+  productSizes  ProductSize[]
 
   @@index([categoryId])
   @@index([typeId])
+  @@index([subcategoryId])
   @@index([genderId])
 }
 
@@ -72,7 +77,7 @@ model Subcategory {
   name          String
   productTypeId Int
   productType   ProductType @relation(fields: [productTypeId], references: [id])
-
+  products      Product[]
   @@index([productTypeId])
 }
 
@@ -85,6 +90,11 @@ model Gender {
 model ProductSize {
   id   Int    @id @default(autoincrement())
   size String
+  quantity Int
+  product Product @relation(fields: [productId], references: [id])
+  productId Int
+
+  @@index([productId])
 }
 
 model Review {
@@ -136,7 +146,7 @@ model OrderItem {
 
 model ShoppingCart {
   id        Int        @id @default(autoincrement())
-  userId    Int
+  userId    Int         @unique
   user      User       @relation(fields: [userId], references: [id])
   cartItems CartItem[]
 
@@ -229,7 +239,7 @@ model CouponCode {
 
 model Wishlist {
   id       Int       @id @default(autoincrement())
-  userId   Int
+  userId   Int        @unique
   user     User      @relation(fields: [userId], references: [id])
   products Product[]
 
@@ -271,6 +281,7 @@ model SeenMessage {
   id              String        @id
   userId          Int
   directMessageId String
+  seenAt          DateTime?
   user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   directMessage   DirectMessage @relation(fields: [directMessageId], references: [id], onDelete: Cascade)
 

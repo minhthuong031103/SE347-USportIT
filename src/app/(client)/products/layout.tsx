@@ -1,21 +1,18 @@
+import { Header } from '@/components/header';
+import { getSession } from '@/lib/auth';
 interface ProductsLayoutProps {
   children: React.ReactNode;
   modal: React.ReactNode;
 }
 
-export default function ProductsLayout({
+export default async function ProductsLayout({
   children,
   modal,
 }: ProductsLayoutProps) {
-  const mainStyles = {
-    margin: '0 auto',
-    padding: '6rem',
-  };
+  const session = await getSession();
   return (
-    <div
-      className="w-full h-full flex items-center justify-center"
-      style={mainStyles}
-    >
+    <div className="w-full h-full items-center justify-center">
+      <Header session={session} />
       {children}
       {modal}
     </div>
