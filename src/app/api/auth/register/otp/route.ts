@@ -68,7 +68,7 @@ export async function PUT(req: Request) {
       });
 
       // send mail with defined transport object
-      await transporter.sendMail({
+      transporter.sendMail({
         from: '"UIT_Sport" <playground.dev001@gmail.com>',
         to: body.email,
         subject: 'Email Verification OTP',
