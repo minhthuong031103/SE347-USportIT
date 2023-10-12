@@ -8,7 +8,6 @@ export const useProduct = () => {
     const productDetail = await getRequest({
       endPoint: `${process.env.API_HOST}/api/product/detail?productId=${slug}`,
     });
-
     // const data = await productDetail?.json();
 
     return productDetail;
