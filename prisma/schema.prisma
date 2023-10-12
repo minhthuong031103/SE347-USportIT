@@ -88,8 +88,8 @@ model ProductSize {
   id   Int    @id @default(autoincrement())
   size String
   quantity Int
-  product Product @relation(fields: [productId], references: [id])
-  productId Int
+  product Product? @relation(fields: [productId], references: [id])
+  productId Int?
 
   @@index([productId])
 }
