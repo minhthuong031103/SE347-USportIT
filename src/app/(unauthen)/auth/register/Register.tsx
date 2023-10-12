@@ -72,8 +72,8 @@ const Register = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
-      email: '',
+      name: payload.name || '',
+      email: payload.email || '',
       password: '',
       confirmPassword: '',
     },
@@ -117,21 +117,6 @@ const Register = ({
             <div className="grid gap-6">
               <div className="gap-8 flex flex-col">
                 <div className="flex flex-col gap-3 ">
-                  <Label>Name</Label>
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input placeholder="Enter Username" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="flex flex-col gap-3 ">
                   <Label>Email</Label>
                   <FormField
                     name="email"
@@ -139,7 +124,31 @@ const Register = ({
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <Input placeholder="Enter Email" {...field} />
+                          <Input
+                            type="email"
+                            placeholder="Enter Email"
+                            autoComplete="username"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="flex flex-col gap-3 ">
+                  <Label>Name</Label>
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            type="text"
+                            placeholder="Enter Username"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

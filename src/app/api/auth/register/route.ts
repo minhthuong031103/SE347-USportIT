@@ -1,4 +1,5 @@
 import prisma from '@/lib/prisma';
+import jwt from 'jsonwebtoken';
 
 export async function POST(req: Request) {
   const body = await req.json();
@@ -25,9 +26,15 @@ export async function POST(req: Request) {
       },
     });
     if (create) {
+      const payload = jwt.sign(
+        { email: body.email, name: body.name },
+        process.env.NEXT_PUBLIC_JWT_SECRET,
+        { expiresIn: '1h' }
+      );
       return new Response(
         JSON.stringify({
-          message: 'User created',
+          message: 'User created and OTP sent',
+          payload: payload,
           status: 200,
         })
       );
