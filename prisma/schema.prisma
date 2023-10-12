@@ -39,7 +39,6 @@ model Product {
   images        String?       @db.LongText
   categoryId    Int?
   typeId        Int?
-  subcategoryId Int?
   genderId      Int?
   name          String
   category      Category?     @relation(fields: [categoryId], references: [id])
