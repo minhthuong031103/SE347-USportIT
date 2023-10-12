@@ -19,10 +19,10 @@ model User {
   otp                    String?
   orders                 Order[]
   reviews                Review[]
-  shoppingCart           ShoppingCart?
+  shoppingCart          ShoppingCart?
   payments               Payment[]
   shippingAddresses      ShippingAddress[]
-  wishlist               Wishlist?
+  wishlist              Wishlist?
   Shipment               Shipment[]
   directMessages         DirectMessage[]
   conversationsInitiated Conversation[]    @relation("userOne")
@@ -39,18 +39,17 @@ model Product {
   images        String?       @db.LongText
   categoryId    Int?
   typeId        Int?
-  subcategoryId Int?
   genderId      Int?
   name          String
-  category      Category?     @relation(fields: [categoryId], references: [id])
-  type          ProductType?  @relation(fields: [typeId], references: [id])
-  subcategory   Subcategory?  @relation(fields: [subcategoryId], references: [id])
-  gender        Gender?       @relation(fields: [genderId], references: [id])
+  category      Category?    @relation(fields: [categoryId], references: [id])
+  type          ProductType? @relation(fields: [typeId], references: [id])
+  gender        Gender?      @relation(fields: [genderId], references: [id])
   reviews       Review[]
   orderItems    OrderItem[]
   sales         Sale[]
   wishlists     Wishlist[]
   CartItem      CartItem[]
+  productSizes  ProductSize[]
   productSizes  ProductSize[]
 
   @@index([categoryId])
@@ -91,6 +90,11 @@ model Gender {
 model ProductSize {
   id   Int    @id @default(autoincrement())
   size String
+  quantity Int
+  product Product @relation(fields: [productId], references: [id])
+  productId Int
+
+  @@index([productId])
 }
 
 model Review {
@@ -152,7 +156,7 @@ model OrderItem {
 
 model ShoppingCart {
   id        Int        @id @default(autoincrement())
-  userId    Int        @unique
+  userId    Int         @unique
   user      User       @relation(fields: [userId], references: [id])
   cartItems CartItem[]
 
@@ -245,7 +249,7 @@ model CouponCode {
 
 model Wishlist {
   id       Int       @id @default(autoincrement())
-  userId   Int       @unique
+  userId   Int        @unique
   user     User      @relation(fields: [userId], references: [id])
   products Product[]
 
