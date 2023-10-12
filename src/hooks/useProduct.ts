@@ -1,5 +1,3 @@
-'use client';
-
 import { getRequest } from '@/lib/fetch';
 import { type z } from 'zod';
 import prisma from '@/lib/prisma';
