@@ -21,11 +21,14 @@ export async function GET(req: Request) {
     0, 0,
   ];
   const categoriesArray = categoriesString?.split('.') || [];
+  const categoriesIntArray = categoriesArray.map(category => parseInt(category, 10));
+
+
   const subcategoriesArray = subcategoriesString?.split('.') || [];
   const where = {
     AND: [
-      categoriesArray.length
-        ? { categoryId: { in: categoriesArray } }
+      categoriesIntArray.length
+        ? { categoryId: { in: categoriesIntArray } }
         : undefined,
       subcategoriesArray.length
         ? { subcategory: { in: subcategoriesArray } }

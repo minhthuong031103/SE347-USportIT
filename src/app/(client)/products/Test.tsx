@@ -6,10 +6,10 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { Footer } from '@/components/footer';
 import React, { useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { type Option } from '@/models';
+// import { type Option } from '@/models';
 import { sortOptions } from '@/config/products';
 // getSubcategories,
-import { cn, toTitleCase } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { useDebounce } from '@/hooks/useDebounce';
 import { Button } from '@/components/ui/button';
 import {
@@ -32,7 +32,6 @@ import {
 } from '@/components/ui/sheet';
 import { Slider } from '@/components/ui/slider';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
-import { MultiSelect } from '@/components/multi-select';
 import {
   Accordion,
   AccordionContent,
@@ -41,6 +40,7 @@ import {
 } from '@/components/ui/accordion';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@nextui-org/react';
+import { Loader } from 'lucide-react';
 
 
 interface TestProps {
@@ -143,7 +143,7 @@ export default function Test({
     getAccessoryNavItems();
   }, []);
     //Query Gender
-    useEffect(() => {
+  useEffect(() => {
       const getGenderNavItems = async () => {
         const res = await fetch('/api/lib/gender');
         const data = await res.json();
@@ -157,7 +157,7 @@ export default function Test({
     }, []);
 
         //Query Sport
-        useEffect(() => {
+  useEffect(() => {
           const getSportNavItems = async () => {
             const res = await fetch('/api/lib/sports');
             const data = await res.json();
@@ -210,9 +210,7 @@ export default function Test({
   }, [debouncedPrice]);
 
   // Category filter
-  const [selectedCategories, setSelectedCategories] = React.useState<
-    Option[] | null
-  >(null);
+  const [selectedCategories, setSelectedCategories] = React.useState([]);
 
   React.useEffect(() => {
     startTransition(() => {
@@ -220,7 +218,7 @@ export default function Test({
         `${pathname}?${createQueryString({
           categories: selectedCategories?.length
             ? // Join categories with a dot to make search params prettier
-              selectedCategories.map((c) => c.value).join('.')
+              selectedCategories.map((c) => c).join('.')
             : null,
         })}`,
         {
@@ -230,6 +228,13 @@ export default function Test({
     });
     refetchData();
   }, [selectedCategories]);
+  const toggleCategory = (category) => {
+    setSelectedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category]
+    );
+  };
 
   // Subcategory filter
   // const [selectedSubcategories, setSelectedSubcategories] = React.useState<
@@ -310,35 +315,7 @@ export default function Test({
                   />
                 </div>
               </div>
-              {categories?.length ? (
-                <div className="space-y-4">
-                  <h3 className="text-sm font-medium tracking-wide text-foreground">
-                    Categories
-                  </h3>
-                  <MultiSelect
-                    placeholder="Select categories"
-                    selected={selectedCategories}
-                    setSelected={setSelectedCategories}
-                    options={categories.map((c) => ({
-                      label: toTitleCase(c?.toString()),
-                      value: c,
-                    }))}
-                  />
-                </div>
-              ) : null}
-              {/* {category ? (
-                <div className="space-y-4">
-                  <h3 className="text-sm font-medium tracking-wide text-foreground">
-                    Subcategories
-                  </h3>
-                  <MultiSelect
-                    placeholder="Select subcategories"
-                    selected={selectedSubcategories}
-                    setSelected={setSelectedSubcategories}
-                    options={subcategories}
-                  />
-                </div>
-              ) : null} */}
+            
 
               <ScrollArea className="my-2 h-[calc(100vh-8rem)] pb-10 pl-6 pr-5">
                 <div className="space-y-4">
@@ -421,9 +398,15 @@ export default function Test({
                         <div className="flex flex-col">
                           {sportNavItems?.map((subItem, index) =>
                             subItem.name ? (
-                              <Checkbox key={index} defaultChecked>
-                                {subItem.name}
-                              </Checkbox>
+                              <Checkbox
+                              key={index}
+                              // Set the default checked value based on the state
+                              defaultChecked={selectedCategories.includes(subItem.id)}
+                              // Pass a callback function that toggles the category on change
+                              onChange={() => toggleCategory(subItem.id)}
+                            >
+                              {subItem.name}
+                            </Checkbox>
                             ) : null
                           )}
                         </div>
@@ -452,7 +435,7 @@ export default function Test({
                       );
 
                       setPriceRange([0, 100]);
-                      setSelectedCategories(null);
+                      setSelectedCategories([]);
                       // setSelectedSubcategories(null);
                     });
                   }}
@@ -514,7 +497,7 @@ export default function Test({
               fetchNextPage();
             }}
             hasMore={hasNextPage || false}
-            loader={<h4>Loading...</h4>}
+            loader={<Loader/>}
             className="h-full"
             // below props only if you need pull down functionality
           >
@@ -532,7 +515,7 @@ export default function Test({
             <Footer />
           </InfiniteScroll>
         ) : (
-          <div>loading</div>
+         <Loader/>
         )}
       </div>
     </section>
