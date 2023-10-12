@@ -19,10 +19,10 @@ model User {
   otp                    String?
   orders                 Order[]
   reviews                Review[]
-  shoppingCarts          ShoppingCart[]
+  shoppingCart          ShoppingCart?
   payments               Payment[]
   shippingAddresses      ShippingAddress[]
-  wishlists              Wishlist[]
+  wishlist              Wishlist?
   Shipment               Shipment[]
   directMessages         DirectMessage[]
   conversationsInitiated Conversation[]    @relation("userOne")
@@ -39,10 +39,8 @@ model Product {
   images        String?      @db.LongText
   categoryId    Int?
   typeId        Int?
-  subcategoryId Int?
   genderId      Int?
   name          String
-  sizes         String       @db.LongText
   category      Category?    @relation(fields: [categoryId], references: [id])
   type          ProductType? @relation(fields: [typeId], references: [id])
   gender        Gender?      @relation(fields: [genderId], references: [id])
@@ -51,6 +49,7 @@ model Product {
   sales         Sale[]
   wishlists     Wishlist[]
   CartItem      CartItem[]
+  productSizes  ProductSize[]
 
   @@index([categoryId])
   @@index([typeId])
@@ -88,6 +87,11 @@ model Gender {
 model ProductSize {
   id   Int    @id @default(autoincrement())
   size String
+  quantity Int
+  product Product @relation(fields: [productId], references: [id])
+  productId Int
+
+  @@index([productId])
 }
 
 model Review {
@@ -139,7 +143,7 @@ model OrderItem {
 
 model ShoppingCart {
   id        Int        @id @default(autoincrement())
-  userId    Int
+  userId    Int         @unique
   user      User       @relation(fields: [userId], references: [id])
   cartItems CartItem[]
 
@@ -232,7 +236,7 @@ model CouponCode {
 
 model Wishlist {
   id       Int       @id @default(autoincrement())
-  userId   Int
+  userId   Int        @unique
   user     User      @relation(fields: [userId], references: [id])
   products Product[]
 
