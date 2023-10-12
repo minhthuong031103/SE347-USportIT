@@ -15,41 +15,43 @@ model User {
   password               String
   role                   String?           @default("user")
   avatar                 String?           @default("https://i0.wp.com/www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg?ssl=1")
+  isEmailVerified        Boolean           @default(false)
+  otp                    String?
   orders                 Order[]
   reviews                Review[]
-  shoppingCarts          ShoppingCart[]
+  shoppingCart          ShoppingCart?
   payments               Payment[]
   shippingAddresses      ShippingAddress[]
-  wishlists              Wishlist[]
+  wishlist              Wishlist?
   Shipment               Shipment[]
   directMessages         DirectMessage[]
   conversationsInitiated Conversation[]    @relation("userOne")
   conversationsReceived  Conversation[]    @relation("userTwo")
-  seenMessages           SeenMessage[]   
+  seenMessages           SeenMessage[]
 }
 
 model Product {
-  id          Int          @id @default(autoincrement())
-  description String       @db.LongText
-  price       Float
-  sale        Float?
-  thumbnail   String?      @db.LongText
-  images      String?      @db.LongText
-  categoryId  Int?
-  typeId      Int?
+  id            Int          @id @default(autoincrement())
+  description   String       @db.LongText
+  price         Float
+  sale          Float?
+  thumbnail     String?      @db.LongText
+  images        String?      @db.LongText
+  categoryId    Int?
+  typeId        Int?
   subcategoryId Int?
-  genderId    Int?
-  name        String
-  sizes       String       @db.LongText
-  category    Category?    @relation(fields: [categoryId], references: [id])
-  type        ProductType? @relation(fields: [typeId], references: [id])
+  genderId      Int?
+  name          String
+  category      Category?    @relation(fields: [categoryId], references: [id])
+  type          ProductType? @relation(fields: [typeId], references: [id])
   subcategory Subcategory? @relation(fields: [subcategoryId], references: [id])
-  gender      Gender?      @relation(fields: [genderId], references: [id])
-  reviews     Review[]
-  orderItems  OrderItem[]
-  sales       Sale[]
-  wishlists   Wishlist[]
-  CartItem    CartItem[]
+  gender        Gender?      @relation(fields: [genderId], references: [id])
+  reviews       Review[]
+  orderItems    OrderItem[]
+  sales         Sale[]
+  wishlists     Wishlist[]
+  CartItem      CartItem[]
+  productSizes  ProductSize[]
 
   @@index([categoryId])
   @@index([typeId])
@@ -86,19 +88,26 @@ model Gender {
 }
 
 model ProductSize {
-  id        Int    @id @default(autoincrement())
-  size      String
-  remaining Int
+  id   Int    @id @default(autoincrement())
+  size String
+  quantity Int
+  product Product @relation(fields: [productId], references: [id])
+  productId Int
+
+  @@index([productId])
 }
 
 model Review {
-  id        Int     @id @default(autoincrement())
-  text      String
-  rating    Int
-  userId    Int
-  productId Int
-  user      User    @relation(fields: [userId], references: [id])
-  product   Product @relation(fields: [productId], references: [id])
+  id         Int      @id @default(autoincrement())
+  text       String   @db.LongText
+  rating     Int
+  userId     Int
+  productId  Int
+  images     String?  @db.LongText
+  reviewDate DateTime
+  title      String
+  user       User     @relation(fields: [userId], references: [id])
+  product    Product  @relation(fields: [productId], references: [id])
 
   @@index([userId])
   @@index([productId])
@@ -137,7 +146,7 @@ model OrderItem {
 
 model ShoppingCart {
   id        Int        @id @default(autoincrement())
-  userId    Int
+  userId    Int         @unique
   user      User       @relation(fields: [userId], references: [id])
   cartItems CartItem[]
 
@@ -230,7 +239,7 @@ model CouponCode {
 
 model Wishlist {
   id       Int       @id @default(autoincrement())
-  userId   Int
+  userId   Int        @unique
   user     User      @relation(fields: [userId], references: [id])
   products Product[]
 
@@ -242,6 +251,7 @@ model Conversation {
   userOneId      Int
   userTwoId      Int
   lastMessageAt  DateTime        @default(now())
+  lastMessage    String?
   userOne        User            @relation("userOne", fields: [userOneId], references: [id], onDelete: Cascade)
   userTwo        User            @relation("userTwo", fields: [userTwoId], references: [id], onDelete: Cascade)
   directMessages DirectMessage[]
@@ -251,16 +261,16 @@ model Conversation {
 }
 
 model DirectMessage {
-  id             String         @id @default(uuid())
-  content        String         @db.Text
-  fileUrl        String?        @db.Text
+  id             String        @id @default(uuid())
+  content        String        @db.Text
+  fileUrl        String?       @db.Text
   userId         Int
   conversationId String
-  deleted        Boolean        @default(false)
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  conversation   Conversation   @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  deleted        Boolean       @default(false)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversation   Conversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   seenBy         SeenMessage[]
 
   @@index([userId])
@@ -268,26 +278,16 @@ model DirectMessage {
 }
 
 model SeenMessage {
-  userId         Int
+  id              String        @id
+  userId          Int
   directMessageId String
-  seenAt         DateTime      @default(now())
-  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  directMessage  DirectMessage @relation(fields: [directMessageId], references: [id], onDelete: Cascade)
+  seenAt          DateTime?
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  directMessage   DirectMessage @relation(fields: [directMessageId], references: [id], onDelete: Cascade)
 
-  @@id([userId, directMessageId])
+  @@unique([userId, directMessageId])
   @@index([directMessageId])
-  @@index([userId])
 }
-// model SeenMessage {
-//   id              String        @id @default(uuid())
-//   userId          Int
-//   directMessageId String
-//   user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-//   directMessage   DirectMessage @relation(fields: [directMessageId], references: [id], onDelete: Cascade)
-
-//   @@unique([userId, directMessageId])
-//   @@index([directMessageId])
-// }
 
 model ProductToSale {
   A Int

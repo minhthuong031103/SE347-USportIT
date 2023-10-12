@@ -8,7 +8,6 @@ import { getSubcategories, sortOptions } from '@/config/products';
 import { cn, toTitleCase } from '@/lib/utils';
 import { useDebounce } from '@/hooks/useDebounce';
 import { Button } from '@/components/ui/button';
-//import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,9 +27,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { Slider } from '@/components/ui/slider';
-import {
-  ChevronDownIcon,
-} from '@radix-ui/react-icons';
+import { ChevronDownIcon } from '@radix-ui/react-icons';
 import ProductCard from '@/components/ProductCard';
 import { MultiSelect } from '@/components/multi-select';
 import { PaginationButton } from '@/components/pagers/pagination-button';
