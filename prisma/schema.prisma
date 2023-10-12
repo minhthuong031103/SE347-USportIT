@@ -39,10 +39,12 @@ model Product {
   images        String?      @db.LongText
   categoryId    Int?
   typeId        Int?
+  subcategoryId Int?
   genderId      Int?
   name          String
   category      Category?    @relation(fields: [categoryId], references: [id])
   type          ProductType? @relation(fields: [typeId], references: [id])
+  subcategory Subcategory? @relation(fields: [subcategoryId], references: [id])
   gender        Gender?      @relation(fields: [genderId], references: [id])
   reviews       Review[]
   orderItems    OrderItem[]
@@ -53,6 +55,7 @@ model Product {
 
   @@index([categoryId])
   @@index([typeId])
+  @@index([subcategoryId])
   @@index([genderId])
 }
 
@@ -74,7 +77,7 @@ model Subcategory {
   name          String
   productTypeId Int
   productType   ProductType @relation(fields: [productTypeId], references: [id])
-
+  products      Product[]
   @@index([productTypeId])
 }
 

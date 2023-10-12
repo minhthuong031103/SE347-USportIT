@@ -1,3 +1,5 @@
+'use client';
+
 import { getRequest } from '@/lib/fetch';
 import { type z } from 'zod';
 import prisma from '@/lib/prisma';
@@ -8,7 +10,6 @@ export const useProduct = () => {
     const productDetail = await getRequest({
       endPoint: `${process.env.API_HOST}/api/product/detail?productId=${slug}`,
     });
-
     // const data = await productDetail?.json();
 
     return productDetail;
@@ -29,7 +30,7 @@ export const useProduct = () => {
     const where = {
       AND: [
         categoriesArray.length
-          ? { category: { in: categoriesArray } }
+          ? { categoryId: { in: categoriesArray } }
           : undefined,
         subcategoriesArray.length
           ? { subcategory: { in: subcategoriesArray } }
@@ -58,5 +59,46 @@ export const useProduct = () => {
     };
   };
 
-  return { onGetProductDetail, getProductsAction };
+  const fetchProduct = async ({
+    page,
+    sort,
+    categories,
+    subcategories,
+    price_range,
+  }) => {
+    // Construct the base endpoint
+    let endpoint = 'api/product/search?limit=8';
+    console.log('page:', page);
+    // Add parameters if they exist and are not null or undefined
+    if (page !== null && page !== undefined) {
+      endpoint += `&page=${page}`;
+    }
+
+    if (sort !== null && sort !== undefined) {
+      endpoint += `&sort=${sort}`;
+    }
+    // Add other parameters similarly
+    if (categories !== null && categories !== undefined) {
+      endpoint += `&categories=${categories}`;
+    }
+    if (subcategories !== null && subcategories !== undefined) {
+      endpoint += `&subcategories=${subcategories}`;
+    }
+    if (price_range !== null && price_range !== undefined) {
+      endpoint += `&price_range=${price_range}`;
+    }
+    // Make the API request
+    const products = await getRequest({ endPoint: endpoint });
+
+    // Handle the response and return the necessary data
+    console.log(products);
+    return {
+      data: products.data,
+      totalPages: products.totalPages,
+      totalItems: products.totalItems,
+      page: products.page,
+    };
+  };
+
+  return { onGetProductDetail, getProductsAction, fetchProduct };
 };
