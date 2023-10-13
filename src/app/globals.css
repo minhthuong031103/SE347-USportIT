@@ -125,6 +125,17 @@
     @apply rounded-md lg:rounded-2xl;
   }
 }
+<<<<<<< HEAD
+=======
+.no-scroll {
+  overflow: hidden;
+  padding-right: var(--scrollbar-width);
+}
+.no-scroll {
+  overflow: hidden;
+  padding-right: var(--scrollbar-width);
+}
+>>>>>>> 0e619fc (fix conflict)
 
 .products-grid {
   display: grid;
@@ -228,7 +239,10 @@
   100% {
     background-color: hsl(200, 20%, 95%);
   }
+<<<<<<< HEAD
 
   overflow: hidden;
   padding-right: var(--scrollbar-width);
+=======
+>>>>>>> 0e619fc (fix conflict)
 }

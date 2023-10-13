@@ -56,7 +56,6 @@ model Product {
   @@index([categoryId])
   @@index([typeId])
   @@index([genderId])
-  @@index([subcategoryId])
 }
 
 model Category {
@@ -89,7 +88,6 @@ model Gender {
 }
 
 model ProductSize {
-
   id   Int    @id @default(autoincrement())
   size String
   quantity Int
