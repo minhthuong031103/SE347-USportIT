@@ -41,6 +41,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@nextui-org/react';
 import { Loader } from 'lucide-react';
+import { AiOutlineFilter } from 'react-icons/ai';
 interface TestProps {
   q: string | null;
   sort: string | null;
@@ -60,12 +61,13 @@ export default function Test({
   ...props
 }: TestProps) {
   const { fetchProduct } = useProduct();
-  const { data, fetchNextPage, hasNextPage, refetch: refetchData, } = useInfiniteQuery(
-    ['products',q,sort,
-    gender,
-    categories,
-    subcategories,
-    price_range,],
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    refetch: refetchData,
+  } = useInfiniteQuery(
+    ['products', q, sort, gender, categories, subcategories, price_range],
     ({ pageParam = 0 }) =>
       fetchProduct({
         page: pageParam,
@@ -144,34 +146,34 @@ export default function Test({
     };
     getAccessoryNavItems();
   }, []);
-    //Query Gender
+  //Query Gender
   useEffect(() => {
-      const getGenderNavItems = async () => {
-        const res = await fetch('/api/lib/gender');
-        const data = await res.json();
-        console.log(res);
-        console.log(data);
-        if (data) {
-          setGenderNavItems(data);
-        }
-      };
-      getGenderNavItems();
-    }, []);
+    const getGenderNavItems = async () => {
+      const res = await fetch('/api/lib/gender');
+      const data = await res.json();
+      console.log(res);
+      console.log(data);
+      if (data) {
+        setGenderNavItems(data);
+      }
+    };
+    getGenderNavItems();
+  }, []);
 
-        //Query Sport
+  //Query Sport
   useEffect(() => {
-          const getSportNavItems = async () => {
-            const res = await fetch('/api/lib/sports');
-            const data = await res.json();
-            console.log(res);
-            console.log(data);
-            if (data) {
-              setSportNavItems(data);
-            }
-          };
-          getSportNavItems();
-        }, []);
-    
+    const getSportNavItems = async () => {
+      const res = await fetch('/api/lib/sports');
+      const data = await res.json();
+      console.log(res);
+      console.log(data);
+      if (data) {
+        setSportNavItems(data);
+      }
+    };
+    getSportNavItems();
+  }, []);
+
   // Create query string
   const createQueryString = React.useCallback(
     (params: Record<string, string | number | null>) => {
@@ -211,32 +213,32 @@ export default function Test({
     refetchData();
   }, [debouncedPrice]);
 
-// Gender filter
-const [selectedGenders, setSelectedGenders] = React.useState([]);
+  // Gender filter
+  const [selectedGenders, setSelectedGenders] = React.useState([]);
 
-React.useEffect(() => {
-  startTransition(() => {
-    router.push(
-      `${pathname}?${createQueryString({
-        gender: selectedGenders?.length
-          ? // Join categories with a dot to make search params prettier
-            selectedGenders.map((c) => c).join('.')
-          : null,
-      })}`,
-      {
-        scroll: false,
-      }
+  React.useEffect(() => {
+    startTransition(() => {
+      router.push(
+        `${pathname}?${createQueryString({
+          gender: selectedGenders?.length
+            ? // Join categories with a dot to make search params prettier
+              selectedGenders.map((c) => c).join('.')
+            : null,
+        })}`,
+        {
+          scroll: false,
+        }
+      );
+    });
+    refetchData();
+  }, [selectedGenders]);
+  const toggleGender = (gender) => {
+    setSelectedGenders((prev) =>
+      prev.includes(gender)
+        ? prev.filter((c) => c !== gender)
+        : [...prev, gender]
     );
-  });
-  refetchData();
-}, [selectedGenders]);
-const toggleGender = (gender) => {
-  setSelectedGenders((prev) =>
-    prev.includes(gender)
-      ? prev.filter((c) => c !== gender)
-      : [...prev, gender]
-  );
-};
+  };
 
   // Category filter
   const [selectedCategories, setSelectedCategories] = React.useState([]);
@@ -274,7 +276,7 @@ const toggleGender = (gender) => {
         `${pathname}?${createQueryString({
           subcategories: selectedSubCategories?.length
             ? // Join categories with a dot to make search params prettier
-            selectedSubCategories.map((c) => c).join('.')
+              selectedSubCategories.map((c) => c).join('.')
             : null,
         })}`,
         {
@@ -294,22 +296,19 @@ const toggleGender = (gender) => {
 
   // Search bar
 
-  const [searchQuery, setSearchQuery] = useState<string | null>(
-    q ? q : ""
-  );
+  const [searchQuery, setSearchQuery] = useState<string | null>(q ? q : '');
 
   const onSearch = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (typeof searchQuery !== "string") {
+    if (typeof searchQuery !== 'string') {
       return;
     }
 
     const encodedSearchQuery = encodeURI(searchQuery);
     router.push(
       `${pathname}?${createQueryString({
-        q: encodedSearchQuery? encodedSearchQuery
-          : null,
+        q: encodedSearchQuery ? encodedSearchQuery : null,
       })}`,
       {
         scroll: false,
@@ -322,14 +321,84 @@ const toggleGender = (gender) => {
       <div className="flex space-x-2 items-end px-4">
         <Sheet>
           <SheetTrigger asChild>
-            <Button aria-label="Filter products" size="sm" disabled={isPending}>
+            {/* <Button
+              aria-label="Filter products"
+              size="sm"
+              disabled={isPending}
+              className="fixed center-x top-150 left-100 w-50 z-50"
+            >
               Filter
+            </Button> */}
+            <Button
+              aria-label="Filter products"
+              className="fixed top-200 left-50 w-[30px] h-[30px] z-50 p-2 rounded-full bg-white shadow-md hover:shadow-lg"
+              onClick={() => {
+                // Handle filter functionality here
+              }}
+              disabled={isPending}
+            >
+              <div className="transform duration-200 hover:scale-105 flex items-center justify-center cursor-pointer">
+                <AiOutlineFilter className="text-slate-600 w-6 h-6" />
+              </div>
             </Button>
           </SheetTrigger>
           <SheetContent className="flex flex-col">
             <SheetHeader className="px-1">
               <SheetTitle>Filters</SheetTitle>
             </SheetHeader>
+            <Separator />
+            <div className="flex items-center space-x-4">
+              <form
+                onSubmit={onSearch}
+                className="flex justify-center w-5/6 h-8 rounded-md px-3"
+              >
+                <input
+                  value={searchQuery || ''}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  className="px-5 py-1 w-2/3 sm:px-5 sm:py-3 flex-1 text-zinc-800 bg-zinc-100 focus:bg-white rounded-full focus:outline-none focus:ring-[1px] focus:ring-black placeholder:text-zinc-400"
+                  placeholder="What are you looking?"
+                />
+              </form>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    aria-label="Sort products"
+                    size="sm"
+                    disabled={isPending}
+                  >
+                    Sort
+                    <ChevronDownIcon
+                      className="ml-2 h-4 w-4"
+                      aria-hidden="true"
+                    />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-48">
+                  <DropdownMenuLabel>Sort by</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {sortOptions.map((option) => (
+                    <DropdownMenuItem
+                      key={option.label}
+                      className={cn(option.value === sort && 'font-bold')}
+                      onClick={() => {
+                        startTransition(() => {
+                          router.push(
+                            `${pathname}?${createQueryString({
+                              sort: option.value,
+                            })}`,
+                            {
+                              scroll: false,
+                            }
+                          );
+                        });
+                      }}
+                    >
+                      {option.label}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
             <Separator />
             <div className="flex flex-1 flex-col gap-5 overflow-hidden px-1">
               <div className="space-y-4">
@@ -375,7 +444,6 @@ const toggleGender = (gender) => {
                   />
                 </div>
               </div>
-            
 
               <ScrollArea className="my-2 h-[calc(100vh-8rem)] pb-10 pl-6 pr-5">
                 <div className="space-y-4">
@@ -383,7 +451,7 @@ const toggleGender = (gender) => {
                     type="multiple"
                     className="w-full overflow-auto no-scrollbar"
                   >
-                     <AccordionItem value="genders">
+                    <AccordionItem value="genders">
                       <AccordionTrigger className="text-sm">
                         Gender
                       </AccordionTrigger>
@@ -392,14 +460,16 @@ const toggleGender = (gender) => {
                           {genderNavItems?.map((subItem, index) =>
                             subItem.name ? (
                               <Checkbox
-                              key={index}
-                              // Set the checked value based on whether the category is in selectedCategories
-                              isSelected={selectedGenders.includes(subItem.id)}
-                              // Pass a callback function that toggles the category on change
-                              onChange={() => toggleGender(subItem.id)}
-                            >
-                              {subItem.name}
-                            </Checkbox>
+                                key={index}
+                                // Set the checked value based on whether the category is in selectedCategories
+                                isSelected={selectedGenders.includes(
+                                  subItem.id
+                                )}
+                                // Pass a callback function that toggles the category on change
+                                onChange={() => toggleGender(subItem.id)}
+                              >
+                                {subItem.name}
+                              </Checkbox>
                             ) : null
                           )}
                         </div>
@@ -415,14 +485,16 @@ const toggleGender = (gender) => {
                           {shoesNavItems?.map((subItem, index) =>
                             subItem.name ? (
                               <Checkbox
-                              key={index}
-                              // Set the checked value based on whether the category is in selectedCategories
-                              isSelected={selectedSubCategories.includes(subItem.id)}
-                              // Pass a callback function that toggles the category on change
-                              onChange={() => toggleSubCategory(subItem.id)}
-                            >
-                              {subItem.name}
-                            </Checkbox>
+                                key={index}
+                                // Set the checked value based on whether the category is in selectedCategories
+                                isSelected={selectedSubCategories.includes(
+                                  subItem.id
+                                )}
+                                // Pass a callback function that toggles the category on change
+                                onChange={() => toggleSubCategory(subItem.id)}
+                              >
+                                {subItem.name}
+                              </Checkbox>
                             ) : null
                           )}
                         </div>
@@ -437,14 +509,16 @@ const toggleGender = (gender) => {
                           {clothNavItems?.map((subItem, index) =>
                             subItem.name ? (
                               <Checkbox
-                              key={index}
-                              // Set the checked value based on whether the category is in selectedCategories
-                              isSelected={selectedSubCategories.includes(subItem.id)}
-                              // Pass a callback function that toggles the category on change
-                              onChange={() => toggleSubCategory(subItem.id)}
-                            >
-                              {subItem.name}
-                            </Checkbox>
+                                key={index}
+                                // Set the checked value based on whether the category is in selectedCategories
+                                isSelected={selectedSubCategories.includes(
+                                  subItem.id
+                                )}
+                                // Pass a callback function that toggles the category on change
+                                onChange={() => toggleSubCategory(subItem.id)}
+                              >
+                                {subItem.name}
+                              </Checkbox>
                             ) : null
                           )}
                         </div>
@@ -460,14 +534,16 @@ const toggleGender = (gender) => {
                           {accessoryNavItems?.map((subItem, index) =>
                             subItem.name ? (
                               <Checkbox
-                              key={index}
-                              // Set the checked value based on whether the category is in selectedCategories
-                              isSelected={selectedSubCategories.includes(subItem.id)}
-                              // Pass a callback function that toggles the category on change
-                              onChange={() => toggleSubCategory(subItem.id)}
-                            >
-                              {subItem.name}
-                            </Checkbox>
+                                key={index}
+                                // Set the checked value based on whether the category is in selectedCategories
+                                isSelected={selectedSubCategories.includes(
+                                  subItem.id
+                                )}
+                                // Pass a callback function that toggles the category on change
+                                onChange={() => toggleSubCategory(subItem.id)}
+                              >
+                                {subItem.name}
+                              </Checkbox>
                             ) : null
                           )}
                         </div>
@@ -483,14 +559,16 @@ const toggleGender = (gender) => {
                           {sportNavItems?.map((subItem, index) =>
                             subItem.name ? (
                               <Checkbox
-                              key={index}
-                              // Set the checked value based on whether the category is in selectedCategories
-                              isSelected={selectedCategories.includes(subItem.id)}
-                              // Pass a callback function that toggles the category on change
-                              onChange={() => toggleCategory(subItem.id)}
-                            >
-                              {subItem.name}
-                            </Checkbox>
+                                key={index}
+                                // Set the checked value based on whether the category is in selectedCategories
+                                isSelected={selectedCategories.includes(
+                                  subItem.id
+                                )}
+                                // Pass a callback function that toggles the category on change
+                                onChange={() => toggleCategory(subItem.id)}
+                              >
+                                {subItem.name}
+                              </Checkbox>
                             ) : null
                           )}
                         </div>
@@ -509,17 +587,8 @@ const toggleGender = (gender) => {
                   className="w-full"
                   onClick={() => {
                     startTransition(() => {
-                      
-                      router.push(
-                        // `${pathname}?${createQueryString({
-                        //   price_range: 0 - 5000000,
-                        //   store_ids: null,
-                        //   categories: null,
-                        //   subcategories: null,
-                        // })}`
-                        '/products'
-                      );
-                      setPriceRange([0, 5000000]); 
+                      router.push('/products');
+                      setPriceRange([0, 5000000]);
                       setSelectedCategories([]);
                       setSelectedSubCategories([]);
                       setSelectedGenders([]);
@@ -533,46 +602,6 @@ const toggleGender = (gender) => {
             </div>
           </SheetContent>
         </Sheet>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button aria-label="Sort products" size="sm" disabled={isPending}>
-              Sort
-              <ChevronDownIcon className="ml-2 h-4 w-4" aria-hidden="true" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="w-48">
-            <DropdownMenuLabel>Sort by</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {sortOptions.map((option) => (
-              <DropdownMenuItem
-                key={option.label}
-                className={cn(option.value === sort && 'font-bold')}
-                onClick={() => {
-                  startTransition(() => {
-                    router.push(
-                      `${pathname}?${createQueryString({
-                        sort: option.value,
-                      })}`,
-                      {
-                        scroll: false,
-                      }
-                    );
-                  });
-                }}
-              >
-                {option.label}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <form onSubmit={onSearch} className="flex justify-center w-1/2 h-8 rounded-md px-3 absolute right-4">
-      <input
-        value={searchQuery || ""}
-        onChange={(event) => setSearchQuery(event.target.value)}
-        className="px-5 py-1 w-2/3 sm:px-5 sm:py-3 flex-1 text-zinc-800 bg-zinc-100 focus:bg-white rounded-full focus:outline-none focus:ring-[1px] focus:ring-black placeholder:text-zinc-400"
-        placeholder="What are you looking for?"
-      />
-    </form>
       </div>
       {!isPending && !data?.pages?.[0]?.totalItems ? (
         <div className="mx-auto flex max-w-xs flex-col space-y-1.5">
@@ -591,7 +620,7 @@ const toggleGender = (gender) => {
               fetchNextPage();
             }}
             hasMore={hasNextPage || false}
-            loader={<Loader/>}
+            loader={<Loader />}
             className="h-full"
             // below props only if you need pull down functionality
           >
@@ -609,7 +638,7 @@ const toggleGender = (gender) => {
             <Footer />
           </InfiniteScroll>
         ) : (
-         <Loader/>
+          <Loader />
         )}
       </div>
     </section>
