@@ -1,5 +1,4 @@
 'use client';
-
 import ReviewDetail from '@/components/ReviewDetail';
 
 import React from 'react';
@@ -36,7 +35,7 @@ const ProductReviewItem = ({
                 </div>
               ))}
         </div>
-        {reviewItemData ? (
+        {reviewItemData?.data?.length == 0 && data != null ? (
           <div></div>
         ) : (
           <Pagination
