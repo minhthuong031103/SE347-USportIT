@@ -59,6 +59,7 @@ export const useProduct = () => {
 
   const fetchProduct = async ({
     page,
+    q,
     sort,
     gender,
     categories,
@@ -68,6 +69,9 @@ export const useProduct = () => {
     // Construct the base endpoint
     let endpoint = 'api/product/search?limit=8';
     console.log('page:', page);
+    if (q !== null && q !== undefined) {
+      endpoint += `&q=${q}`;
+    }
     // Add parameters if they exist and are not null or undefined
     if (page !== null && page !== undefined) {
       endpoint += `&page=${page}`;
@@ -88,6 +92,7 @@ export const useProduct = () => {
     if (price_range !== null && price_range !== undefined) {
       endpoint += `&price_range=${price_range}`;
     }
+
     // Make the API request
     const products = await getRequest({ endPoint: endpoint });
 

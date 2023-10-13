@@ -13,7 +13,7 @@ export async function GET(req: Request) {
   const subcategoriesString = searchParams.get('subcategories') || null;
   const gendersString = searchParams.get('gender') || null;
   const price_rangeString = searchParams.get('price_range') || null;
-
+  const q = searchParams.get('q') || null;
   // Convert
 
   const [column, order] =
@@ -40,6 +40,7 @@ export async function GET(req: Request) {
         : undefined,
       minPrice ? { price: { gte: minPrice } } : undefined,
       maxPrice ? { price: { lte: maxPrice } } : undefined,
+      q ? { name: { contains: q } } : undefined,
     ].filter(Boolean),
   };
 

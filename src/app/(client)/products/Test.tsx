@@ -41,9 +41,8 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@nextui-org/react';
 import { Loader } from 'lucide-react';
-
-
 interface TestProps {
+  q: string | null;
   sort: string | null;
   gender: string | null;
   categories: string | null;
@@ -52,6 +51,7 @@ interface TestProps {
 }
 
 export default function Test({
+  q,
   sort,
   gender,
   categories,
@@ -61,7 +61,7 @@ export default function Test({
 }: TestProps) {
   const { fetchProduct } = useProduct();
   const { data, fetchNextPage, hasNextPage, refetch: refetchData, } = useInfiniteQuery(
-    ['products',sort,
+    ['products',q,sort,
     gender,
     categories,
     subcategories,
@@ -69,6 +69,7 @@ export default function Test({
     ({ pageParam = 0 }) =>
       fetchProduct({
         page: pageParam,
+        q,
         sort,
         gender,
         categories,
@@ -290,6 +291,32 @@ const toggleGender = (gender) => {
         : [...prev, subcategory]
     );
   };
+
+  // Search bar
+
+  const [searchQuery, setSearchQuery] = useState<string | null>(
+    q ? q : ""
+  );
+
+  const onSearch = (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (typeof searchQuery !== "string") {
+      return;
+    }
+
+    const encodedSearchQuery = encodeURI(searchQuery);
+    router.push(
+      `${pathname}?${createQueryString({
+        q: encodedSearchQuery? encodedSearchQuery
+          : null,
+      })}`,
+      {
+        scroll: false,
+      }
+    );
+    // router.push(`/search?q=${encodedSearchQuery}`);
+  };
   return (
     <section className="flex flex-col space-y-6" {...props}>
       <div className="flex space-x-2 items-end px-4">
@@ -482,18 +509,20 @@ const toggleGender = (gender) => {
                   className="w-full"
                   onClick={() => {
                     startTransition(() => {
+                      
                       router.push(
-                        `${pathname}?${createQueryString({
-                          price_range: 0 - 100,
-                          store_ids: null,
-                          categories: null,
-                          subcategories: null,
-                        })}`
+                        // `${pathname}?${createQueryString({
+                        //   price_range: 0 - 5000000,
+                        //   store_ids: null,
+                        //   categories: null,
+                        //   subcategories: null,
+                        // })}`
+                        '/products'
                       );
-
-                      setPriceRange([0, 5000000]);
+                      setPriceRange([0, 5000000]); 
                       setSelectedCategories([]);
-                      // setSelectedSubcategories(null);
+                      setSelectedSubCategories([]);
+                      setSelectedGenders([]);
                     });
                   }}
                   disabled={isPending}
@@ -536,6 +565,14 @@ const toggleGender = (gender) => {
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
+        <form onSubmit={onSearch} className="flex justify-center w-1/2 h-8 rounded-md px-3 absolute right-4">
+      <input
+        value={searchQuery || ""}
+        onChange={(event) => setSearchQuery(event.target.value)}
+        className="px-5 py-1 w-2/3 sm:px-5 sm:py-3 flex-1 text-zinc-800 bg-zinc-100 focus:bg-white rounded-full focus:outline-none focus:ring-[1px] focus:ring-black placeholder:text-zinc-400"
+        placeholder="What are you looking for?"
+      />
+    </form>
       </div>
       {!isPending && !data?.pages?.[0]?.totalItems ? (
         <div className="mx-auto flex max-w-xs flex-col space-y-1.5">

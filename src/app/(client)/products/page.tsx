@@ -11,15 +11,16 @@ export default function ProductsPage() {
   const categories = search ? search.get('categories') : null;
   const subcategories = search ? search.get('subcategories') : null;
   const price_range = search ? search.get('price_range') : null;
-
-  console.log('sort:', sort);
-  console.log('gender:', gender);
-  console.log('categories:', categories);
-  console.log('subcategories:', subcategories);
-  console.log('price_range:', price_range);
+  const q = search ? search.get('q') : null;
+  // console.log('sort:', sort);
+  // console.log('gender:', gender);
+  // console.log('categories:', categories);
+  // console.log('subcategories:', subcategories);
+  // console.log('price_range:', price_range);
   return (
     <div className="w-full h-full">
       <Test
+        q={q}
         sort={sort}
         gender={gender}
         categories={categories}
