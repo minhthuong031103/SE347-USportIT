@@ -54,7 +54,6 @@ model Product {
   @@index([categoryId])
   @@index([typeId])
   @@index([genderId])
-  @@index([subcategoryId])
 }
 
 model Category {
@@ -86,18 +85,11 @@ model Gender {
 }
 
 model ProductSize {
-<<<<<<< Updated upstream
   id   Int    @id @default(autoincrement())
   size String
   quantity Int
   product Product? @relation(fields: [productId], references: [id])
   productId Int?
-=======
-  id        Int    @id @default(autoincrement())
-  size      String
-  productId Int
-  quantity  Int
->>>>>>> Stashed changes
 
   @@index([productId])
 }
@@ -151,11 +143,7 @@ model OrderItem {
 
 model ShoppingCart {
   id        Int        @id @default(autoincrement())
-<<<<<<< Updated upstream
   userId    Int         @unique
-=======
-  userId    Int        @unique
->>>>>>> Stashed changes
   user      User       @relation(fields: [userId], references: [id])
   cartItems CartItem[]
 
@@ -248,11 +236,7 @@ model CouponCode {
 
 model Wishlist {
   id       Int       @id @default(autoincrement())
-<<<<<<< Updated upstream
   userId   Int        @unique
-=======
-  userId   Int       @unique
->>>>>>> Stashed changes
   user     User      @relation(fields: [userId], references: [id])
   products Product[]
 

@@ -134,7 +134,6 @@
   padding-right: var(--scrollbar-width);
 }
 
-
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -237,19 +236,4 @@
   100% {
     background-color: hsl(200, 20%, 95%);
   }
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> Stashed changes
-=======
->>>>>>> 9215fd0 (Test skeleton loading)
-=======
-  overflow: hidden;
-  padding-right: var(--scrollbar-width);
->>>>>>> d5e50d7 (Complete ReviewForm)
-=======
->>>>>>> 9215fd0 (Test skeleton loading)
 }
-=======
-
->>>>>>> 3c20018bf8838cd44ff7b78ed1b2a807e15655f0
