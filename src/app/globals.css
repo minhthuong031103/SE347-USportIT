@@ -125,9 +125,7 @@
     @apply rounded-md lg:rounded-2xl;
   }
 }
-<<<<<<< HEAD
 .no-scroll {
-<<<<<<< HEAD
   overflow: hidden;
   padding-right: var(--scrollbar-width);
 }
@@ -135,8 +133,7 @@
   overflow: hidden;
   padding-right: var(--scrollbar-width);
 }
-=======
->>>>>>> 9215fd0 (Test skeleton loading)
+
 
 .products-grid {
   display: grid;
@@ -242,6 +239,7 @@
   }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> Stashed changes
 =======
 >>>>>>> 9215fd0 (Test skeleton loading)
@@ -252,3 +250,6 @@
 =======
 >>>>>>> 9215fd0 (Test skeleton loading)
 }
+=======
+
+>>>>>>> 3c20018bf8838cd44ff7b78ed1b2a807e15655f0
