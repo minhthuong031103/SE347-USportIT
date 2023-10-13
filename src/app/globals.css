@@ -232,8 +232,6 @@
 .no-scroll {
   overflow: hidden;
   padding-right: var(--scrollbar-width);
-<<<<<<< Updated upstream
-=======
 }
 
 .products-grid {
@@ -338,5 +336,8 @@
   100% {
     background-color: hsl(200, 20%, 95%);
   }
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> 9215fd0 (Test skeleton loading)
 }
