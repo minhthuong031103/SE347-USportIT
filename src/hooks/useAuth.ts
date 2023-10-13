@@ -50,7 +50,6 @@ export const useAuth = () => {
       });
       callback?.();
       router.push(`/auth/register/otp?payload=${response.payload}`);
-      toast.success('OTP has been sent to your email');
     }
   };
 
@@ -72,6 +71,16 @@ export const useAuth = () => {
 
   const onSendAgain = async (data) => {
     console.log(data);
+
+    await putRequest({
+      endPoint: '/api/auth/register/otp',
+
+      formData: { email: data },
+      isFormData: false,
+    });
+    toast.success('OTP has been sent to your email');
+  };
+  const onFirstSend = async (data) => {
     toast.success('OTP has been sent to your email');
     await putRequest({
       endPoint: '/api/auth/register/otp',
@@ -80,11 +89,11 @@ export const useAuth = () => {
       isFormData: false,
     });
   };
-
   return {
     onRegister,
     onRegister1,
     onSendAgain,
     onVerifyOtp,
+    onFirstSend,
   };
 };
