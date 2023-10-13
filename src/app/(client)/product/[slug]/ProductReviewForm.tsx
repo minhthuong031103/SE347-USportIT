@@ -38,40 +38,6 @@ const ProductReviewForm = ({
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [isVisible, setIsVisible] = React.useState(false);
-  //Loading and success
-  const [isLoading, setIsLoading] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  //Show dialog
-  const [isShowDialog, setIsShowDialog] = useState(false);
-  //Invalid input
-  const [isTitleValid, setIsTitleValid] = useState(false);
-  const [isContentValid, setIsContentValid] = useState(false);
-
-  //POST hook
-  const { onPostProductReview } = useReview();
-  const [files, setFiles] = useState<FileWithPreview[]>([]);
-  const { isUploading, startUpload } = useUploadThing('imageUploader');
-  //Star rating when hover and click
-  const [rating, setRating] = useState(0);
-  const [hover, setHover] = useState(0);
-  const [isVisible, setIsVisible] = React.useState(false);
-  //Loading and success
-  const [isLoading, setIsLoading] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  //Show dialog
-  const [isShowDialog, setIsShowDialog] = useState(false);
-  //Invalid input
-  const [isTitleValid, setIsTitleValid] = useState(false);
-  const [isContentValid, setIsContentValid] = useState(false);
-
-  //POST hook
-  const { onPostProductReview } = useReview();
-  const [files, setFiles] = useState<FileWithPreview[]>([]);
-  const { isUploading, startUpload } = useUploadThing('imageUploader');
-  //Star rating when hover and click
-  const [rating, setRating] = useState(0);
-  const [hover, setHover] = useState(0);
-  const [isVisible, setIsVisible] = React.useState(false);
   //Loading, success, invalid
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
