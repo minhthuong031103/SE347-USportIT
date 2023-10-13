@@ -60,6 +60,7 @@ export const useProduct = () => {
   const fetchProduct = async ({
     page,
     sort,
+    gender,
     categories,
     subcategories,
     price_range,
@@ -71,7 +72,9 @@ export const useProduct = () => {
     if (page !== null && page !== undefined) {
       endpoint += `&page=${page}`;
     }
-
+    if (gender !== null && gender !== undefined) {
+      endpoint += `&gender=${gender}`;
+    }
     if (sort !== null && sort !== undefined) {
       endpoint += `&sort=${sort}`;
     }

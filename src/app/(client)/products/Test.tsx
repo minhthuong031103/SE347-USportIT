@@ -70,6 +70,7 @@ export default function Test({
       fetchProduct({
         page: pageParam,
         sort,
+        gender,
         categories,
         subcategories,
         price_range,
@@ -209,6 +210,33 @@ export default function Test({
     refetchData();
   }, [debouncedPrice]);
 
+// Gender filter
+const [selectedGenders, setSelectedGenders] = React.useState([]);
+
+React.useEffect(() => {
+  startTransition(() => {
+    router.push(
+      `${pathname}?${createQueryString({
+        gender: selectedGenders?.length
+          ? // Join categories with a dot to make search params prettier
+            selectedGenders.map((c) => c).join('.')
+          : null,
+      })}`,
+      {
+        scroll: false,
+      }
+    );
+  });
+  refetchData();
+}, [selectedGenders]);
+const toggleGender = (gender) => {
+  setSelectedGenders((prev) =>
+    prev.includes(gender)
+      ? prev.filter((c) => c !== gender)
+      : [...prev, gender]
+  );
+};
+
   // Category filter
   const [selectedCategories, setSelectedCategories] = React.useState([]);
 
@@ -236,27 +264,32 @@ export default function Test({
     );
   };
 
-  // Subcategory filter
-  // const [selectedSubcategories, setSelectedSubcategories] = React.useState<
-  //   Option[] | null
-  // >(null);
-  // const subcategories = getSubcategories(category);
+  // subCategory filter
+  const [selectedSubCategories, setSelectedSubCategories] = React.useState([]);
 
-  // React.useEffect(() => {
-  //   startTransition(() => {
-  //     router.push(
-  //       `${pathname}?${createQueryString({
-  //         subcategories: selectedSubcategories?.length
-  //           ? selectedSubcategories.map((s) => s.value).join('.')
-  //           : null,
-  //       })}`,
-  //       {
-  //         scroll: false,
-  //       }
-  //     );
-  //   });
-  // }, [selectedSubcategories]);
-
+  React.useEffect(() => {
+    startTransition(() => {
+      router.push(
+        `${pathname}?${createQueryString({
+          subcategories: selectedSubCategories?.length
+            ? // Join categories with a dot to make search params prettier
+            selectedSubCategories.map((c) => c).join('.')
+            : null,
+        })}`,
+        {
+          scroll: false,
+        }
+      );
+    });
+    refetchData();
+  }, [selectedSubCategories]);
+  const toggleSubCategory = (subcategory) => {
+    setSelectedSubCategories((prev) =>
+      prev.includes(subcategory)
+        ? prev.filter((c) => c !== subcategory)
+        : [...prev, subcategory]
+    );
+  };
   return (
     <section className="flex flex-col space-y-6" {...props}>
       <div className="flex space-x-2 items-end px-4">
@@ -331,9 +364,15 @@ export default function Test({
                         <div className="flex flex-col">
                           {genderNavItems?.map((subItem, index) =>
                             subItem.name ? (
-                              <Checkbox key={index} defaultChecked>
-                                {subItem.name}
-                              </Checkbox>
+                              <Checkbox
+                              key={index}
+                              // Set the checked value based on whether the category is in selectedCategories
+                              isSelected={selectedGenders.includes(subItem.id)}
+                              // Pass a callback function that toggles the category on change
+                              onChange={() => toggleGender(subItem.id)}
+                            >
+                              {subItem.name}
+                            </Checkbox>
                             ) : null
                           )}
                         </div>
@@ -348,9 +387,15 @@ export default function Test({
                         <div className="flex flex-col">
                           {shoesNavItems?.map((subItem, index) =>
                             subItem.name ? (
-                              <Checkbox key={index} defaultChecked>
-                                {subItem.name}
-                              </Checkbox>
+                              <Checkbox
+                              key={index}
+                              // Set the checked value based on whether the category is in selectedCategories
+                              isSelected={selectedSubCategories.includes(subItem.id)}
+                              // Pass a callback function that toggles the category on change
+                              onChange={() => toggleSubCategory(subItem.id)}
+                            >
+                              {subItem.name}
+                            </Checkbox>
                             ) : null
                           )}
                         </div>
@@ -364,9 +409,15 @@ export default function Test({
                         <div className="flex flex-col">
                           {clothNavItems?.map((subItem, index) =>
                             subItem.name ? (
-                              <Checkbox key={index} defaultChecked>
-                                {subItem.name}
-                              </Checkbox>
+                              <Checkbox
+                              key={index}
+                              // Set the checked value based on whether the category is in selectedCategories
+                              isSelected={selectedSubCategories.includes(subItem.id)}
+                              // Pass a callback function that toggles the category on change
+                              onChange={() => toggleSubCategory(subItem.id)}
+                            >
+                              {subItem.name}
+                            </Checkbox>
                             ) : null
                           )}
                         </div>
@@ -381,9 +432,15 @@ export default function Test({
                         <div className="flex flex-col">
                           {accessoryNavItems?.map((subItem, index) =>
                             subItem.name ? (
-                              <Checkbox key={index} defaultChecked>
-                                {subItem.name}
-                              </Checkbox>
+                              <Checkbox
+                              key={index}
+                              // Set the checked value based on whether the category is in selectedCategories
+                              isSelected={selectedSubCategories.includes(subItem.id)}
+                              // Pass a callback function that toggles the category on change
+                              onChange={() => toggleSubCategory(subItem.id)}
+                            >
+                              {subItem.name}
+                            </Checkbox>
                             ) : null
                           )}
                         </div>
@@ -400,8 +457,8 @@ export default function Test({
                             subItem.name ? (
                               <Checkbox
                               key={index}
-                              // Set the default checked value based on the state
-                              defaultChecked={selectedCategories.includes(subItem.id)}
+                              // Set the checked value based on whether the category is in selectedCategories
+                              isSelected={selectedCategories.includes(subItem.id)}
                               // Pass a callback function that toggles the category on change
                               onChange={() => toggleCategory(subItem.id)}
                             >
@@ -434,7 +491,7 @@ export default function Test({
                         })}`
                       );
 
-                      setPriceRange([0, 100]);
+                      setPriceRange([0, 5000000]);
                       setSelectedCategories([]);
                       // setSelectedSubcategories(null);
                     });

@@ -11,6 +11,7 @@ export async function GET(req: Request) {
   const sortString = searchParams.get('sort') || null;
   const categoriesString = searchParams.get('categories') || null;
   const subcategoriesString = searchParams.get('subcategories') || null;
+  const gendersString = searchParams.get('gender') || null;
   const price_rangeString = searchParams.get('price_range') || null;
 
   // Convert
@@ -22,16 +23,20 @@ export async function GET(req: Request) {
   ];
   const categoriesArray = categoriesString?.split('.') || [];
   const categoriesIntArray = categoriesArray.map(category => parseInt(category, 10));
-
-
   const subcategoriesArray = subcategoriesString?.split('.') || [];
+  const subcategoriesIntArray = subcategoriesArray.map(category => parseInt(category, 10));
+  const gendersArray = gendersString?.split('.') || [];
+  const gendersIntArray = gendersArray.map(category => parseInt(category, 10));
   const where = {
     AND: [
       categoriesIntArray.length
         ? { categoryId: { in: categoriesIntArray } }
         : undefined,
-      subcategoriesArray.length
-        ? { subcategory: { in: subcategoriesArray } }
+        subcategoriesIntArray.length
+        ? { subcategoryId: { in: subcategoriesIntArray } }
+        : undefined,
+        gendersIntArray.length
+        ? { genderId: { in: gendersIntArray } }
         : undefined,
       minPrice ? { price: { gte: minPrice } } : undefined,
       maxPrice ? { price: { lte: maxPrice } } : undefined,
