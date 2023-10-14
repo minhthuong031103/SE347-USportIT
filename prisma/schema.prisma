@@ -44,6 +44,7 @@ model Product {
   name          String
   category      Category?     @relation(fields: [categoryId], references: [id])
   type          ProductType?  @relation(fields: [typeId], references: [id])
+  subcategory   Subcategory?  @relation(fields: [subcategoryId], references: [id])
   gender        Gender?       @relation(fields: [genderId], references: [id])
   reviews       Review[]
   orderItems    OrderItem[]
@@ -54,8 +55,8 @@ model Product {
 
   @@index([categoryId])
   @@index([typeId])
-  @@index([genderId])
   @@index([subcategoryId])
+  @@index([genderId])
 }
 
 model Category {
@@ -76,6 +77,7 @@ model Subcategory {
   name          String
   productTypeId Int
   productType   ProductType @relation(fields: [productTypeId], references: [id])
+  products      Product[]
 
   @@index([productTypeId])
 }
@@ -87,12 +89,11 @@ model Gender {
 }
 
 model ProductSize {
-  id        Int      @id @default(autoincrement())
-  size      String
-  productId Int
-  quantity  Int
-  product   Product? @relation(fields: [productId], references: [id])
-
+  id   Int    @id @default(autoincrement())
+  size String
+  quantity Int
+  product Product? @relation(fields: [productId], references: [id])
+  productId Int?
   @@index([productId])
 }
 

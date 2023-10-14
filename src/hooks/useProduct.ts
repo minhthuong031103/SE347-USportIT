@@ -28,7 +28,7 @@ export const useProduct = () => {
     const where = {
       AND: [
         categoriesArray.length
-          ? { category: { in: categoriesArray } }
+          ? { categoryId: { in: categoriesArray } }
           : undefined,
         subcategoriesArray.length
           ? { subcategory: { in: subcategoriesArray } }
@@ -57,5 +57,47 @@ export const useProduct = () => {
     };
   };
 
-  return { onGetProductDetail, getProductsAction };
+  const fetchProduct = async ({
+    page,
+    q,
+    sort,
+    gender,
+    categories,
+    subcategories,
+    price_range,
+  } = {}) => {
+    const params = {
+      page,
+      q,
+      sort,
+      gender,
+      categories,
+      subcategories,
+      price_range,
+    };
+
+    // Construct the base endpoint
+    let endpoint = 'api/product/search?limit=8';
+
+    // Add parameters to the endpoint
+    for (const [key, value] of Object.entries(params)) {
+      if (value !== null && value !== undefined) {
+        endpoint += `&${key}=${value}`;
+      }
+    }
+
+    // Make the API request
+    const products = await getRequest({ endPoint: endpoint });
+
+    // Handle the response and return the necessary data
+    console.log(products);
+    return {
+      data: products.data,
+      totalPages: products.totalPages,
+      totalItems: products.totalItems,
+      page: products.page,
+    };
+  };
+
+  return { onGetProductDetail, getProductsAction, fetchProduct };
 };
