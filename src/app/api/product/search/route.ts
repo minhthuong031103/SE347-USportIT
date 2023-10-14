@@ -5,7 +5,7 @@ export async function GET(req: Request) {
 
   // Customize the parameters you want to extract and provide default values if not present
   const page = parseInt(searchParams.get('page') || '0');
-  const limit = parseInt(searchParams.get('limit') || '0');
+  const limit = parseInt(searchParams.get('limit') || '1');
   // String query
 
   const sortString = searchParams.get('sort') || null;
@@ -22,20 +22,26 @@ export async function GET(req: Request) {
     0, 0,
   ];
   const categoriesArray = categoriesString?.split('.') || [];
-  const categoriesIntArray = categoriesArray.map(category => parseInt(category, 10));
+  const categoriesIntArray = categoriesArray.map((category) =>
+    parseInt(category, 10)
+  );
   const subcategoriesArray = subcategoriesString?.split('.') || [];
-  const subcategoriesIntArray = subcategoriesArray.map(category => parseInt(category, 10));
+  const subcategoriesIntArray = subcategoriesArray.map((category) =>
+    parseInt(category, 10)
+  );
   const gendersArray = gendersString?.split('.') || [];
-  const gendersIntArray = gendersArray.map(category => parseInt(category, 10));
+  const gendersIntArray = gendersArray.map((category) =>
+    parseInt(category, 10)
+  );
   const where = {
     AND: [
       categoriesIntArray.length
         ? { categoryId: { in: categoriesIntArray } }
         : undefined,
-        subcategoriesIntArray.length
+      subcategoriesIntArray.length
         ? { subcategoryId: { in: subcategoriesIntArray } }
         : undefined,
-        gendersIntArray.length
+      gendersIntArray.length
         ? { genderId: { in: gendersIntArray } }
         : undefined,
       minPrice ? { price: { gte: minPrice } } : undefined,
@@ -59,7 +65,7 @@ export async function GET(req: Request) {
   const response = {
     data: [...items],
     page,
-    totalPages: count / limit,
+    totalPages: Math.round(count / limit),
     totalItems: count,
   };
 
