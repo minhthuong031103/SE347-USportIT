@@ -40,7 +40,7 @@ import {
 } from '@/components/ui/accordion';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@nextui-org/react';
-import { Loader } from 'lucide-react';
+import { Spinner } from '@nextui-org/react';
 import { AiOutlineFilter } from 'react-icons/ai';
 interface TestProps {
   q: string | null;
@@ -66,6 +66,8 @@ export default function Test({
     fetchNextPage,
     hasNextPage,
     refetch: refetchData,
+    isFetching,
+    isFetchingNextPage,
   } = useInfiniteQuery(
     ['products', q, sort, gender, categories, subcategories, price_range],
     ({ pageParam = 0 }) =>
@@ -297,25 +299,22 @@ export default function Test({
   // Search bar
 
   const [searchQuery, setSearchQuery] = useState<string | null>(q ? q : '');
+  const debouncedSearch = useDebounce(searchQuery, 500);
 
-  const onSearch = (event: React.FormEvent) => {
-    event.preventDefault();
-
-    if (typeof searchQuery !== 'string') {
-      return;
-    }
-
-    const encodedSearchQuery = encodeURI(searchQuery);
-    router.push(
-      `${pathname}?${createQueryString({
-        q: encodedSearchQuery ? encodedSearchQuery : null,
-      })}`,
-      {
-        scroll: false,
-      }
-    );
-    // router.push(`/search?q=${encodedSearchQuery}`);
-  };
+  React.useEffect(() => {
+    const encodedSearchQuery = encodeURI(debouncedSearch);
+    startTransition(() => {
+      router.push(
+        `${pathname}?${createQueryString({
+          q: encodedSearchQuery ? encodedSearchQuery : null,
+        })}`,
+        {
+          scroll: false,
+        }
+      );
+    });
+    refetchData();
+  }, [debouncedSearch]);
   return (
     <section className="flex flex-col space-y-6" {...props}>
       <div className="flex space-x-2 items-end px-4">
@@ -331,7 +330,7 @@ export default function Test({
             </Button> */}
             <Button
               aria-label="Filter products"
-              className="fixed top-200 left-50 w-[30px] h-[30px] z-50 p-2 rounded-full bg-white shadow-md hover:shadow-lg"
+              className="fixed top-[55px] left-50 w-[30px] h-[30px] z-50 p-2 rounded-full bg-white shadow-md hover:shadow-lg"
               onClick={() => {
                 // Handle filter functionality here
               }}
@@ -347,11 +346,8 @@ export default function Test({
               <SheetTitle>Filters</SheetTitle>
             </SheetHeader>
             <Separator />
-            <div className="flex items-center space-x-4">
-              <form
-                onSubmit={onSearch}
-                className="flex justify-center w-5/6 h-8 rounded-md px-3"
-              >
+            <div className="flex flex-col lg:flex-row items-center space-x-0 lg:space-x-4 space-y-4 lg:space-y-0 ">
+              <form className="flex justify-center w-5/6 h-8 rounded-md px-3">
                 <input
                   value={searchQuery || ''}
                   onChange={(event) => setSearchQuery(event.target.value)}
@@ -363,7 +359,7 @@ export default function Test({
                 <DropdownMenuTrigger asChild>
                   <Button
                     aria-label="Sort products"
-                    size="sm"
+                    className="w-[60%] lg:w-auto h-6"
                     disabled={isPending}
                   >
                     Sort
@@ -584,7 +580,7 @@ export default function Test({
                 <Button
                   aria-label="Clear filters"
                   size="sm"
-                  className="w-full"
+                  className="w-auto md:w-full pr-5"
                   onClick={() => {
                     startTransition(() => {
                       router.push('/products');
@@ -611,36 +607,43 @@ export default function Test({
           </p>
         </div>
       ) : null}
-      <div className="overflow-hidden">
-        {data?.pages?.[0]?.totalItems ? (
-          <InfiniteScroll
-            // className="overflow-hidden"
-            dataLength={(data?.pages?.length + 1) * 8} //This is important field to render the next data
-            next={() => {
-              fetchNextPage();
-            }}
-            hasMore={hasNextPage || false}
-            loader={<Loader />}
-            className="h-full"
-            // below props only if you need pull down functionality
-          >
-            <div className="px-4">
-              {data?.pages?.map((item) => {
-                return (
-                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    {item.data.map((product) => {
-                      return <ProductCard product={product} />;
-                    })}
-                  </div>
-                );
-              })}
-            </div>
-            <Footer />
-          </InfiniteScroll>
-        ) : (
-          <Loader />
-        )}
-      </div>
+      {isFetching && !isFetchingNextPage ? (
+        <div className="w-full h-full flex items-center justify-center">
+          <Spinner size="lg" />
+        </div>
+      ) : (
+        <div className="overflow-hidden">
+          {data?.pages?.[0]?.totalItems ? (
+            <InfiniteScroll
+              dataLength={(data?.pages?.length + 1) * 8} //This is important field to render the next data
+              next={() => {
+                fetchNextPage();
+              }}
+              hasMore={hasNextPage || false}
+              className="h-full"
+              // below props only if you need pull down functionality
+            >
+              <div className="px-4">
+                {data?.pages?.map((item) => {
+                  return (
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                      {item.data.map((product) => {
+                        return <ProductCard product={product} />;
+                      })}
+                    </div>
+                  );
+                })}
+              </div>
+              {isFetchingNextPage ? (
+                <div className="w-full h-full flex items-center justify-center">
+                  <Spinner size="lg" />
+                </div>
+              ) : null}
+              <Footer />
+            </InfiniteScroll>
+          ) : null}
+        </div>
+      )}
     </section>
   );
 }

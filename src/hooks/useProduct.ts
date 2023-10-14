@@ -65,32 +65,25 @@ export const useProduct = () => {
     categories,
     subcategories,
     price_range,
-  }) => {
+  } = {}) => {
+    const params = {
+      page,
+      q,
+      sort,
+      gender,
+      categories,
+      subcategories,
+      price_range,
+    };
+
     // Construct the base endpoint
     let endpoint = 'api/product/search?limit=8';
-    console.log('page:', page);
-    if (q !== null && q !== undefined) {
-      endpoint += `&q=${q}`;
-    }
-    // Add parameters if they exist and are not null or undefined
-    if (page !== null && page !== undefined) {
-      endpoint += `&page=${page}`;
-    }
-    if (gender !== null && gender !== undefined) {
-      endpoint += `&gender=${gender}`;
-    }
-    if (sort !== null && sort !== undefined) {
-      endpoint += `&sort=${sort}`;
-    }
-    // Add other parameters similarly
-    if (categories !== null && categories !== undefined) {
-      endpoint += `&categories=${categories}`;
-    }
-    if (subcategories !== null && subcategories !== undefined) {
-      endpoint += `&subcategories=${subcategories}`;
-    }
-    if (price_range !== null && price_range !== undefined) {
-      endpoint += `&price_range=${price_range}`;
+
+    // Add parameters to the endpoint
+    for (const [key, value] of Object.entries(params)) {
+      if (value !== null && value !== undefined) {
+        endpoint += `&${key}=${value}`;
+      }
     }
 
     // Make the API request
