@@ -1,64 +1,32 @@
-import { type Metadata } from 'next';
+'use client';
+import React from 'react';
 
-import {
-  PageHeader,
-  PageHeaderDescription,
-  PageHeaderHeading,
-} from '@/components/page-header';
-import { Products } from '@/components/products';
-import { Shell } from '@/components/shells/shell';
-import { useProduct } from '@/hooks/useProduct';
+import { useSearchParams } from 'next/navigation';
+import Test from './Test';
 
-export const metadata: Metadata = {
-  title: 'Products',
-  description: 'Buy products from our stores',
-};
-
-interface ProductsPageProps {
-  searchParams: {
-    [key: string]: string | string[] | undefined;
-  };
-}
-
-export default async function ProductsPage({
-  searchParams,
-}: ProductsPageProps) {
-  const { page, per_page, sort, categories, subcategories, price_range } =
-    searchParams ?? {};
-
-  // Products transaction
-  const limit = typeof per_page === 'string' ? parseInt(per_page) : 8;
-  const offset = typeof page === 'string' ? (parseInt(page) - 1) * limit : 0;
-  const { getProductsAction } = useProduct();
-  const productsTransaction = await getProductsAction({
-    limit,
-    offset,
-    sort: typeof sort === 'string' ? sort : null,
-    categories: typeof categories === 'number' ? categories : null,
-    subcategories: typeof subcategories === 'string' ? subcategories : null,
-    price_range: typeof price_range === 'string' ? price_range : null,
-  });
-
-  const pageCount = Math.ceil(productsTransaction.count / limit);
-
+export default function ProductsPage() {
+  const search = useSearchParams();
+  const sort = search ? search.get('sort') : null;
+  const gender = search ? search.get('gender') : null;
+  const categories = search ? search.get('categories') : null;
+  const subcategories = search ? search.get('subcategories') : null;
+  const price_range = search ? search.get('price_range') : null;
+  const q = search ? search.get('q') : null;
+  // console.log('sort:', sort);
+  // console.log('gender:', gender);
+  // console.log('categories:', categories);
+  // console.log('subcategories:', subcategories);
+  // console.log('price_range:', price_range);
   return (
-    <Shell>
-      <PageHeader
-        id="products-page-header"
-        aria-labelledby="products-page-header-heading"
-      >
-        <PageHeaderHeading size="sm">Products</PageHeaderHeading>
-        <PageHeaderDescription size="sm">
-          Buy products from our stores
-        </PageHeaderDescription>
-      </PageHeader>
-      <Products
-        id="products-page-products"
-        aria-labelledby="products-page-products-heading"
-        products={productsTransaction.items}
-        pageCount={pageCount}
-        categories={[1, 2, 3]}
+    <div className="w-full h-full">
+      <Test
+        q={q}
+        sort={sort}
+        gender={gender}
+        categories={categories}
+        subcategories={subcategories}
+        price_range={price_range}
       />
-    </Shell>
+    </div>
   );
 }

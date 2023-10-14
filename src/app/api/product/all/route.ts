@@ -3,31 +3,22 @@ import prisma from '@/lib/prisma';
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
 
-  const page = parseInt(searchParams.get('page') || '1');
-  const limit = parseInt(searchParams.get('limit') || '10');
-  const search = searchParams.get('search') || '';
+  const page = parseInt(searchParams.get('page') || '0');
+  const limit = parseInt(searchParams.get('limit') || '0');
 
-  const all = await prisma.product.findMany({
-    skip: (page - 1) * limit,
+  const productCount = await prisma.product.count({});
+
+  const products = await prisma.product.findMany({
     take: limit,
-    where: {
-      name: {
-        contains: search,
-      },
-    },
+    skip: page * limit,
   });
-  const total = await prisma.product.count({
-    where: {
-      name: {
-        contains: search,
-      },
-    },
-  });
-  const totalPage = Math.ceil(total / limit);
-  const data = {
-    data: all,
-    totalItems: total,
-    totalPage,
+
+  const response = {
+    data: [...products],
+    page,
+    totalPages: productCount / limit,
+    totalItems: productCount,
   };
-  return new Response(JSON.stringify(data), { status: 200 });
+
+  return new Response(JSON.stringify(response), { status: 200 });
 }
