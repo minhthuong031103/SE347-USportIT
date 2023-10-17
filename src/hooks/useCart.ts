@@ -10,6 +10,7 @@ import {
   decreaseItemFromCart,
   deleteItemFromCart,
 } from '@/redux/cart/cart';
+
 export const useCart = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state: any) => state.cart) || null;

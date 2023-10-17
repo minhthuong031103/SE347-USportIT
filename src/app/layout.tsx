@@ -29,7 +29,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <AuthProvider>
           <ReduxProvider>
             <QueryProvider>
-              <Toaster />
+              <Toaster position="bottom-right" reverseOrder={false} />
               {children}
             </QueryProvider>
           </ReduxProvider>

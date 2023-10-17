@@ -1,18 +1,16 @@
 'use client';
-
-import React, { useRef } from 'react';
 import HomeBanner from '@/components/HomeBanner';
 import { Balancer } from 'react-wrap-balancer';
-import 'react-multi-carousel/lib/styles.css';
 import ShopByCollection from './ShopByCollection';
 import Categories from './Categories';
 import Image from 'next/image';
 import FeaturedProduct from './FeaturedProduct';
 import SalesProduct from './SalesProduct';
 import ShopAll from './ShopAll';
+import { useWindowSize } from 'rooks';
 
 const page = () => {
-  const windowWidth = useRef(window?.innerWidth);
+  const { innerWidth } = useWindowSize();
   return (
     <div className="mt-10 flex h-full w-full flex-col">
       <HomeBanner />
@@ -23,8 +21,8 @@ const page = () => {
           'https://static.nike.com/a/images/f_auto/dpr_2.0,cs_srgb/w_974,c_limit/79cf6b2d-1216-4d22-a3cd-e9fca50ddebe/nike-just-do-it.png'
         }
         className="relative"
-        width={windowWidth.current}
-        height={windowWidth.current / 2}
+        width={innerWidth}
+        height={innerWidth / 2}
         priority
         quality={100}
         objectFit="cover"
@@ -39,8 +37,8 @@ const page = () => {
           'https://static.nike.com/a/images/f_auto/dpr_1.3,cs_srgb/w_1531,c_limit/bb4458f0-855c-4548-a745-97aefec048ea/nike-just-do-it.jpg'
         }
         className="relative"
-        width={windowWidth.current}
-        height={windowWidth.current / 2}
+        width={innerWidth}
+        height={innerWidth / 2}
         priority
         quality={100}
         objectFit="cover"

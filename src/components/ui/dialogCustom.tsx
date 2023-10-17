@@ -3,10 +3,8 @@
 import { ScrollArea } from '@components/ui/scroll-area';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
-import { Label } from './label';
 import { Label } from './label';
 function DialogCustom({
   isModalOpen,
@@ -14,8 +12,6 @@ function DialogCustom({
   children,
   warningOnClose,
   className,
-  callBack,
-  notShowClose,
 }: {
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void;
