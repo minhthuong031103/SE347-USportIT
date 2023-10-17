@@ -17,7 +17,7 @@ function DialogCustom({
   callBack,
   notShowClose,
 }: {
-  isModalOpen: boolean;
+  warningOnClose?: boolean;
   setIsModalOpen: (value: boolean) => void;
   warningOnClose?: boolean;
   children: React.ReactNode;
