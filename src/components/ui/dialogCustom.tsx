@@ -33,6 +33,9 @@ function DialogCustom({
   const [isWarningVisible, setIsWarningVisible] = useState(false);
   const [isWarningClosing, setIsWarningClosing] = useState(false);
 
+  console.log("🚀 ~ file: dialogCustom.tsx:32 ~ notShowClose:", notShowClose)
+  console.log("🚀 ~ file: dialogCustom.tsx:32 ~ callBack:", callBack)
+
   useEffect(() => {
     function getScrollbarWidth() {
       return window.innerWidth - document.documentElement.clientWidth;
