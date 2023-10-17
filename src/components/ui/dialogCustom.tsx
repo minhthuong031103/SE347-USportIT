@@ -11,16 +11,12 @@ import { Label } from './label';
 function DialogCustom({
   isModalOpen,
   setIsModalOpen,
-  setIsModalOpen,
   children,
-  warningOnClose,
   warningOnClose,
   className,
   callBack,
   notShowClose,
 }: {
-  isModalOpen: boolean;
-  setIsModalOpen: (value: boolean) => void;
   warningOnClose?: boolean;
   setIsModalOpen: (value: boolean) => void;
   warningOnClose?: boolean;
@@ -36,6 +32,9 @@ function DialogCustom({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isWarningVisible, setIsWarningVisible] = useState(false);
   const [isWarningClosing, setIsWarningClosing] = useState(false);
+
+  console.log("🚀 ~ file: dialogCustom.tsx:32 ~ notShowClose:", notShowClose)
+  console.log("🚀 ~ file: dialogCustom.tsx:32 ~ callBack:", callBack)
 
   useEffect(() => {
     function getScrollbarWidth() {
