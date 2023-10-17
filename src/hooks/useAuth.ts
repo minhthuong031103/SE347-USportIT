@@ -1,6 +1,8 @@
 import { postRequest, putRequest } from '@/lib/fetch';
+import { postRequest, putRequest } from '@/lib/fetch';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
+import { signIn } from 'next-auth/react';
 import { signIn } from 'next-auth/react';
 
 export const useAuth = () => {
