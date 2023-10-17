@@ -35,6 +35,8 @@ export async function POST(req: Request) {
         JSON.stringify({
           message: 'User created and OTP sent',
           payload: payload,
+          message: 'User created and OTP sent',
+          payload: payload,
           status: 200,
         })
       );

@@ -1,11 +1,10 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogTrigger, DialogContent } from '@components/ui/dialog';
-import { Input, Textarea } from '@nextui-org/react';
-import React from 'react';
+import { Input, Spinner, Textarea } from '@nextui-org/react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { parseJSON } from '@/lib/utils';
-import { FaStar } from 'react-icons/fa';
+import { FaCheckCircle, FaStar, FaExclamationTriangle } from 'react-icons/fa';
 import { Controller, useForm } from 'react-hook-form';
 import { generateReactHelpers } from '@uploadthing/react/hooks';
 import { Label } from '@/components/ui/label';
@@ -15,28 +14,84 @@ import { type FileWithPath } from 'react-dropzone';
 import { FileDialog } from '@/app/(authenticated)/admin/add-product/FileDialog';
 import { getSession } from 'next-auth/react';
 import { useReview } from '@/hooks/useReview';
+import { useRouter } from 'next/navigation';
+import DialogCustom from '@/components/ui/dialogCustom';
 
 type FileWithPreview = FileWithPath & {
   preview: string;
 };
 const { useUploadThing } = generateReactHelpers<OurFileRouter>();
 
-const ProductReviewForm = ({ product }) => {
-  const [files, setFiles] = React.useState<FileWithPreview[]>([]);
-  const { isUploading, startUpload } = useUploadThing('imageUploader');
-  const { onPostProductReview } = useReview();
-  const [rating, setRating] = React.useState(0);
-  const [hover, setHover] = React.useState(0);
-  const [isVisible, setIsVisible] = React.useState(false);
+const ProductReviewForm = ({
+  product,
+  reviewRatingRefetch,
+  reviewItemRefetch,
+}) => {
+  //Router for redirecting
+  const router = useRouter();
 
+  //POST hook
+  const { onPostProductReview } = useReview();
+  const [files, setFiles] = useState<FileWithPreview[]>([]);
+  const { isUploading, startUpload } = useUploadThing('imageUploader');
+  //Star rating when hover and click
+  const [rating, setRating] = useState(0);
+  const [hover, setHover] = useState(0);
+  const [isVisible, setIsVisible] = React.useState(false);
+  //Loading, success, invalid
+  const [isLoading, setIsLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [isInvalid, setIsInvalid] = useState(false);
+  //Show dialog
+  const [isShowDialog, setIsShowDialog] = useState(false);
+  //Invalid input
+  const [isTitleValid, setIsTitleValid] = useState(false);
+  const [isContentValid, setIsContentValid] = useState(false);
+
+  //Get session
   const onGetSession = async () => {
     const session = await getSession();
     const userId = parseInt(session?.user?.id);
     return userId;
   };
 
-  const { handleSubmit, control } = useForm();
+  const { handleSubmit, control, reset } = useForm();
+  //Submit function
   const onSubmit = async (data) => {
+    await setIsInvalid(false);
+    console.log(
+      'isInvalid = ' +
+        isInvalid +
+        ' rating = ' +
+        rating +
+        ' isTitleValid = ' +
+        isTitleValid +
+        ' isContentValid = ' +
+        isContentValid
+    );
+    // Reset isInvalid to false when the dialog is opened
+    if (rating === 0) {
+      setIsInvalid(true); // Set isInvalid to true if rating is 0
+      return;
+    }
+    if (data.title === '') {
+      setIsTitleValid(false);
+      setIsInvalid(true); // Set isInvalid to true if title is empty
+      return;
+    } else {
+      setIsTitleValid(true);
+    }
+    if (data.text === '') {
+      setIsContentValid(false);
+      setIsInvalid(true); // Set isInvalid to true if content is empty
+      return;
+    } else {
+      setIsContentValid(true);
+    }
+    //If all input is valid, then submit
+    // Set loading state to true when submitting for submiting dialog
+
+    setIsLoading(true);
     const userId = await onGetSession();
     const images = await startUpload([...files]).then((res) => {
       const formattedImages = res?.map((image) => ({
@@ -47,6 +102,7 @@ const ProductReviewForm = ({ product }) => {
       return formattedImages ?? null;
     });
 
+    // const [data] = useQuery('key', func(), {});
     const ret = await onPostProductReview(
       JSON.stringify({
         ...data,
@@ -58,7 +114,26 @@ const ProductReviewForm = ({ product }) => {
       })
     );
 
-    console.log(ret);
+    if (ret) {
+      console.log(ret);
+      // Set loading state to false and show success dialog
+      setIsLoading(false);
+      setShowSuccess(true);
+
+      // Reset form and other state variables after submission after 2sec
+      setTimeout(() => {
+        reset();
+        setFiles([]);
+        setRating(0);
+        setHover(0);
+        setIsShowDialog(false);
+        setIsLoading(false);
+        setShowSuccess(false);
+        setIsInvalid(false);
+      }, 2000);
+      reviewItemRefetch();
+      reviewRatingRefetch();
+    }
   };
   return (
     <div className="w-full overflow-hidden">

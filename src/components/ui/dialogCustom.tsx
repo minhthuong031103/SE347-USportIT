@@ -9,20 +9,34 @@ import { Label } from './label';
 function DialogCustom({
   isModalOpen,
   setIsModalOpen,
+  setIsModalOpen,
   children,
   warningOnClose,
+  warningOnClose,
   className,
+  callBack,
+  notShowClose,
 }: {
   isModalOpen: boolean;
+  setIsModalOpen: (value: boolean) => void;
+  warningOnClose?: boolean;
   setIsModalOpen: (value: boolean) => void;
   warningOnClose?: boolean;
   children: React.ReactNode;
   className?: string;
   callBack?: () => void;
   notShowClose?: boolean;
+  callBack?: () => void;
+  notShowClose?: boolean;
 }) {
   const [isVisible, setIsVisible] = useState(isModalOpen);
   const [isClosing, setIsClosing] = useState(false);
+
+  const [isWarningOpen, setIsWarningOpen] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isWarningVisible, setIsWarningVisible] = useState(false);
+  const [isWarningClosing, setIsWarningClosing] = useState(false);
+
 
   const [isWarningOpen, setIsWarningOpen] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

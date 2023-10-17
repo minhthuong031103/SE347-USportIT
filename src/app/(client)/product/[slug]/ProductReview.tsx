@@ -6,27 +6,42 @@ import React from 'react';
 import { Pagination, Skeleton } from '@nextui-org/react';
 import { useQuery } from '@tanstack/react-query';
 const ProductReview = ({ product }) => {
-  //Get review data from useReview hook
-  const { onGetProductReview } = useReview();
   //State of current page for pagination
-  const [currentPage, setCurrentPage] = React.useState(1);
-
-  const ref = React.useRef(null);
-
-  //Set page state when change review page index
-  const onPageChange = (page) => {
-    ref.current?.scrollIntoView({ behavior: 'smooth' });
+  const [currentPage, setCurrentPage] = useState(1);
+  const onSetCurrentPage = (page) => {
     setCurrentPage(page);
   };
-  //Get review data from API
-  const getReviewData = async () => {
+
+  const { onGetProductReview, onGetProductReviewRating } = useReview();
+  //Get review data per page from API
+  // Define a query key and fetch function for fetching review data
+  const reviewDataQueryKey = ['productReview', product.id, currentPage];
+  const fetchReviewData = async () => {
     const fetchedReviewData = await onGetProductReview(product.id, currentPage);
     return fetchedReviewData;
   };
-  //Update page when change review page index
-  const { data, isFetched } = useQuery(
-    ['productReview', product.id, currentPage],
-    () => getReviewData(),
+
+  // Define a query key and fetch function for fetching review rating data
+  const reviewRatingQueryKey = ['productReviewRating', product.id];
+  const fetchReviewRatingData = async () => {
+    const fetchedReviewRatingData = await onGetProductReviewRating(product.id);
+    return fetchedReviewRatingData;
+  };
+
+  // Fetch review data
+  const {
+    data: reviewData,
+    isFetched: isReviewDataFetched,
+    refetch: refetchReviewData,
+  } = useQuery(reviewDataQueryKey, fetchReviewData, {
+    staleTime: 1000 * 60 * 1,
+    keepPreviousData: true,
+  });
+
+  // Fetch review rating data
+  const { data: reviewRatingData, refetch: refetchReviewRatingData } = useQuery(
+    reviewRatingQueryKey,
+    fetchReviewRatingData,
     {
       staleTime: 1000 * 60 * 1,
       keepPreviousData: true,
@@ -51,19 +66,14 @@ const ProductReview = ({ product }) => {
                 </div>
               ))}
         </div>
-        {data?.data?.length == 0 && data != null ? (
-          <div></div>
-        ) : (
-          <Pagination
-            showControls
-            total={data?.totalPages}
-            initialPage={1}
-            onChange={(page) => {
-              onPageChange(page);
-            }}
-            page={currentPage}
-          />
-        )}
+      </div>
+      <div className="w-full py-5">
+        <ProductReviewItem
+          reviewItemData={reviewData}
+          currentPage={currentPage}
+          setCurrentPage={onSetCurrentPage}
+          isFetched={isReviewDataFetched}
+        />
       </div>
     </div>
   );
