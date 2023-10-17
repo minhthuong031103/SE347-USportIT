@@ -1,4 +1,3 @@
-'use client';
 import HomeBanner from '@/components/HomeBanner';
 import { Balancer } from 'react-wrap-balancer';
 import ShopByCollection from './ShopByCollection';
@@ -7,10 +6,18 @@ import Image from 'next/image';
 import FeaturedProduct from './FeaturedProduct';
 import SalesProduct from './SalesProduct';
 import ShopAll from './ShopAll';
-import { useWindowSize } from 'rooks';
 
-const page = () => {
-  const { innerWidth } = useWindowSize();
+async function fetchWindowSize() {
+  const res = await fetch(`/api/user/window-size`);
+  console.log("🚀 ~ file: page.tsx:14 ~ fetchWindowSize ~ res:", res)
+  return res.json();
+}
+
+const page = async () => {
+
+  const windowSize = fetchWindowSize();
+  console.log("🚀 ~ file: page.tsx:20 ~ page ~ windowSize:", windowSize)
+  
   return (
     <div className="mt-10 flex h-full w-full flex-col">
       <HomeBanner />
@@ -21,8 +28,8 @@ const page = () => {
           'https://static.nike.com/a/images/f_auto/dpr_2.0,cs_srgb/w_974,c_limit/79cf6b2d-1216-4d22-a3cd-e9fca50ddebe/nike-just-do-it.png'
         }
         className="relative"
-        width={innerWidth}
-        height={innerWidth / 2}
+        width={50}
+        height={50}
         priority
         quality={100}
         objectFit="cover"
@@ -37,8 +44,8 @@ const page = () => {
           'https://static.nike.com/a/images/f_auto/dpr_1.3,cs_srgb/w_1531,c_limit/bb4458f0-855c-4548-a745-97aefec048ea/nike-just-do-it.jpg'
         }
         className="relative"
-        width={innerWidth}
-        height={innerWidth / 2}
+        width={50}
+        height={50}
         priority
         quality={100}
         objectFit="cover"
