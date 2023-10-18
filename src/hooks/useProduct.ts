@@ -93,7 +93,7 @@ export const useProduct = () => {
     console.log(products);
     return {
       data: products.data,
-      totalPages: Math.round(products.totalPages),
+      totalPages: products.totalPages,
       totalItems: products.totalItems,
       page: products.page,
     };

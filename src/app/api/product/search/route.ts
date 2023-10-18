@@ -4,7 +4,7 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
 
   // Customize the parameters you want to extract and provide default values if not present
-  const page = parseInt(searchParams.get('page') || '1');
+  const page = parseInt(searchParams.get('page') || '0');
   const limit = parseInt(searchParams.get('limit') || '1');
   // String query
 
@@ -65,7 +65,7 @@ export async function GET(req: Request) {
   const response = {
     data: [...items],
     page,
-    totalPages: Math.round(count / limit),
+    totalPages: count / limit,
     totalItems: count,
   };
 

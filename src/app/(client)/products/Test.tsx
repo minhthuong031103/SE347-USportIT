@@ -70,7 +70,7 @@ export default function Test({
     isFetchingNextPage,
   } = useInfiniteQuery(
     ['products', q, sort, gender, categories, subcategories, price_range],
-    ({ pageParam = 1 }) =>
+    ({ pageParam = 0 }) =>
       fetchProduct({
         page: pageParam,
         q,
@@ -86,7 +86,7 @@ export default function Test({
       refetchOnWindowFocus: false,
       getNextPageParam: (lastPage, pages) => {
         if (lastPage.page === 0 && pages.length < lastPage.totalPages) return 1;
-        if (pages.length <= lastPage.totalPages) return pages.length;
+        if (pages.length < lastPage.totalPages) return pages.length;
         else return undefined;
       },
     }
@@ -624,11 +624,11 @@ export default function Test({
               // below props only if you need pull down functionality
             >
               <div className="px-4">
-                {data?.pages?.map((item) => {
+                {data?.pages?.map((item, index) => {
                   return (
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                      {item.data.map((product) => {
-                        return <ProductCard product={product} />;
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" key={index}>
+                      {item.data.map((product,index) => {
+                        return <ProductCard product={product}  key={index}/>;
                       })}
                     </div>
                   );
