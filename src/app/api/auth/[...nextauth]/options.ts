@@ -151,9 +151,8 @@ const options: AuthOptions = {
     },
     //first it run the jwt function, the jwt function will return the token , then in the session function we can access the token
     async jwt({ token, user, trigger, session }) {
-      console.log('user in jwt: ');
-      console.log(token);
-      console.log(user);
+      console.log('🚀 ~ file: options.ts:154 ~ jwt ~ user:', user);
+      console.log('🚀 ~ file: options.ts:154 ~ jwt ~ token:', token);
       if (trigger === 'update') {
         return { ...token, ...session.user };
       }
