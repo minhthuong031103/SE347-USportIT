@@ -70,18 +70,7 @@ function DialogCustom({
     if (isModalOpen) {
       setIsVisible(true);
     } else {
-<<<<<<< HEAD
       setIsModalOpen?.(false);
-=======
-      setIsModalOpen(false);
-    }
-  }, [isModalOpen]);
-  useEffect(() => {
-    if (isWarningOpen) {
-      setIsWarningVisible(true);
-    } else {
-      setIsWarningOpen(false);
->>>>>>> d5e50d7 (Complete ReviewForm)
     }
   }, [isModalOpen]);
   useEffect(() => {
@@ -100,11 +89,7 @@ function DialogCustom({
       setTimeout(() => {
         setIsClosing(false);
         setIsVisible(false);
-<<<<<<< HEAD
         setIsModalOpen?.(false);
-=======
-        setIsModalOpen(false);
->>>>>>> d5e50d7 (Complete ReviewForm)
       }, 120);
     }
   };
@@ -127,18 +112,10 @@ function DialogCustom({
             }  ${isClosing ? 'animate-out fade-out-0 ' : ''}
   `}
           ></div>
-<<<<<<< HEAD
           <div
             className={cn(
               `fixed left-[50%] top-[50%] z-50 max-w-full translate-x-[-50%] 
       translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200   ${
-=======
-
-          <div
-            className={cn(
-              `fixed left-[50%] top-[50%] z-50 max-w-full translate-x-[-50%] 
-      translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 ww-[90%] lg:w-[30%] h-[40%] lg:h-[50%]  ${
->>>>>>> d5e50d7 (Complete ReviewForm)
         isModalOpen
           ? `animate-in fade-in-0 zoom-in-95 slide-in-from-left-1/2 slide-in-from-top-[48%]`
           : ''

@@ -125,18 +125,15 @@
     @apply rounded-md lg:rounded-2xl;
   }
 }
-<<<<<<< HEAD
-=======
-.no-scroll {
-  overflow: hidden;
-  padding-right: var(--scrollbar-width);
-}
-.no-scroll {
-  overflow: hidden;
-  padding-right: var(--scrollbar-width);
-}
->>>>>>> 0e619fc (fix conflict)
 
+.no-scroll {
+  overflow: hidden;
+  padding-right: var(--scrollbar-width);
+}
+.no-scroll {
+  overflow: hidden;
+  padding-right: var(--scrollbar-width);
+}
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -239,10 +236,7 @@
   100% {
     background-color: hsl(200, 20%, 95%);
   }
-<<<<<<< HEAD
 
   overflow: hidden;
   padding-right: var(--scrollbar-width);
-=======
->>>>>>> 0e619fc (fix conflict)
 }

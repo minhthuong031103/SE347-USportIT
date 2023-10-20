@@ -38,26 +38,17 @@ const ProductReviewForm = ({
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [isVisible, setIsVisible] = React.useState(false);
-<<<<<<< HEAD
-  //Loading and success
-  const [isLoading, setIsLoading] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-=======
   //Loading, success, invalid
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [isInvalid, setIsInvalid] = useState(false);
->>>>>>> 3780b97 (fix conflict when merge from main to devQuan)
   //Show dialog
   const [isShowDialog, setIsShowDialog] = useState(false);
   //Invalid input
   const [isTitleValid, setIsTitleValid] = useState(false);
   const [isContentValid, setIsContentValid] = useState(false);
 
-<<<<<<< HEAD
-=======
   //Get session
->>>>>>> 3780b97 (fix conflict when merge from main to devQuan)
   const onGetSession = async () => {
     const session = await getSession();
     const userId = parseInt(session?.user?.id);

@@ -1,8 +1,5 @@
 'use client';
-<<<<<<< HEAD:src/app/(client)/(withHDFT)/product/[slug]/ProductReviewItem.tsx
-<<<<<<<< HEAD:src/app/(client)/(withHDFT)/product/[slug]/ProductReviewItem.tsx
-=======
->>>>>>> d5e50d7 (Complete ReviewForm):src/app/(client)/product/[slug]/ProductReviewItem.tsx
+
 import ReviewDetail from '@/components/ReviewDetail';
 
 import React from 'react';
@@ -39,11 +36,8 @@ const ProductReviewItem = ({
                 </div>
               ))}
         </div>
-<<<<<<< HEAD:src/app/(client)/(withHDFT)/product/[slug]/ProductReviewItem.tsx
         {reviewItemData ? (
-=======
-        {reviewItemData?.data?.length == 0 && data != null ? (
->>>>>>> d5e50d7 (Complete ReviewForm):src/app/(client)/product/[slug]/ProductReviewItem.tsx
+
           <div></div>
         ) : (
           <Pagination
@@ -130,9 +124,6 @@ const ProductReview = ({ product }) => {
           setCurrentPage={onSetCurrentPage}
           isFetched={isReviewDataFetched}
         />
->>>>>>>> d5e50d7 (Complete ReviewForm):src/app/(client)/product/[slug]/ProductReview.tsx
-=======
->>>>>>> d5e50d7 (Complete ReviewForm):src/app/(client)/product/[slug]/ProductReviewItem.tsx
       </div>
     </div>
   );
