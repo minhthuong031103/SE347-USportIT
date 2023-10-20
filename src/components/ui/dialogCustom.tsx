@@ -112,10 +112,11 @@ function DialogCustom({
             }  ${isClosing ? 'animate-out fade-out-0 ' : ''}
   `}
           ></div>
+
           <div
             className={cn(
               `fixed left-[50%] top-[50%] z-50 max-w-full translate-x-[-50%] 
-      translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200   ${
+      translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 ww-[90%] lg:w-[30%] h-[40%] lg:h-[50%]  ${
         isModalOpen
           ? `animate-in fade-in-0 zoom-in-95 slide-in-from-left-1/2 slide-in-from-top-[48%]`
           : ''
@@ -130,7 +131,6 @@ function DialogCustom({
           >
             <div className="h-full w-full ">
               <ScrollArea className="h-full w-full px-3">
-<<<<<<< HEAD
                 {!notShowClose ? (
                   <div className="flex items-end justify-end mb-3">
                     <Button variant={'outline'} onClick={handleClose}>
@@ -139,13 +139,6 @@ function DialogCustom({
                   </div>
                 ) : null}
 
-=======
-                <div className="flex items-end justify-end mb-3">
-                  <Button variant={'outline'} onClick={handleClose}>
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
->>>>>>> d5e50d7 (Complete ReviewForm)
                 <div className="w-full h-full py-3">
                   {/* CHILDREN */}
                   {children}
@@ -158,18 +151,11 @@ function DialogCustom({
                         }  ${isWarningClosing ? 'animate-out fade-out-0 ' : ''}
   `}
                       ></div>
-<<<<<<< HEAD
-                      <div
-                        className={cn(
-                          `fixed left-[50%] top-[50%] z-50 max-w-full translate-x-[-50%] 
-      translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 w-[90%] lg:w-[50%] ${
-=======
 
                       <div
                         className={cn(
                           `fixed left-[50%] top-[50%] z-50 max-w-full translate-x-[-50%] 
       translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 w-[90%] lg:w-[30%] h-[40%] lg:h-[50%]   ${
->>>>>>> d5e50d7 (Complete ReviewForm)
         isWarningOpen
           ? `animate-in fade-in-0 zoom-in-95 slide-in-from-left-1/2 slide-in-from-top-[48%]`
           : ''
@@ -198,10 +184,7 @@ function DialogCustom({
                                       // setDanhMucValue(null);
                                       // setThue(false);
                                       // setBan(false);
-<<<<<<< HEAD
                                       callBack?.();
-=======
->>>>>>> d5e50d7 (Complete ReviewForm)
                                       handleClose();
                                     }}
                                   >
