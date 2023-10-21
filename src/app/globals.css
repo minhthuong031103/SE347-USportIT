@@ -127,8 +127,11 @@
 }
 <<<<<<< HEAD
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 2a051c07c981aba86604ec991866e1826fcbb9bb
 .no-scroll {
   overflow: hidden;
   padding-right: var(--scrollbar-width);
@@ -137,8 +140,11 @@
   overflow: hidden;
   padding-right: var(--scrollbar-width);
 }
+<<<<<<< HEAD
 
 <<<<<<< HEAD
+=======
+>>>>>>> 2a051c07c981aba86604ec991866e1826fcbb9bb
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));

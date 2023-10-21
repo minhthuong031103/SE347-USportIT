@@ -38,7 +38,7 @@ const ProductReviewForm = ({
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [isVisible, setIsVisible] = React.useState(false);
-  //Loading and success
+  //Loading, success, invalid
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   //Show dialog
@@ -47,6 +47,7 @@ const ProductReviewForm = ({
   const [isTitleValid, setIsTitleValid] = useState(false);
   const [isContentValid, setIsContentValid] = useState(false);
 
+  //Get session
   const onGetSession = async () => {
     const session = await getSession();
     const userId = parseInt(session?.user?.id);
