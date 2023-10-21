@@ -1,3 +1,5 @@
+/** @format */
+
 import * as React from 'react';
 import Cropper, { type ReactCropperElement } from 'react-cropper';
 import {
@@ -17,13 +19,12 @@ import { toast } from 'react-hot-toast';
 
 import 'cropperjs/dist/cropper.css';
 
-import Image from 'next/image';
-
 import { cn, formatBytes } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Button } from '@components/ui/button';
+import { Dialog, DialogContent, DialogTrigger } from '@components/ui/dialog';
 import { Icons } from '@/assets/Icons';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { ImageCus } from '@/components/ui/ImageCus';
 
 // FIXME Your proposed upload exceeds the maximum allowed size, this should trigger toast.error too
 type FileWithPreview = FileWithPath & {
@@ -35,7 +36,7 @@ interface FileDialogProps<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
 > extends React.HTMLAttributes<HTMLDivElement> {
   name: TName;
-  setValue: UseFormSetValue<TFieldValues>;
+  setValue?: UseFormSetValue<TFieldValues>;
   accept?: Accept;
   maxSize?: number;
   maxFiles?: number;
@@ -63,8 +64,8 @@ export function FileDialog<TFieldValues extends FieldValues>({
   const onDrop = React.useCallback(
     (acceptedFiles: FileWithPath[], rejectedFiles: FileRejection[]) => {
       console.log(acceptedFiles.length, files?.length);
-      if (acceptedFiles.length + files?.length > 8) {
-        toast.error('You can only upload up to 8 files');
+      if (acceptedFiles.length + (files?.length ?? 0) > maxFiles) {
+        toast.error(`You can only upload up to ${maxFiles} files`);
         return;
       } else {
         acceptedFiles.forEach((file) => {
@@ -92,7 +93,7 @@ export function FileDialog<TFieldValues extends FieldValues>({
 
   // Register files to react-hook-form
   React.useEffect(() => {
-    setValue(name, files as PathValue<TFieldValues, Path<TFieldValues>>);
+    setValue?.(name, files as PathValue<TFieldValues, Path<TFieldValues>>);
   }, [files]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -108,21 +109,25 @@ export function FileDialog<TFieldValues extends FieldValues>({
   React.useEffect(() => {
     return () => {
       if (!files) return;
-      files.forEach((file) => URL.revokeObjectURL(file.preview));
+      files.forEach((file) =>
+        URL.revokeObjectURL(
+          file?.preview || `${import.meta.env.VITE_IMAGE_HOST}${file}`
+        )
+      );
     };
   }, []);
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" disabled={disabled}>
-          Upload Images
-          <span className="sr-only">Upload Images</span>
+        <Button className={className} variant="outline" disabled={disabled}>
+          Tải ảnh lên
+          <span className="sr-only">Tải ảnh lên</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[480px]">
         <p className="absolute left-5 top-4 text-base font-medium text-muted-foreground">
-          Upload your images
+          Tải ảnh của bạn lên
         </p>
 
         {(files && files?.length < maxFiles) || !files ? (
@@ -155,22 +160,21 @@ export function FileDialog<TFieldValues extends FieldValues>({
                 <div className="grid place-items-center gap-1 sm:px-5">
                   <Icons.upload className="h-8 w-8 text-muted-foreground" />
                   <p className="mt-2 text-base font-medium text-muted-foreground">
-                    Drag {`'n'`} drop file here, or click to select file
+                    Kéo và thả ảnh vào đây hoặc click để tải ảnh lên
                   </p>
                   <p className="text-sm text-slate-500">
-                    Please upload file with size less than{' '}
+                    Vui lòng chọn file có kích thước nhỏ hơn{' '}
                     {formatBytes(maxSize)}
                   </p>
                 </div>
               )}
             </div>
             <p className="text-center text-sm font-medium text-muted-foreground">
-              You can upload up to {maxFiles}{' '}
-              {maxFiles === 1 ? 'file' : 'files'}
+              Bạn có thể tải lên {maxFiles} {maxFiles === 1 ? 'file' : 'files'}
             </p>
           </div>
         ) : null}
-        <ScrollArea className="h-[300px] mt-10">
+        <ScrollArea className="h-[300px] mt-10 px-3">
           {files?.length ? (
             <div className="grid gap-5">
               {files?.map((file, i) => (
@@ -191,11 +195,11 @@ export function FileDialog<TFieldValues extends FieldValues>({
             variant="outline"
             size="sm"
             className="mt-2.5 w-full"
-            onClick={() => setFiles(null)}
+            onClick={() => setFiles([])}
           >
             <Icons.trash className="mr-2 h-4 w-4 text-primary" />
-            Remove All
-            <span className="sr-only">Remove all</span>
+            Xóa tất cả
+            <span className="sr-only">Xóa tất cả</span>
           </Button>
         ) : null}
       </DialogContent>
@@ -253,21 +257,18 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
     document.addEventListener('keydown', handleKeydown);
     return () => document.removeEventListener('keydown', handleKeydown);
   }, [onCrop]);
-
+  console.log(file?.type.startsWith('image'));
   return (
     <div className="relative flex items-center justify-between gap-2.5">
       <div className="flex items-center gap-2">
-        <Image
+        <ImageCus
           src={cropData ? cropData : file.preview}
           alt={file.name}
-          className="h-10 w-10 shrink-0 rounded-md"
-          width={40}
-          height={40}
-          loading="lazy"
+          className="h-12 w-12 shrink-0 rounded-md"
         />
         <div className="flex flex-col">
           <p className="line-clamp-1 text-sm font-medium text-muted-foreground">
-            {file.name}
+            {file.name.length > 30 ? file.name.slice(0, 30) + '...' : file.name}
           </p>
           <p className="text-xs text-slate-500">
             {(file.size / 1024 / 1024).toFixed(2)}MB
@@ -275,7 +276,7 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
         </div>
       </div>
       <div className="flex items-center gap-2">
-        {file.type.startsWith('image') && (
+        {file !== null && (
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
               <Button
@@ -288,12 +289,12 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
                   className="h-4 w-4 text-primary"
                   aria-hidden="true"
                 />
-                <span className="sr-only">Crop image</span>
+                <span className="sr-only"> Cắt ảnh</span>
               </Button>
             </DialogTrigger>
             <DialogContent>
               <p className="absolute left-5 top-4 text-base font-medium text-muted-foreground">
-                Crop image
+                Cắt ảnh
               </p>
               <div className="mt-8 grid place-items-center space-y-5">
                 <Cropper
@@ -323,8 +324,8 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
                       setIsOpen(false);
                     }}
                   >
-                    <Icons.crop className="mr-2 h-3.5 w-3.5 text-primary" />
-                    Crop Image
+                    <Icons.crop className="mr-2 h-3.5 w-3.5 text-secondary-50" />
+                    Cắt ảnh
                   </Button>
                   <Button
                     aria-label="Reset crop"
@@ -341,7 +342,7 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
                       className="mr-2 h-3.5 w-3.5 text-primary"
                       aria-hidden="true"
                     />
-                    Reset Crop
+                    Bỏ thay đổi
                   </Button>
                 </div>
               </div>
