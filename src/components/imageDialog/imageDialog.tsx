@@ -46,7 +46,7 @@ interface FileDialogProps<
   disabled?: boolean;
 }
 
-export function FileDialog<TFieldValues extends FieldValues>({
+export function ImageDialog<TFieldValues extends FieldValues>({
   name,
   setValue,
   accept = {
