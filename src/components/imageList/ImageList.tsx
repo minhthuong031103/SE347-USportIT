@@ -1,12 +1,12 @@
 /** @format */
 
-import { Zoom } from '@components/ui/zoom';
+import { Zoom } from '@components/ui/zoom-image';
 import { ScrollArea } from '@components/ui/scroll-area';
-import { ImageCus } from '@components/ui/image';
-export const ImageList = ({ files, width, height }) => {
+import { ImageCus } from '@components/ui/ImageCus';
+export const ImageList = ({ files, width, height, className }) => {
   return (
-    <ScrollArea className='h-72'>
-      <div className='flex items-center gap-2 flex-wrap'>
+    <ScrollArea className={className}>
+      <div className="flex items-center gap-2 flex-wrap">
         {files.map((file, i) => {
           return (
             <Zoom key={i}>
