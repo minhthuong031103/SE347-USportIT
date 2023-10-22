@@ -1,7 +1,7 @@
 import React from 'react';
 
-function layout({ children }) {
-  return <div className="w-full h-full  ">{children}</div>;
+async function layout({ children }) {
+  return <div>{children}</div>;
 }
 
 export default layout;
