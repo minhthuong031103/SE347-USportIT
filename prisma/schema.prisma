@@ -55,8 +55,8 @@ model Product {
 
   @@index([categoryId])
   @@index([typeId])
-  @@index([subcategoryId])
   @@index([genderId])
+  @@index([subcategoryId])
 }
 
 model Category {
@@ -89,11 +89,12 @@ model Gender {
 }
 
 model ProductSize {
-  id   Int    @id @default(autoincrement())
-  size String
-  quantity Int
-  product Product? @relation(fields: [productId], references: [id])
-  productId Int?
+  id        Int      @id @default(autoincrement())
+  size      String
+  productId Int
+  quantity  Int
+  product   Product? @relation(fields: [productId], references: [id])
+
   @@index([productId])
 }
 
@@ -239,7 +240,9 @@ model CouponCode {
 
 model Wishlist {
   id       Int       @id @default(autoincrement())
+
   userId   Int       @unique
+
   user     User      @relation(fields: [userId], references: [id])
   products Product[]
 

@@ -1,4 +1,5 @@
 'use client';
+
 import ReviewDetail from '@/components/ReviewDetail';
 
 import React from 'react';
