@@ -7,6 +7,7 @@ import FeaturedProduct from './FeaturedProduct';
 import SalesProduct from './SalesProduct';
 import ShopAll from './ShopAll';
 import ClientSideImage from './ClientSideImage';
+import AddProductDialog from './AddProductDialog';
 
 const page = () => {
   return (
@@ -47,6 +48,8 @@ const page = () => {
       <section>
         <Categories />
       </section>
+
+      <AddProductDialog isShowDialog={true} />
     </div>
   );
 };
