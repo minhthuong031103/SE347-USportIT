@@ -9,6 +9,7 @@ const persistConfig = {
   key: 'root',
   storage: storage,
   timeout: 100000,
+  whitelist: ['cart', 'favorite'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
