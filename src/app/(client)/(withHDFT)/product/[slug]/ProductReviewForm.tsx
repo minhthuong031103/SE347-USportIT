@@ -41,6 +41,7 @@ const ProductReviewForm = ({
   //Loading and success
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [isInvalid, setIsInvalid] = useState(false);
   //Show dialog
   const [isShowDialog, setIsShowDialog] = useState(false);
   //Invalid input
