@@ -84,6 +84,7 @@ const AddProductDialog = ({
   });
   const { onGetProductDetail } = useProduct();
   /* End Form Validation */
+  // const [selectDetailData, setSelectDetailData] = useState('');
 
   useEffect(() => {
     /* Get product detail */
@@ -125,6 +126,8 @@ const AddProductDialog = ({
         // setRating(0);
         // setHover(0);
         // setIsInvalid(false);
+        setSizeSelected(null);
+        setSelectedQuantity(null);
       }}
     >
       <div className="flex flex-col w-full h-auto pr-4 gap-6">
@@ -160,7 +163,7 @@ const AddProductDialog = ({
           {/* Heading */}
 
           {/* Size start */}
-          <div id="sizesGrid" className="grid grid-cols-3 gap-2">
+          <div id="sizesGrid" className="grid grid-cols-3 lg:grid-cols-4 gap-2">
             {selectDetailData.productSizes?.map((size, index) => (
               <div
                 onClick={

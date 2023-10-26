@@ -49,7 +49,7 @@ const page = () => {
         <Categories />
       </section>
 
-      <AddProductDialog isShowDialog={true} />
+      <AddProductDialog />
     </div>
   );
 };

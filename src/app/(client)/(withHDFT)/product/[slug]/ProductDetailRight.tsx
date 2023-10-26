@@ -93,7 +93,7 @@ function ProductDetailRight({ data }) {
       </div>
       <div className="flex flex-col gap-2 w-full items-center justify-center">
         {/* Product size */}
-        {selectedSize ? (
+        {!selectedSize ? (
           <Sheet>
             <SheetTrigger className="w-full mx-0 flex items-center justify-center  ">
               <Button
