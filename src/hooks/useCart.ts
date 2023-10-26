@@ -15,8 +15,8 @@ export const useCart = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state: any) => state.cart) || null;
 
-  const onAddToCart = useCallback(({ data, selectedSize }) => {
-    dispatch(addToCart({ data, selectedSize }));
+  const onAddToCart = useCallback(({ data, selectedSize, quantity }) => {
+    dispatch(addToCart({ data, selectedSize, quantity }));
   }, []);
 
   const onIncreaseItemFromCart = useCallback(({ data, selectedSize }) => {
