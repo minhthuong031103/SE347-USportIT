@@ -172,7 +172,7 @@ export default function ProductCard({ product }) {
         </div>
 
         <div
-          onClick={async () => {
+          onClick={() => {
             // Doan nay su dung cho favorite
             // if (!isAddToCart) {
             //   setIsShowDialog(true);
@@ -181,8 +181,7 @@ export default function ProductCard({ product }) {
             // }
             // setIsAddToCart((prev) => !prev);
 
-            setIsShowDialog(true);
-            await onSelectProduct({ data: product });
+            onSelectProduct({ data: product });
             onToggleDialog();
           }}
           className="transform duration-200 
