@@ -10,6 +10,7 @@ import { ScrollArea } from './ui/scroll-area';
 import { CommonSvg } from '@/assets/CommonSvg';
 import { Input } from './ui/input';
 import { useCart } from '@/hooks/useCart';
+import toast from 'react-hot-toast';
 // import { ScrollArea } from '@/components/ui/scroll-area';
 // import { Separator } from '@/components/ui/separator';
 // import { UpdateCart } from '@/components/checkout/update-cart';
@@ -126,6 +127,7 @@ const CartItem = ({ item }) => {
                 selectedSize: item.selectedSize,
                 quantity: item.quantity,
               });
+              toast.success('Delete item successfully');
             }}
             size={'sm'}
             variant={'outline'}

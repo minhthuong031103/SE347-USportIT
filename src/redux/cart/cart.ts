@@ -39,7 +39,7 @@ const cartSlice = createSlice({
       if (!state.listItem[productIndex]) {
         state.listItem.push({
           data: payload.data,
-          quantity: 1,
+          quantity: payload.quantity,
           selectedSize: payload.selectedSize,
         });
         state.total += payload.data.price;

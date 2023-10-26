@@ -7,16 +7,18 @@ import { useSelectedProduct } from '@/hooks/useSelectedProduct';
 import { parseJSON } from '@/lib/utils';
 import Image from 'next/image';
 import { useProduct } from '@/hooks/useProduct';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useFormState } from 'react-hook-form';
 import { Input } from '@nextui-org/react';
-// import { yup } from 'yup';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useCart } from '@/hooks/useCart';
+import toast from 'react-hot-toast';
 
 const AddProductDialog = ({
   // reset,
   // setRating,
   // setHover,
   // setIsInvalid,
-  onSubmit,
   rating,
   // hover,
   isInvalid,
@@ -26,23 +28,62 @@ const AddProductDialog = ({
   const { isShowDialog, selectedProduct, onToggleDialog } =
     useSelectedProduct();
   const [selectedSize, setSizeSelected] = useState(null);
+  const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [showError, setShowError] = useState(false);
   const [selectDetailData, setSelectDetailData] = useState('');
+  const { onAddToCart } = useCart();
 
-  /* Form Validation */
-  /*   const schema = yup.object().shape({
-    quantity: yup
-      .number()
-      .typeError('Quantity must be a number') // Thông báo lỗi kiểu dữ liệu
-      .required('Quantity is required') // Thông báo lỗi khi trống
-      .positive('Quantity must be a positive number') // Kiểm tra số dương
-      .integer('Quantity must be an integer'), // Kiểm tra số nguyên
-  }); */
-
-  const { onGetProductDetail } = useProduct();
-  const { control, handleSubmit, getValues } = useForm({
-    // validationSchema: schema,
+  /* Start Form Validation */
+  const schema = z.object({
+    quantity: z
+      .string()
+      .refine((val) => val.length > 0, { message: 'Quantity is required' })
+      .transform(Number)
+      .refine((value) => Number.isInteger(value) && value >= 0, {
+        message: 'Quantity must be a nonnegative integer',
+      }),
   });
+
+  const { control, handleSubmit, getValues, reset } = useForm({
+    resolver: zodResolver(schema),
+    mode: 'onChange',
+  });
+
+  const { errors, isValid } = useFormState({ control });
+
+  const onSubmit = handleSubmit(async (data) => {
+    if (errors.quantity) {
+      return;
+    }
+
+    if (data.quantity > selectedQuantity) {
+      toast.error('Quantity cannot exceed available stock');
+      return;
+    }
+
+    if (!selectedSize) {
+      setShowError(true);
+      return;
+    }
+
+    console.log(
+      '🚀 ~ file: AddProductDialog.tsx:65 ~ onSubmit ~ selectedProduct:',
+      selectedProduct
+    );
+    try {
+      await onAddToCart({
+        data: selectedProduct.data,
+        quantity: data.quantity,
+        selectedSize: selectedSize,
+      });
+      onToggleDialog(); // Close the dialog
+      toast.success('Added to cart');
+    } catch (error) {
+      console.error('Failed to add product to cart:', error);
+    }
+  });
+  const { onGetProductDetail } = useProduct();
+  /* End Form Validation */
 
   useEffect(() => {
     /* Get product detail */
@@ -55,6 +96,10 @@ const AddProductDialog = ({
       }
       const data = parseJSON(JSON.stringify(fetchProductDetails));
       setSelectDetailData(data);
+      console.log(
+        '🚀 ~ file: AddProductDialog.tsx:94 ~ getProductDetails ~ selectDetailData:',
+        selectDetailData
+      );
     };
 
     if (isShowDialog) {
@@ -64,6 +109,7 @@ const AddProductDialog = ({
         getValues('title')
       );
     }
+    reset();
   }, [isShowDialog]);
 
   return isShowDialog ? (
@@ -121,6 +167,7 @@ const AddProductDialog = ({
                   size.quantity > 0
                     ? () => {
                         setSizeSelected(size.size);
+                        setSelectedQuantity(size.quantity);
                         setShowError(false);
                       }
                     : () => {}
@@ -155,13 +202,18 @@ const AddProductDialog = ({
             name="quantity"
             render={({ field }) => {
               return (
-                <Input
-                  radius="sm"
-                  type="text"
-                  size="sm"
-                  value={field.value}
-                  onChange={field.onChange}
-                />
+                <div>
+                  <Input
+                    radius="sm"
+                    type="text"
+                    size="sm"
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                  {errors.quantity && (
+                    <p className="text-red-500">{errors.quantity.message}</p>
+                  )}
+                </div>
               );
             }}
           />
@@ -170,13 +222,8 @@ const AddProductDialog = ({
         <div className="flex w-full mt-5 justify-center items-center">
           <Button
             className="w-[50%] inset-0 border-transparent hover:scale-105 hover:transition text-[13px] sm:text-[16px] hover:duration-200 font-semibold text-white rounded-md"
-            onClick={async () => {
-              try {
-                await handleSubmit(onSubmit)();
-              } catch (e) {
-                // Handle submission error if needed
-              }
-            }}
+            onClick={onSubmit}
+            disabled={!isValid}
           >
             Submit
           </Button>
