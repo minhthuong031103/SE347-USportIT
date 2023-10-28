@@ -3,13 +3,14 @@
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-//disptach, seclector
+//dispatch, selector
 import {
   addToCart,
   increaseItemFromCart,
   decreaseItemFromCart,
   deleteItemFromCart,
 } from '@/redux/cart/cart';
+
 export const useCart = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state: any) => state.cart) || null;
@@ -32,6 +33,17 @@ export const useCart = () => {
     },
     []
   );
+
+  // const onGetUserWishList = async (userId) => {
+  //   const userWishList = await getRequest({
+  //     endPoint: `/api/user/wishlist?userId=${userId}`,
+  //   });
+  //   if (userWishList) {
+  //     console.log('userWishList', userWishList.products);
+  //   }
+  //   return userWishList;
+  // };
+
   return {
     onAddToCart,
     onIncreaseItemFromCart,
