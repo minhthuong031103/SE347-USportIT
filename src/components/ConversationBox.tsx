@@ -23,7 +23,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
   // const session = useSession();
   const router = useRouter();
   const handleClick = useCallback(() => {
-    router.push(`conversations/${data.id}`);
+    router.push(`/user/conversations/${data.id}`);
   }, [data, router]);
 
   const lastMessage = useMemo(() => {
@@ -101,11 +101,12 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
             )}
           </div>
           <p
-            className={clsx(`
+            className={
+              clsx(`
               truncate 
               text-sm
               `)
-            // hasSeen ? 'text-gray-500' : 'text-black font-medium'
+              // hasSeen ? 'text-gray-500' : 'text-black font-medium'
             }
           >
             {lastMessageText}
