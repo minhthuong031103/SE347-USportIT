@@ -5,6 +5,8 @@ import { Poppins } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
 import { QueryProvider } from '@/components/providers/query-provider';
 import AuthProvider from '../../context/AuthProvider';
+import { Web3Provider } from '@/components/providers/web3-provider';
+import { ChainProvider } from '@/components/providers/chain-provider';
 const poppins = Poppins({
   subsets: ['latin'],
   weight: ['100', '200', '300', '400', '500', '600', '700', '800'],
@@ -26,14 +28,18 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <body className={poppins.className}>
-        <AuthProvider>
-          <ReduxProvider>
-            <QueryProvider>
-              <Toaster position="bottom-right" reverseOrder={false} />
-              {children}
-            </QueryProvider>
-          </ReduxProvider>
-        </AuthProvider>
+        <ChainProvider>
+          <AuthProvider>
+            <Web3Provider>
+              <ReduxProvider>
+                <QueryProvider>
+                  <Toaster />
+                  {children}
+                </QueryProvider>
+              </ReduxProvider>
+            </Web3Provider>
+          </AuthProvider>
+        </ChainProvider>
       </body>
     </html>
   );
