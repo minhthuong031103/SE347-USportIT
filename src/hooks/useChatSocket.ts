@@ -87,7 +87,7 @@ export const useChatSocket = ({
   }, [queryClient, addKey, queryKey, socket, updateKey]);
 
   const goToConversation = async (userOneId, userTwoId) => {
-    const res = await postRequest({
+    const res: any = await postRequest({
       endPoint: `${process.env.NEXT_PUBLIC_SOCKET_URL}/conversations`,
       formData: { userOneId, userTwoId },
       isFormData: false,

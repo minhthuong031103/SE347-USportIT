@@ -1,4 +1,4 @@
-import { addToCart } from '@/redux/cart/cart';
+import { addToCart } from '@/redux/cart/cartSlice';
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 
