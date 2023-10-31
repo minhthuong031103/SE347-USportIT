@@ -3,25 +3,15 @@ import prisma from '@/lib/prisma';
 import { uploadthingApi } from '@/lib/uploadthingServer';
 import { Prisma } from '@prisma/client';
 
-interface ProductUpload {
-  description: string;
-  price: number;
-  thumbnail: string;
-  images: string;
-  categoryId: number;
-  typeId: number;
-  subcategoryId: number;
-  genderId: number;
-  name: string;
-}
 export async function POST(req: Request) {
   const formData = await req.formData();
   console.log('🚀 ~ file: route.ts:19 ~ POST ~ formData:', formData);
 
+  //Get thumbnail and images
   const thumbnail = formData.getAll('thumbnail');
   const images = formData.getAll('images');
-  console.log('🚀 ~ file: route.ts:23 ~ POST ~ images:', images);
 
+  //Upload thumbnail to uploadthing
   const uploadThumbnail = await uploadthingApi
     .uploadFiles(thumbnail)
     .then((res) => {
@@ -33,10 +23,8 @@ export async function POST(req: Request) {
       }));
       return JSON.stringify(formattedThumbnail?.[0]) ?? '';
     });
-  console.log(
-    '🚀 ~ file: route.ts:34 ~ POST ~ uploadThumbnail:',
-    uploadThumbnail
-  );
+
+  //Upload images to uploadthing
   const uploadImages = await uploadthingApi.uploadFiles(images).then((res) => {
     console.log('🚀 ~ file: route.ts:27 ~ .then ~ res:', res);
     const formattedImages = res?.map((image) => ({
@@ -46,11 +34,8 @@ export async function POST(req: Request) {
     }));
     return JSON.stringify(formattedImages) ?? '';
   });
-  console.log(
-    '🚀 ~ file: route.ts:43 ~ uploadImages ~ uploadImages:',
-    uploadImages
-  );
 
+  //Create product
   const postProduct = await prisma.product.create({
     data: {
       name: formData.get('name')?.toString() ?? '',
@@ -64,23 +49,58 @@ export async function POST(req: Request) {
       genderId: parseInt(formData.get('gender')?.toString() ?? '0'),
     },
   });
+  //If product created successfully
   if (postProduct) {
-    return new Response(
-      JSON.stringify({
-        status: 200,
-      })
+    //Started upload sizes
+    //Get sizes from formData (FormDataEntryValue type)
+    const productId = postProduct.id;
+    // Get the string from formData
+    const sizesString = formData.getAll('sizes'); // Get the string from formData
+
+    const sizes = [];
+    sizesString.forEach((size) => {
+      sizes.push(JSON.parse(size.toString()));
+    });
+    console.log(
+      '🚀 ~ file: route.ts:72 ~ sizesString.forEach ~ sizesString:',
+      sizes
     );
+
+    const uploadSizes = await prisma.productSize.createMany({
+      data: sizes?.map((size) => ({
+        ...size,
+        productId: productId,
+      })),
+    });
+
+    const ret = { postProduct, uploadSizes };
+
+    if (uploadSizes) {
+      return new Response(
+        JSON.stringify({
+          data: ret,
+          status: 200,
+        })
+      );
+    } else {
+      return new Response(
+        JSON.stringify({
+          status: 400,
+        })
+      );
+    }
   } else {
     return new Response(
       JSON.stringify({
-        status: 500,
+        status: 400,
       })
     );
   }
-  //   await uploadthingApi.deleteFiles([
-  //     '95f7c1e3-7eef-4940-bf73-6adef86beaed-vpfo60.jpg',
-  //     '6257f199-9c1f-4c03-83e9-41f50a94456e-73anx4.jpg',
-  //   ]);
-
-  //   uploadthingApi.uploadFiles();
 }
+
+//   await uploadthingApi.deleteFiles([
+//     '95f7c1e3-7eef-4940-bf73-6adef86beaed-vpfo60.jpg',
+//     '6257f199-9c1f-4c03-83e9-41f50a94456e-73anx4.jpg',
+//   ]);
+
+//   uploadthingApi.uploadFiles();

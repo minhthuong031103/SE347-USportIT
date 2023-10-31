@@ -15,6 +15,12 @@ export async function GET(req: Request) {
         contains: search,
       },
     },
+    include: {
+      productSizes: true,
+    },
+    orderBy: {
+      id: 'desc',
+    },
   });
   const total = await prisma.product.count({
     where: {

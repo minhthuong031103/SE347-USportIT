@@ -2,7 +2,7 @@ import prisma from '@/lib/prisma';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const productId = searchParams.get('id');
+  const productId = searchParams.get('productId');
   if (!productId) return new Response(JSON.stringify({}), { status: 400 });
 
   const productDetail = await prisma.product.findUnique({
