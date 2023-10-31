@@ -3,7 +3,6 @@ import getConversationById from '@actions/getConversationById';
 
 import Header from './components/Header';
 import Body from './components/Body';
-import Form from './components/Form';
 import EmptyState from '@components/EmptyState';
 import { getSession } from '@/lib/auth';
 interface IParams {
@@ -30,7 +29,7 @@ const ChatId = async ({ params }: { params: IParams }) => {
       <div className="h-full flex flex-col">
         <Header conversation={conversation} />
         <Body className="h-[80%] " session={session} />
-        <Form />
+        {/* <Form /> */}
       </div>
     </div>
   );

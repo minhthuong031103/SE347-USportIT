@@ -12,8 +12,12 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { SocketIndicator } from '@/components/socket-indicator';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
+import { HiPaperAirplane, HiPhoto } from 'react-icons/hi2';
+import { ImageDialog } from '@/components/imageDialog';
+
 const Body = ({ session, className }) => {
   // const bottomRef = useRef<HTMLDivElement>(null);
+  const [imageFiles, setImageFiles] = useState([]);
   const { conversationId } = useConversation();
   const queryClient = useQueryClient();
   const [lastToastId, setLastToastId] = useState<any>();
@@ -187,13 +191,71 @@ const Body = ({ session, className }) => {
           </React.Fragment>
         ))}
       </InfiniteScroll>
-      <div>
+      {/* <div>
         <textarea
           value={newMessage}
           onChange={handleNewMessageChange}
           placeholder="Type a message..."
         />
         <button onClick={handleSendMessage}>Send</button>
+      </div> */}
+      <div
+        className="
+        fixed
+        bottom-0
+        py-4 
+        px-4 
+        bg-white 
+        border-t 
+        flex 
+        items-center 
+        gap-2 
+        lg:gap-4 
+        w-[70%]
+      "
+      >
+        <ImageDialog
+          name="images"
+          maxFiles={8}
+          customButton={<HiPhoto size={30} className="text-sky-500" />}
+          maxSize={1024 * 1024 * 4}
+          files={imageFiles}
+          setFiles={setImageFiles}
+          disabled={false}
+        />
+
+        <form className="flex items-center gap-2 lg:gap-4 w-full">
+          <textarea
+            value={newMessage}
+            onChange={handleNewMessageChange}
+            placeholder="Type a message..."
+            className="
+          text-black
+          font-light
+          py-2
+          px-4
+          bg-neutral-100 
+          w-full 
+          rounded-full
+          focus:outline-none
+        "
+          />
+
+          <button
+            type="submit"
+            onClick={handleSendMessage}
+            className="
+            rounded-full 
+            p-2 
+            bg-sky-500 
+            cursor-pointer 
+            hover:bg-sky-600 
+            transition
+          "
+          >
+            <HiPaperAirplane size={18} className="text-white" />
+          </button>
+        </form>
       </div>
     </div>
   );
