@@ -27,7 +27,9 @@ const metadata: Metadata = {
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
-      <body  className={`${roboto.variable} ${roboto.style.fontWeight} font-rob`}>
+      <body
+        className={`${roboto.variable} ${roboto.style.fontWeight} font-rob`}
+      >
         <ChainProvider>
           <AuthProvider>
             <Web3Provider>
