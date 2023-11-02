@@ -17,6 +17,8 @@ model User {
   avatar                 String?           @default("https://i0.wp.com/www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg?ssl=1")
   isEmailVerified        Boolean           @default(false)
   otp                    String?
+  isOnline               Boolean           @default(false)
+  lastSeen               DateTime?
   orders                 Order[]
   reviews                Review[]
   shoppingCart           ShoppingCart?
@@ -91,7 +93,7 @@ model Gender {
 model ProductSize {
   id        Int      @id @default(autoincrement())
   size      String
-  productId Int
+  productId Int?
   quantity  Int
   product   Product? @relation(fields: [productId], references: [id])
 
@@ -159,6 +161,7 @@ model CartItem {
   quantity       Int
   productId      Int
   shoppingCartId Int
+  selectedSize   Int
   product        Product      @relation(fields: [productId], references: [id])
   shoppingCart   ShoppingCart @relation(fields: [shoppingCartId], references: [id])
 
@@ -251,7 +254,7 @@ model Conversation {
   id             String          @id @default(uuid())
   userOneId      Int
   userTwoId      Int
-  lastMessageAt  DateTime        @default(now())
+  lastMessageAt  DateTime
   lastMessage    String?
   userOne        User            @relation("userOne", fields: [userOneId], references: [id], onDelete: Cascade)
   userTwo        User            @relation("userTwo", fields: [userTwoId], references: [id], onDelete: Cascade)

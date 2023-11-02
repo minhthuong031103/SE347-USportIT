@@ -1,55 +1,47 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import DialogCustom from '@/components/ui/dialogCustom';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useSelectedProduct } from '@/hooks/useSelectedProduct';
 import { parseJSON } from '@/lib/utils';
 import Image from 'next/image';
-import { useProduct } from '@/hooks/useProduct';
-import { Controller, useForm, useFormState } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Input } from '@nextui-org/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useCart } from '@/hooks/useCart';
 import toast from 'react-hot-toast';
+import { Skeleton } from '@/components/ui/skeleton';
 
-const AddProductDialog = ({
-  // reset,
-  // setRating,
-  // setHover,
-  // setIsInvalid,
-  rating,
-  // hover,
-  isInvalid,
-  isLoading,
-  showSuccess,
-}) => {
-  const { isShowDialog, selectedProduct, onToggleDialog } =
+const schema = z.object({
+  quantity: z
+    .string()
+    .refine((val) => val.length > 0, { message: 'Quantity is required' })
+    .transform(Number)
+    .refine((value) => Number.isInteger(value) && value >= 0, {
+      message: 'Quantity must be a nonnegative integer',
+    }),
+});
+
+const AddProductDialog = () => {
+  const { isShowDialog, selectedProduct, onToggleDialog, onUnselectProduct } =
     useSelectedProduct();
   const [selectedSize, setSizeSelected] = useState(null);
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [showError, setShowError] = useState(false);
-  const [selectDetailData, setSelectDetailData] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const { onAddToCart } = useCart();
 
-  /* Start Form Validation */
-  const schema = z.object({
-    quantity: z
-      .string()
-      .refine((val) => val.length > 0, { message: 'Quantity is required' })
-      .transform(Number)
-      .refine((value) => Number.isInteger(value) && value >= 0, {
-        message: 'Quantity must be a nonnegative integer',
-      }),
-  });
-
-  const { control, handleSubmit, getValues, reset } = useForm({
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors, isValid },
+  } = useForm({
     resolver: zodResolver(schema),
     mode: 'onChange',
   });
-
-  const { errors, isValid } = useFormState({ control });
 
   const onSubmit = handleSubmit(async (data) => {
     if (errors.quantity) {
@@ -72,46 +64,34 @@ const AddProductDialog = ({
     );
     try {
       await onAddToCart({
-        data: selectedProduct.data,
+        data: selectedProduct,
         quantity: data.quantity,
         selectedSize: selectedSize,
       });
-      onToggleDialog(); // Close the dialog
+      // Chờ cho đến khi onAddToCart hoàn thành trước khi gọi onToggleDialog
+      onToggleDialog(); // Đóng hộp thoại
+      resetFormAndState(); // Reset form và state
       toast.success('Added to cart');
     } catch (error) {
       console.error('Failed to add product to cart:', error);
     }
   });
-  const { onGetProductDetail } = useProduct();
-  /* End Form Validation */
-  // const [selectDetailData, setSelectDetailData] = useState('');
 
   useEffect(() => {
-    /* Get product detail */
-    const getProductDetails = async () => {
-      const fetchProductDetails = await onGetProductDetail(
-        selectedProduct?.data.id
-      );
-      if (fetchProductDetails) {
-        console.log(fetchProductDetails);
-      }
-      const data = parseJSON(JSON.stringify(fetchProductDetails));
-      setSelectDetailData(data);
-      console.log(
-        '🚀 ~ file: AddProductDialog.tsx:94 ~ getProductDetails ~ selectDetailData:',
-        selectDetailData
-      );
-    };
+    setIsLoading(!selectedProduct);
+  }, [selectedProduct]);
 
-    if (isShowDialog) {
-      getProductDetails();
-      console.log(
-        '🚀 ~ file: AddProductDialog.tsx:57 ~ useEffect ~ getValues:',
-        getValues('title')
-      );
+  useEffect(() => {
+    if (!isShowDialog) {
+      onUnselectProduct();
     }
+  }, [isShowDialog, onUnselectProduct]);
+
+  const resetFormAndState = useCallback(() => {
     reset();
-  }, [isShowDialog]);
+    setSizeSelected(null);
+    setSelectedQuantity(1);
+  }, []);
 
   return isShowDialog ? (
     <DialogCustom
@@ -119,16 +99,7 @@ const AddProductDialog = ({
       className="flex justify-center items-center w-[90%] lg:w-[60%] h-[90%]"
       isModalOpen={isShowDialog}
       setIsModalOpen={onToggleDialog}
-      callBack={() => {
-        // Reset form details and state variables
-        // when the dialog is closed
-        // reset();
-        // setRating(0);
-        // setHover(0);
-        // setIsInvalid(false);
-        setSizeSelected(null);
-        setSelectedQuantity(null);
-      }}
+      callBack={resetFormAndState}
     >
       <div className="flex flex-col w-full h-auto pr-4 gap-6">
         <div className="w-full h-fit flex flex-col pt-2 items-center gap-3">
@@ -139,16 +110,24 @@ const AddProductDialog = ({
             Choose the right product details
           </span>
           <div className="w-full h-fit mt-2 flex flex-row gap-3 items-center">
-            <Image
-              src={parseJSON(selectedProduct?.data.images)[0].url}
-              alt={selectedProduct?.name}
-              width={60}
-              height={50}
-              className="rounded-md object-cover object-center"
-            />
-            <span className="text-[10px] sm:text-sm text-gray-700">
-              {selectedProduct?.data.name}
-            </span>
+            {isLoading ? (
+              <Skeleton className="h-20 w-20 rounded-lg" />
+            ) : (
+              <Image
+                src={parseJSON(selectedProduct.images)[0].url}
+                alt={selectedProduct?.name}
+                width={60}
+                height={50}
+                className="rounded-md object-cover object-center"
+              />
+            )}
+            {isLoading ? (
+              <Skeleton className="w-20 h-10" /> // Sử dụng component Skeleton từ thư viện react-loading-skeleton
+            ) : (
+              <span className="text-[10px] sm:text-sm text-gray-700">
+                {selectedProduct?.name}
+              </span>
+            )}
           </div>
         </div>
 
@@ -163,28 +142,45 @@ const AddProductDialog = ({
           {/* Heading */}
 
           {/* Size start */}
-          <div id="sizesGrid" className="grid grid-cols-3 lg:grid-cols-4 gap-2">
-            {selectDetailData.productSizes?.map((size, index) => (
-              <div
-                onClick={
-                  size.quantity > 0
-                    ? () => {
-                        setSizeSelected(size.size);
-                        setSelectedQuantity(size.quantity);
-                        setShowError(false);
-                      }
-                    : () => {}
-                }
-                key={index}
-                className={`border-2 rounded-md text-center py-2.5 font-medium hover:bg-slate-300 cursor-pointer ${
-                  size.quantity > 0
-                    ? 'hover:border-black cursor-pointer'
-                    : 'cursor-not-allowed disabled bg-black/[0.1] opacity-50'
-                } ${selectedSize === size.size ? 'border-black' : ''} `}
-              >
-                {size.size}
-              </div>
-            ))}
+          <div id="sizesGrid" className="grid grid-cols-4 gap-2">
+            {isLoading ? (
+              <>
+                <div className="col-span-1">
+                  <Skeleton className="h-10 border-2 rounded-md py-2.5" />
+                </div>
+                <div className="col-span-1">
+                  <Skeleton className="h-10 border-2 rounded-md py-2.5" />
+                </div>
+                <div className="col-span-1">
+                  <Skeleton className="h-10 border-2 rounded-md py-2.5" />
+                </div>
+                <div className="col-span-1">
+                  <Skeleton className="h-10 border-2 rounded-md py-2.5" />
+                </div>
+              </>
+            ) : (
+              selectedProduct.productSizes?.map((size, index) => (
+                <div
+                  onClick={
+                    size.quantity > 0
+                      ? () => {
+                          setSizeSelected(size.size);
+                          setSelectedQuantity(size.quantity);
+                          setShowError(false);
+                        }
+                      : () => {}
+                  }
+                  key={index}
+                  className={`border-2 rounded-md text-center py-2.5 font-medium hover:bg-slate-300 cursor-pointer ${
+                    size.quantity > 0
+                      ? 'hover:border-black cursor-pointer'
+                      : 'cursor-not-allowed disabled bg-black/[0.1] opacity-50'
+                  } ${selectedSize === size.size ? 'border-black' : ''} `}
+                >
+                  {size.size}
+                </div>
+              ))
+            )}
           </div>
           {/* Size end */}
 
@@ -230,85 +226,6 @@ const AddProductDialog = ({
           >
             Submit
           </Button>
-        </div>
-        <div className="flex flex-col gap-3 items-center justify-center">
-          {/* Loading Dialog */}
-          {isLoading &&
-            !showSuccess &&
-            rating !== 0 &&
-            isTitleValid &&
-            isContentValid && (
-              <DialogCustom
-                className="w-[90%] lg:w-[50%] h-fit items-center justify-center"
-                isModalOpen={isLoading}
-                notShowClose={true}
-              >
-                <div className="flex flex-col gap-3 items-center justify-center">
-                  <Spinner size="lg" />
-                  <div className="text-center font-semibold text-xs sm:text-sm">
-                    Submitting Review...
-                  </div>
-                </div>
-              </DialogCustom>
-            )}
-
-          {/* Invalid Dialog */}
-          {isInvalid ? (
-            <DialogCustom
-              className="w-[90%] lg:w-[50%] h-fit items-center justify-center"
-              isModalOpen={!isLoading}
-            >
-              <div className="flex flex-col gap-3 items-center justify-center">
-                {rating === 0 ? (
-                  <>
-                    <FaExclamationTriangle
-                      className="text-gray-700"
-                      size={35}
-                    />
-                    <div className="text-center font-semibold text-xs sm:text-sm">
-                      Please type in your rating!
-                    </div>
-                  </>
-                ) : !isTitleValid ? (
-                  <>
-                    <FaExclamationTriangle
-                      className="text-gray-700"
-                      size={35}
-                    />
-                    <div className="text-center font-semibold text-xs sm:text-sm">
-                      Please type in your title!
-                    </div>
-                  </>
-                ) : !isContentValid ? (
-                  <>
-                    <FaExclamationTriangle
-                      className="text-gray-700"
-                      size={35}
-                    />
-                    <div className="text-center font-semibold text-xs sm:text-sm">
-                      Please type in your content!
-                    </div>
-                  </>
-                ) : null}
-              </div>
-            </DialogCustom>
-          ) : null}
-
-          {/* Success Dialog */}
-          {showSuccess && (
-            <DialogCustom
-              className="w-[90%] lg:w-[50%] h-fit items-center justify-center"
-              isModalOpen={!isLoading}
-              notShowClose={true}
-            >
-              <div className="flex flex-col gap-3 items-center justify-center">
-                <FaCheckCircle className="text-gray-700" size={35} />
-                <div className="text-center font-semibold text-xs sm:text-sm">
-                  Review Submitted!
-                </div>
-              </div>
-            </DialogCustom>
-          )}
         </div>
       </div>
     </DialogCustom>

@@ -19,12 +19,19 @@ import {
 import { useCart } from '@/hooks/useCart';
 import { CommonSvg } from '@/assets/CommonSvg';
 import { CartLineItems } from './CartLineItems';
+import { useEffect, useState } from 'react';
 
 export function CartSheet() {
   const { cart } = useCart();
-  const itemCount = cart.listItem.length;
+  const [itemCount, setItemCount] = useState(0);
   const cartLineItems = cart.listItem;
   const cartTotal = cart.total ?? 0;
+
+  useEffect(() => {
+    setItemCount(
+      cart.listItem.reduce((total, item) => total + item.quantity, 0)
+    );
+  }, [cart.listItem]);
   return (
     <Sheet>
       <SheetTrigger asChild>

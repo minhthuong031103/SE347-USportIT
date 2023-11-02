@@ -23,6 +23,15 @@ import { useSelectedProduct } from '@/hooks/useSelectedProduct';
 export default function ProductCard({ product }) {
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [isAddToCart, setIsAddToCart] = useState<boolean>(false);
+  console.log(
+    '🚀 ~ file: ProductCard.tsx:26 ~ ProductCard ~ isAddToCart:',
+    isAddToCart
+  );
+  const [isShowDialog, setIsShowDialog] = useState<boolean>(false);
+  console.log(
+    '🚀 ~ file: ProductCard.tsx:27 ~ ProductCard ~ isShowDialog:',
+    isShowDialog
+  );
   // const [isLoading, setIsLoading] = useState(false);
   // const [isInvalid, setIsInvalid] = useState(false);
   // const [showSuccess, setShowSuccess] = useState(false);
@@ -117,15 +126,6 @@ export default function ProductCard({ product }) {
     const found = cart.listItem.find((item) => item.data.id === product?.id);
     if (found) {
       setIsAddToCart(true);
-      console.log(
-        '🚀 ~ file: ProductCard.tsx:27 ~ useEffect ~ cart.listItem:',
-        cart.listItem
-      );
-
-      console.log(
-        '🚀 ~ file: ProductCard.tsx:32 ~ useEffect ~ isAddToCart:',
-        isAddToCart
-      );
     }
   }, [cart.listItem]);
 
@@ -181,6 +181,7 @@ export default function ProductCard({ product }) {
             // }
             // setIsAddToCart((prev) => !prev);
 
+            setIsShowDialog(true);
             onSelectProduct({ data: product });
             onToggleDialog();
           }}

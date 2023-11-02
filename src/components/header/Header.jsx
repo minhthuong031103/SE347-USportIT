@@ -255,9 +255,12 @@ const NavigationMenuDemo = ({ session }) => {
             </DropdownMenu>
           </div>
         ) : (
-          <Button className="w-[70px] h-8">
-            <Link href={'/auth/login'}>Login</Link>
-          </Button>
+          <div className="flex space-x-4 items-center">
+            <Button className="w-[70px] h-8">
+              <Link href={'/auth/login'}>Login</Link>
+            </Button>
+            <CartSheet />
+          </div>
         )}
       </div>
     </div>
