@@ -14,9 +14,12 @@ import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
 import { HiPaperAirplane, HiPhoto } from 'react-icons/hi2';
 import { ImageDialog } from '@/components/imageDialog';
+import NewMessage from './NewMessage';
 
 const Body = ({ session, className }) => {
   // const bottomRef = useRef<HTMLDivElement>(null);
+  const [isSent, setIsSent] = useState(true);
+  const [newMessage1, setNewMessage1] = useState('');
   const [imageFiles, setImageFiles] = useState([]);
   const { conversationId } = useConversation();
   const queryClient = useQueryClient();
@@ -55,6 +58,7 @@ const Body = ({ session, className }) => {
       //   return { ...oldData, pages: newPages };
       // });
       queryClient.refetchQueries(['messages', conversationId]);
+      setIsSent(true);
       const i = toast.custom((t) => (
         <div
           className={`${
@@ -73,12 +77,8 @@ const Body = ({ session, className }) => {
                 />
               </div>
               <div className="ml-3 flex-1">
-                <p className="text-sm font-medium text-gray-900">
-                  Emilia Gates
-                </p>
-                <p className="mt-1 text-sm text-gray-500">
-                  Sure! 8:30pm works great!
-                </p>
+                <p className="text-sm font-medium text-gray-900">You</p>
+                <p className="mt-1 text-sm text-gray-500">Sent Successful!</p>
               </div>
             </div>
           </div>
@@ -98,6 +98,7 @@ const Body = ({ session, className }) => {
       }, 2000);
 
       queryClient.refetchQueries(['conversations']);
+
       // khong duoc dung refetchQueries vi no se goi lai ham fetchMessages
       // dieu nay se fetch nhieu lan
     },
@@ -114,7 +115,7 @@ const Body = ({ session, className }) => {
     );
   };
 
-  const pageSize = 4;
+  const pageSize = 8;
   const { data, error, isFetching, fetchNextPage, hasNextPage } =
     useInfiniteMessagesQuery(conversationId, pageSize);
   const [newMessage, setNewMessage] = useState('');
@@ -122,6 +123,8 @@ const Body = ({ session, className }) => {
     setNewMessage(e.target.value);
   };
   const handleSendMessage = () => {
+    setIsSent(false);
+    setNewMessage1(newMessage);
     if (!newMessage) return;
 
     // setMessages((messages) => [...messages, newMessage]);
@@ -132,10 +135,11 @@ const Body = ({ session, className }) => {
         userId: session?.user?.id,
         conversationId,
       });
+
       setNewMessage('');
     }
   };
-
+  console.log('isSent', isSent);
   console.log(data);
   console.log(
     data ? data.pages.reduce((acc, page) => acc + page.messages.length, 0) : 0
@@ -158,47 +162,43 @@ const Body = ({ session, className }) => {
         </Button>
         <SocketIndicator isConnected={isConnected} />
       </div>
-
-      <InfiniteScroll
-        dataLength={
-          data
-            ? data.pages.reduce((acc, page) => acc + page.messages.length, 0)
-            : 0
-        }
-        next={() => {
-          toast.success('fetching next page');
-          fetchNextPage();
-        }}
-        style={{
-          display: 'flex',
-          flexDirection: 'column-reverse',
-          height: 500,
-        }}
-        inverse={true}
-        hasMore={true}
-        loader={<h4>Loading...</h4>}
+      <div
+        id="scrollableDiv"
+        className="h-[600px] lg:h-[500px] overflow-y-auto flex flex-col-reverse"
       >
-        {data?.pages.map((page, index) => (
-          <React.Fragment key={index}>
-            {page.messages.map((message) => (
-              <MessageBox
-                isLast={index === page.messages.length - 1}
-                key={message.id}
-                data={message}
-              />
-            ))}
-            {/* o duoi nay se la messages dang duoc gui toi */}
-          </React.Fragment>
-        ))}
-      </InfiniteScroll>
-      {/* <div>
-        <textarea
-          value={newMessage}
-          onChange={handleNewMessageChange}
-          placeholder="Type a message..."
-        />
-        <button onClick={handleSendMessage}>Send</button>
-      </div> */}
+        <InfiniteScroll
+          dataLength={
+            data
+              ? data.pages.reduce((acc, page) => acc + page.messages.length, 0)
+              : 0
+          }
+          next={() => {
+            fetchNextPage();
+          }}
+          style={{
+            display: 'flex',
+            flexDirection: 'column-reverse',
+          }}
+          inverse={true}
+          hasMore={hasNextPage || false}
+          loader={<h4>Loading...</h4>}
+          scrollableTarget="scrollableDiv"
+        >
+          {data?.pages.map((page, index) => (
+            <React.Fragment key={index}>
+              {page.messages.map((message) => (
+                <MessageBox
+                  isLast={index === page.messages.length - 1}
+                  key={message.id}
+                  data={message}
+                />
+              ))}
+              {/* o duoi nay se la messages dang duoc gui toi */}
+              {isSent ? null : <NewMessage data={newMessage1} />}
+            </React.Fragment>
+          ))}
+        </InfiniteScroll>
+      </div>
       <div
         className="
         fixed
@@ -210,8 +210,8 @@ const Body = ({ session, className }) => {
         flex 
         items-center 
         gap-2 
-        lg:gap-4 
-        w-[70%]
+        lg:gap-2
+        w-full
       "
       >
         <ImageDialog
@@ -224,7 +224,7 @@ const Body = ({ session, className }) => {
           disabled={false}
         />
 
-        <form className="flex items-center gap-2 lg:gap-4 w-full">
+        <div className="flex items-center gap-2 lg:gap-4 w-full">
           <textarea
             value={newMessage}
             onChange={handleNewMessageChange}
@@ -235,14 +235,14 @@ const Body = ({ session, className }) => {
           py-2
           px-4
           bg-neutral-100 
-          w-full 
+          w-full lg:w-[70%]
           rounded-full
           focus:outline-none
         "
           />
 
           <button
-            type="submit"
+            type="button"
             onClick={handleSendMessage}
             className="
             rounded-full 
@@ -255,7 +255,7 @@ const Body = ({ session, className }) => {
           >
             <HiPaperAirplane size={18} className="text-white" />
           </button>
-        </form>
+        </div>
       </div>
     </div>
   );

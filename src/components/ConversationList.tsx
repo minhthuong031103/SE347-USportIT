@@ -91,7 +91,6 @@ const ConversationList: React.FC<ConversationListProps> = ({
                   selected={conversationId === item.id}
                 />
               ))}
-              ={' '}
             </React.Fragment>
           ))}
         </div>
