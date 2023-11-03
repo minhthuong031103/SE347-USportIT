@@ -26,6 +26,7 @@ export function CartSheet() {
   const [itemCount, setItemCount] = useState(0);
   const cartLineItems = cart.listItem;
   const cartTotal = cart.total ?? 0;
+  const [checkedItems, setCheckedItems] = useState({});
 
   useEffect(() => {
     setItemCount(
@@ -62,7 +63,11 @@ export function CartSheet() {
         {itemCount > 0 ? (
           <>
             <div className="flex flex-1 flex-col gap-5 overflow-hidden">
-              <CartLineItems items={cartLineItems} />
+              <CartLineItems
+                items={cartLineItems}
+                checkedItems={checkedItems}
+                setCheckedItems={setCheckedItems}
+              />
             </div>
             <div className="grid gap-1.5 pr-6 text-sm">
               <Separator className="mb-2" />

@@ -3,6 +3,7 @@ import ProductDetailRight from './ProductDetailRight';
 import { useProduct } from '@/hooks/useProduct';
 import ProductUserMayLike from './ProductUserMayLike';
 import ProductReview from './ProductReview';
+import AddProductDialog from '../../(home)/AddProductDialog';
 
 async function page({ params }) {
   const { slug } = params;
@@ -40,6 +41,8 @@ async function page({ params }) {
           <ProductUserMayLike data={data} />
         </div>
       </div>
+
+      <AddProductDialog />
     </div>
   );
 }

@@ -26,8 +26,13 @@ const schema = z.object({
 });
 
 const AddProductDialog = () => {
-  const { isShowDialog, selectedProduct, onToggleDialog, onUnselectProduct } =
-    useSelectedProduct();
+  const {
+    isShowDialog,
+    selectedProduct,
+    onToggleDialog,
+    onToggleSuccess,
+    // onUnselectProduct,
+  } = useSelectedProduct();
   const [selectedSize, setSizeSelected] = useState(null);
   const [selectedQuantity, setSelectedQuantity] = useState(null);
   const [showError, setShowError] = useState(false);
@@ -91,6 +96,7 @@ const AddProductDialog = () => {
       // Chờ cho đến khi onAddToCart hoàn thành trước khi gọi onToggleDialog
       setTimeout(() => {
         onToggleDialog();
+        onToggleSuccess();
         resetFormAndState();
       }, 2000);
     } catch (error) {
@@ -102,11 +108,11 @@ const AddProductDialog = () => {
     setIsLoading(!selectedProduct);
   }, [selectedProduct]);
 
-  useEffect(() => {
-    if (!isShowDialog) {
-      onUnselectProduct();
-    }
-  }, [isShowDialog, onUnselectProduct]);
+  // useEffect(() => {
+  //   if (!isShowDialog) {
+  //     onUnselectProduct();
+  //   }
+  // }, [isShowDialog, onUnselectProduct]);
 
   const resetFormAndState = useCallback(() => {
     reset();
