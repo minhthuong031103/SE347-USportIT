@@ -1,4 +1,4 @@
-/* @format */
+'use client';
 
 import { ScrollArea } from '@components/ui/scroll-area';
 import { X } from 'lucide-react';
@@ -13,14 +13,16 @@ function DialogCustom({
   warningOnClose,
   className,
   callBack,
+  isChild,
   notShowClose,
 }: {
   isModalOpen: boolean;
-  setIsModalOpen: (value: boolean) => void;
+  setIsModalOpen?: (value: boolean) => void;
   warningOnClose?: boolean;
   children: React.ReactNode;
   className?: string;
   callBack?: () => void;
+  isChild?: boolean;
   notShowClose?: boolean;
 }) {
   const [isVisible, setIsVisible] = useState(isModalOpen);
@@ -52,11 +54,12 @@ function DialogCustom({
     if (isModalOpen) {
       document.body.classList.add('no-scroll');
     } else {
+      if (isChild) return;
       document.body.classList.remove('no-scroll');
     }
-
     return () => {
       // Re-enable scrolling when the component unmounts
+      if (isChild) return;
       document.body.classList.remove('no-scroll');
     };
   }, [isModalOpen]);
@@ -112,10 +115,11 @@ function DialogCustom({
             }  ${isClosing ? 'animate-out fade-out-0 ' : ''}
   `}
           ></div>
+
           <div
             className={cn(
               `fixed left-[50%] top-[50%] z-50 max-w-full translate-x-[-50%] 
-      translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200   ${
+      translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 ww-[90%] lg:w-[30%] h-[40%] lg:h-[50%]  ${
         isModalOpen
           ? `animate-in fade-in-0 zoom-in-95 slide-in-from-left-1/2 slide-in-from-top-[48%]`
           : ''
@@ -137,8 +141,7 @@ function DialogCustom({
                     </Button>
                   </div>
                 ) : null}
-
-                <div className="w-full h-full py-3">
+                <div className="w-full h-full py-3 px-1">
                   {/* CHILDREN */}
                   {children}
                   {/* CHILDREN */}
@@ -153,7 +156,7 @@ function DialogCustom({
                       <div
                         className={cn(
                           `fixed left-[50%] top-[50%] z-50 max-w-full translate-x-[-50%] 
-      translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 w-[90%] lg:w-[50%] ${
+      translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 w-[90%] lg:w-[400px] ${
         isWarningOpen
           ? `animate-in fade-in-0 zoom-in-95 slide-in-from-left-1/2 slide-in-from-top-[48%]`
           : ''
@@ -171,7 +174,7 @@ function DialogCustom({
                             <div className="w-full h-full py-3">
                               <div className="flex flex-col items-center justify-between h-full w-full lg:py-12">
                                 <Label className="mb-24 font-bold text-lg">
-                                  Bạn có muốn đóng cửa sổ này không?
+                                  Do you want to close this dialog?
                                 </Label>
                                 <div className="flex items-center justify-center w-full">
                                   <Button
@@ -186,7 +189,7 @@ function DialogCustom({
                                       handleClose();
                                     }}
                                   >
-                                    Có
+                                    Yes
                                   </Button>
                                   <Button
                                     className="w-[30%]"
@@ -194,7 +197,7 @@ function DialogCustom({
                                       handleCloseWarning();
                                     }}
                                   >
-                                    Không
+                                    No
                                   </Button>
                                 </div>
                               </div>

@@ -253,7 +253,7 @@ model Conversation {
   id             String          @id @default(uuid())
   userOneId      Int
   userTwoId      Int
-  lastMessageAt  DateTime        @default(now())
+  lastMessageAt  DateTime
   lastMessage    String?
   userOne        User            @relation("userOne", fields: [userOneId], references: [id], onDelete: Cascade)
   userTwo        User            @relation("userTwo", fields: [userTwoId], references: [id], onDelete: Cascade)

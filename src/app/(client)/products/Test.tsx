@@ -70,7 +70,7 @@ export default function Test({
     isFetchingNextPage,
   } = useInfiniteQuery(
     ['products', q, sort, gender, categories, subcategories, price_range],
-    ({ pageParam = 0 }) =>
+    ({ pageParam = 1 }) =>
       fetchProduct({
         page: pageParam,
         q,
@@ -86,7 +86,7 @@ export default function Test({
       refetchOnWindowFocus: false,
       getNextPageParam: (lastPage, pages) => {
         if (lastPage.page === 0 && pages.length < lastPage.totalPages) return 1;
-        if (pages.length < lastPage.totalPages) return pages.length;
+        if (pages.length <= lastPage.totalPages) return pages.length;
         else return undefined;
       },
     }

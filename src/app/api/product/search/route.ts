@@ -65,7 +65,7 @@ export async function GET(req: Request) {
   const response = {
     data: [...items],
     page,
-    totalPages: count / limit,
+    totalPages: Math.round(count / limit),
     totalItems: count,
   };
 
