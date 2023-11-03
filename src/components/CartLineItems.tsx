@@ -25,9 +25,13 @@ interface CartLineItemsProps extends React.HTMLAttributes<HTMLDivElement> {
   isScrollable?: boolean;
   isEditable?: boolean;
   variant?: 'default' | 'minimal';
+  checkedItems: { [key: string]: boolean };
+  setCheckedItems: React.Dispatch<
+    React.SetStateAction<{ [key: string]: boolean }>
+  >;
 }
 
-const CartItem = ({ item }) => {
+const CartItem = ({ item, isChecked, onCheck }) => {
   const {
     onIncreaseItemFromCart,
     onDecreaseItemFromCart,
@@ -39,6 +43,8 @@ const CartItem = ({ item }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [productSizeQuantity, setProductSizeQuantity] = useState(null);
   const [disableIncrease, setDisableIncrease] = useState(false);
+  const itemKey = `${item?.data?.id}-${item?.data?.name}-${item?.selectedSize}`;
+  const [isDisabled, setIsDisabled] = useState(false);
 
   useEffect(() => {
     const fetchProductSizeQuantity = async () => {
@@ -61,6 +67,7 @@ const CartItem = ({ item }) => {
       item.quantity >= productSizeQuantity[0]?.quantity
     ) {
       setDisableIncrease(true);
+      setIsDisabled(true);
     } else {
       setDisableIncrease(false);
     }
@@ -73,6 +80,7 @@ const CartItem = ({ item }) => {
       data: item?.data,
       selectedSize: item?.selectedSize,
     });
+    onCheck(itemKey, false, item); // Loại bỏ item khỏi checkedItems
   };
 
   const handleDecreaseItemQuantity = async () => {
@@ -82,6 +90,7 @@ const CartItem = ({ item }) => {
       data: item?.data,
       selectedSize: item?.selectedSize,
     });
+    onCheck(itemKey, false, item); // Loại bỏ item khỏi checkedItems
   };
 
   const handleDeleteItem = async () => {
@@ -91,6 +100,7 @@ const CartItem = ({ item }) => {
       selectedSize: item?.selectedSize,
       quantity: item?.quantity,
     });
+    onCheck(itemKey, false, item); // Loại bỏ item khỏi checkedItems
   };
 
   useEffect(() => {
@@ -99,17 +109,32 @@ const CartItem = ({ item }) => {
     }
   }, [item]);
   return (
-    <div className="flex py-5 gap-3 md:gap-5 border-b">
-      <div className="shrink-0 aspect-square w-[120px] ">
+    <div className="flex py-5 gap-3 md:gap-5 border-b ">
+      <div
+        className={`shrink-0 aspect-square w-[120px] ${
+          isDisabled ? 'blur-sm' : ''
+        }`}
+      >
         {isLoading ? (
           <Skeleton className="h-full w-full rounded-lg" /> // Sử dụng Skeleton khi isLoading là true
         ) : (
-          <Image
-            src={parseJSON(item?.data?.thumbnail)?.url}
-            alt={item?.data?.name}
-            width={100}
-            height={80}
-          />
+          <div className="flex flex-row space-x-2 items-center justify-center">
+            <Input
+              width={30}
+              height={30}
+              type="checkbox"
+              disabled={isDisabled}
+              checked={isChecked}
+              onChange={(e) => onCheck(itemKey, e.target.checked, item)}
+            />
+
+            <Image
+              src={parseJSON(item?.data?.thumbnail)?.url}
+              alt={item?.data?.name}
+              width={90}
+              height={80}
+            />
+          </div>
         )}
       </div>
 
@@ -158,7 +183,8 @@ const CartItem = ({ item }) => {
                     id={`${item?.data?.id}-quantity`}
                     type="text"
                     min="0"
-                    className="h-8 w-10 rounded-none border-x-0 text-black "
+                    className="h-8 w-11 rounded-none border-x-0 text-black 
+                    text-sm items-center justify-center"
                     value={isLoading ? '...' : item.quantity}
                     disabled
                     // onChange={(e) => {
@@ -209,9 +235,22 @@ export function CartLineItems({
   items,
   isScrollable = true,
   className,
+  checkedItems,
+  setCheckedItems,
   ...props
 }: CartLineItemsProps) {
   const Wrapper = isScrollable ? ScrollArea : Slot;
+
+  // Start control checkbox
+
+  const handleCheck = (id, isChecked, item) => {
+    setCheckedItems((prevState) => ({
+      ...prevState,
+      [id]: isChecked ? item : null,
+    }));
+  };
+
+  // End control checkbox
 
   // Start set-up infinite scroll
   const fetchCartItem = async (page: number) => {
@@ -252,13 +291,6 @@ export function CartLineItems({
   const _items = data?.pages.flatMap((page) => page);
 
   // End set-up infinite scroll
-
-  useEffect(() => {
-    if (items) {
-      setIsLoading(false);
-    }
-  }, [items]);
-
   return (
     <Wrapper className="h-full">
       <div
@@ -276,7 +308,11 @@ export function CartLineItems({
                 ref={ref}
                 key={`${item?.data?.id}-${item?.data?.name}-${item?.selectedSize}`}
               >
-                <CartItem item={item} />
+                <CartItem
+                  item={item}
+                  isChecked={checkedItems[item?.data?.id]}
+                  onCheck={handleCheck}
+                />
               </div>
             );
           }
@@ -285,7 +321,11 @@ export function CartLineItems({
             <div
               key={`${item?.data?.id}-${item?.data?.name}-${item?.selectedSize}`}
             >
-              <CartItem item={item} />
+              <CartItem
+                item={item}
+                isChecked={checkedItems[item.data.id]}
+                onCheck={handleCheck}
+              />
             </div>
           );
         })}

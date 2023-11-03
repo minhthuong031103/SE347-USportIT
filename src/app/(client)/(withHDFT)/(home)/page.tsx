@@ -8,6 +8,7 @@ import SalesProduct from './SalesProduct';
 import ShopAll from './ShopAll';
 import ClientSideImage from './ClientSideImage';
 import AddProductDialog from './AddProductDialog';
+import AddSuccessCartItem from '../cart/AddSuccessCartItem';
 
 const page = () => {
   return (
@@ -50,6 +51,7 @@ const page = () => {
       </section>
 
       <AddProductDialog />
+      <AddSuccessCartItem />
     </div>
   );
 };
