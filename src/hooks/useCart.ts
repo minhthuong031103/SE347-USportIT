@@ -14,6 +14,7 @@ import {
   deleteItemFromCart,
   reset,
 } from '@/redux/cart/cart';
+import toast from 'react-hot-toast';
 
 export const useCart = () => {
   // Lay session cua user
@@ -71,33 +72,47 @@ export const useCart = () => {
 
   const dispatch = useDispatch();
 
-  const onAddToCart = useCallback(async ({ data, selectedSize, quantity }) => {
-    if (session) {
-      try {
-        const response = await fetch(
-          `/api/user/cart/cart-item?userId=${session?.user.id}`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              ...data,
-              selectedSize: selectedSize,
-              quantity: quantity,
-            }),
+  const onAddToCart = useCallback(
+    async ({ data, selectedSize, quantity }) => {
+      if (session) {
+        try {
+          const response = await fetch(
+            `/api/user/cart/cart-item?userId=${session?.user.id}`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                ...data,
+                selectedSize: selectedSize,
+                quantity: quantity,
+              }),
+            }
+          );
+          console.log(
+            '🚀 ~ file: useCart.ts:87 ~ onAddToCart ~ selectedSize:',
+            selectedSize
+          );
+
+          if (!response.ok) {
+            throw new Error('Failed to add to cart');
           }
-        );
-        if (!response.ok) {
-          throw new Error('Failed to add to cart');
+
+          /// Trường hợp out of stock
+          if (response.status === 201) {
+            const data = await response.json();
+            toast.success(data.message);
+          }
+        } catch (error) {
+          console.error(error);
         }
-      } catch (error) {
-        console.error(error);
+      } else {
+        dispatch(addToCart({ data, selectedSize, quantity }));
       }
-    } else {
-      dispatch(addToCart({ data, selectedSize, quantity }));
-    }
-  }, []);
+    },
+    [session, dispatch]
+  );
 
   const onIncreaseItemFromCart = useCallback(async ({ data, selectedSize }) => {
     if (session) {
