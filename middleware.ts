@@ -26,5 +26,5 @@ export default withAuth(
   }
 );
 
-export const config = { matcher: ['/api/user', '/api/admin/product/create'] };
+export const config = { matcher: ['/api/admin/product/create'] };
 //authorization is done in the middleware

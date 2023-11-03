@@ -4,9 +4,6 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const userId = searchParams.get('userId');
   const userDetail = await prisma.user.findUnique({
-    select: {
-      name: true,
-    },
     where: {
       id: parseInt(userId ?? '0'),
     },

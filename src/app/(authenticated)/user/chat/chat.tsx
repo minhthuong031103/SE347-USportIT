@@ -3,41 +3,39 @@
 import { Button } from '@/components/ui/button';
 import { SocketIndicator } from '@/components/socket-indicator';
 import { useChatSocket } from '@/hooks/useChatSocket';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import React, { useState } from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
+// import { useInfiniteQuery } from '@tanstack/react-query';
+import React from 'react';
+// import InfiniteScroll from 'react-infinite-scroll-component';
 function Chat({ session }) {
-  const { isConnected, onlineUsers, goToConversation, getConversations } =
-    useChatSocket({
-      session,
-    });
+  const { isConnected, onlineUsers, goToConversation } = useChatSocket({
+    session,
+  });
 
-  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery(
-    ['conversations', session?.user?.id],
-    ({ pageParam = 0 }) =>
-      getConversations({ page: pageParam, userId: session?.user?.id }),
+  // const { data, fetchNextPage, hasNextPage } = useInfiniteQuery(
+  //   ['conversations', session?.user?.id],
+  //   ({ pageParam = 0 }) =>
+  //     getConversations({ page: pageParam, userId: session?.user?.id }),
 
-    {
-      refetchOnWindowFocus: false,
-      getNextPageParam: (lastPage, pages) => {
-        //pages is an array of all the pages fetched so far
-        //last page is the last page fetched
-        console.log('lastPage', lastPage);
-        if (lastPage.page === 0 && pages.length < lastPage.totalPages) return 1;
-        if (pages.length < lastPage.totalPages) return pages.length;
-        else return undefined;
-      },
-    }
-  );
-  const [isFetchingMore] = useState(false);
+  //   {
+  //     refetchOnWindowFocus: false,
+  //     getNextPageParam: (lastPage, pages) => {
+  //       //pages is an array of all the pages fetched so far
+  //       //last page is the last page fetched
+  //       console.log('lastPage', lastPage);
+  //       if (lastPage.page === 0 && pages.length < lastPage.totalPages) return 1;
+  //       if (pages.length < lastPage.totalPages) return pages.length;
+  //       else return undefined;
+  //     },
+  //   }
+  // );
+  // const [isFetchingMore] = useState(false);
 
-  console.log(data);
   return (
     <div className="w-full flex flex-row">
       <div className="w-[30%]">
         <div className="w-full flex justify-start items-start flex-col">
           <SocketIndicator isConnected={isConnected} />
-          {data ? (
+          {/* {data ? (
             <InfiniteScroll
               dataLength={data?.pages?.[0]?.totalItems || 1} //This is important field to render the next data
               next={() => {
@@ -69,7 +67,7 @@ function Chat({ session }) {
               // }
             >
               {data?.pages.map((page, pageIndex) => {
-                console.log(page);
+                
                 return (
                   <div className="Conversation Sidebar" key={pageIndex}>
                     <div className="Conversation Page">
@@ -108,7 +106,7 @@ function Chat({ session }) {
                 );
               })}
             </InfiniteScroll>
-          ) : null}
+          ) : null} */}
         </div>
       </div>
       <div className="w=[70%]w-full">

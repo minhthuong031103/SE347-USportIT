@@ -624,11 +624,11 @@ export default function Test({
               // below props only if you need pull down functionality
             >
               <div className="px-4">
-                {data?.pages?.map((item) => {
+                {data?.pages?.map((item, index) => {
                   return (
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                      {item.data.map((product) => {
-                        return <ProductCard product={product} />;
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" key={index}>
+                      {item.data.map((product,index) => {
+                        return <ProductCard product={product}  key={index}/>;
                       })}
                     </div>
                   );

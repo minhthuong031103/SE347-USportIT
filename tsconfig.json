@@ -23,6 +23,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@components/*": ["./src/components/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@actions/*": ["./src/actions/*"],
       "@services/*": ["./src/services/*"],
       "@endpoints/*": ["./src/endpoints/*"],
       "@types/*": ["./src/types/*"]
