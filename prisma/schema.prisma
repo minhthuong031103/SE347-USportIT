@@ -338,3 +338,11 @@ model ProductToWishlist {
   @@index([B], map: "_ProductToWishlist_B_index")
   @@map("_ProductToWishlist")
 }
+
+model Wallet {
+  id      Int    @id @default(autoincrement())
+  userId  Int
+  address String @unique
+
+  @@index([userId])
+}

@@ -7,12 +7,13 @@ import { useSelectedProduct } from '@/hooks/useSelectedProduct';
 import { parseJSON } from '@/lib/utils';
 import Image from 'next/image';
 import { Controller, useForm } from 'react-hook-form';
-import { Input } from '@nextui-org/react';
+import { Input, Spinner } from '@nextui-org/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useCart } from '@/hooks/useCart';
 import toast from 'react-hot-toast';
 import { Skeleton } from '@/components/ui/skeleton';
+import { FaCheckCircle } from 'react-icons/fa';
 
 const schema = z.object({
   quantity: z
@@ -28,8 +29,9 @@ const AddProductDialog = () => {
   const { isShowDialog, selectedProduct, onToggleDialog, onUnselectProduct } =
     useSelectedProduct();
   const [selectedSize, setSizeSelected] = useState(null);
-  const [selectedQuantity, setSelectedQuantity] = useState(1);
+  const [selectedQuantity, setSelectedQuantity] = useState(null);
   const [showError, setShowError] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { onAddToCart } = useCart();
 
@@ -44,11 +46,26 @@ const AddProductDialog = () => {
   });
 
   const onSubmit = handleSubmit(async (data) => {
+    setIsLoading(true);
+
     if (errors.quantity) {
       return;
     }
 
+    // Kiểm tra xem người dùng đã chọn đủ thông tin chưa
+    if (!selectedSize) {
+      toast.error('Size selection is required');
+      return;
+    } else if (!selectedQuantity) {
+      toast.error('Quantity selection is required');
+      return;
+    }
+
     if (data.quantity > selectedQuantity) {
+      console.log(
+        '🚀 ~ file: AddProductDialog.tsx:52 ~ onSubmit ~ selectedQuantity:',
+        selectedQuantity
+      );
       toast.error('Quantity cannot exceed available stock');
       return;
     }
@@ -68,10 +85,14 @@ const AddProductDialog = () => {
         quantity: data.quantity,
         selectedSize: selectedSize,
       });
+      setIsLoading(false);
+      setShowSuccess(true);
+
       // Chờ cho đến khi onAddToCart hoàn thành trước khi gọi onToggleDialog
-      onToggleDialog(); // Đóng hộp thoại
-      resetFormAndState(); // Reset form và state
-      toast.success('Added to cart');
+      setTimeout(() => {
+        onToggleDialog();
+        resetFormAndState();
+      }, 2000);
     } catch (error) {
       console.error('Failed to add product to cart:', error);
     }
@@ -90,7 +111,9 @@ const AddProductDialog = () => {
   const resetFormAndState = useCallback(() => {
     reset();
     setSizeSelected(null);
-    setSelectedQuantity(1);
+    setSelectedQuantity(null);
+    setShowSuccess(false);
+    setIsLoading(false);
   }, []);
 
   return isShowDialog ? (
@@ -227,6 +250,40 @@ const AddProductDialog = () => {
             Submit
           </Button>
         </div>
+      </div>
+
+      <div className="flex flex-col gap-3 items-center justify-center">
+        {/* Loading Dialog */}
+        {isLoading && selectedSize && selectedQuantity && (
+          <DialogCustom
+            className="w-[90%] lg:w-[50%] h-fit items-center justify-center"
+            isModalOpen={isLoading}
+            notShowClose={true}
+          >
+            <div className="flex flex-col gap-3 items-center justify-center">
+              <Spinner size="lg" />
+              <div className="text-center font-semibold text-xs sm:text-sm">
+                Adding to cart ...
+              </div>
+            </div>
+          </DialogCustom>
+        )}
+
+        {/* Success Dialog */}
+        {showSuccess && (
+          <DialogCustom
+            className="w-[90%] lg:w-[50%] h-fit items-center justify-center"
+            isModalOpen={!isLoading}
+            notShowClose={true}
+          >
+            <div className="flex flex-col gap-3 items-center justify-center">
+              <FaCheckCircle className="text-gray-700" size={35} />
+              <div className="text-center font-semibold text-xs sm:text-sm">
+                Added to cart!
+              </div>
+            </div>
+          </DialogCustom>
+        )}
       </div>
     </DialogCustom>
   ) : null;

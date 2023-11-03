@@ -87,6 +87,7 @@ export async function POST(request: Request) {
   }
 
   const cartItem: CartItem = await request.json();
+  console.log('🚀 ~ file: route.ts:90 ~ POST ~ cartItem:', cartItem);
 
   if (!cartItem)
     return NextResponse.json(
@@ -105,25 +106,61 @@ export async function POST(request: Request) {
     where: {
       productId: cartItem.id,
       shoppingCartId: shoppingCart.id,
-      selectedSize: parseInt(cartItem.selectedSize),
+      selectedSize: cartItem.selectedSize,
     },
   });
 
   // Nếu cartItem đã tồn tại, thì cập nhật số lượng và kích thước đã chọn
   if (existingCartItem) {
-    const updatedCartItem = await prisma.cartItem.update({
+    // Lấy số lượng sản phẩm còn lại trong kho
+    const productDetail = await prisma.product.findUnique({
       where: {
-        id: existingCartItem.id,
+        id: cartItem.id,
       },
-      data: {
-        quantity: existingCartItem.quantity + cartItem.quantity,
+      include: {
+        productSizes: true,
       },
     });
-
-    return NextResponse.json(
-      `Update cart Item succesfully ${updatedCartItem}`,
-      { status: 200 }
+    if (!productDetail)
+      return new Response(JSON.stringify({}), { status: 404 });
+    const stockProductSize = productDetail.productSizes.filter(
+      (productSize) => productSize.size === cartItem.selectedSize
     );
+    // Nếu số lượng còn lại trong kho không đủ so với lượng muốn thêm vào từ form
+    if (
+      stockProductSize[0].quantity <
+      cartItem.quantity + existingCartItem.quantity
+    ) {
+      // Update sản phẩm thành số lượng còn lại trong kho
+      const updatedCartItem = await prisma.cartItem.update({
+        where: {
+          id: existingCartItem.id,
+        },
+        data: {
+          quantity: stockProductSize[0].quantity,
+        },
+      });
+      return NextResponse.json(
+        {
+          message: `You have already reached limited purchased of ${updatedCartItem.quantity} products.`,
+        },
+        { status: 201 }
+      );
+    } else {
+      const updatedCartItem = await prisma.cartItem.update({
+        where: {
+          id: existingCartItem.id,
+        },
+        data: {
+          quantity: existingCartItem.quantity + cartItem.quantity,
+        },
+      });
+
+      return NextResponse.json(
+        { message: `Update cart Item succesfully ${updatedCartItem}` },
+        { status: 200 }
+      );
+    }
   } else {
     // Nếu cartItem chưa tồn tại, thì tạo mới với số lượng và kích thước đã chọn
     try {
@@ -132,7 +169,7 @@ export async function POST(request: Request) {
           quantity: cartItem.quantity,
           productId: cartItem.id,
           shoppingCartId: shoppingCart.id,
-          selectedSize: parseInt(cartItem.selectedSize),
+          selectedSize: cartItem.selectedSize,
         },
       });
 
@@ -239,7 +276,7 @@ export async function DELETE(request: Request) {
       where: {
         productId: id,
         shoppingCartId: shoppingCart?.id,
-        selectedSize: parseInt(selectedSize),
+        selectedSize: selectedSize,
       },
     });
 

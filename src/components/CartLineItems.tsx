@@ -10,8 +10,11 @@ import { ScrollArea } from './ui/scroll-area';
 import { CommonSvg } from '@/assets/CommonSvg';
 import { Input } from './ui/input';
 import { useCart } from '@/hooks/useCart';
-import { useEffect, useState } from 'react';
-import { Skeleton } from '@nextui-org/react';
+import { useEffect, useRef, useState } from 'react';
+import { Skeleton, Spinner } from '@nextui-org/react';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useIntersection } from '@mantine/hooks';
+
 // import { ScrollArea } from '@/components/ui/scroll-area';
 // import { Separator } from '@/components/ui/separator';
 // import { UpdateCart } from '@/components/checkout/update-cart';
@@ -34,6 +37,34 @@ const CartItem = ({ item }) => {
   const [prevQuantity, setPrevQuantity] = useState(item.quantity);
   // Thêm trạng thái loading
   const [isLoading, setIsLoading] = useState(false);
+  const [productSizeQuantity, setProductSizeQuantity] = useState(null);
+  const [disableIncrease, setDisableIncrease] = useState(false);
+
+  useEffect(() => {
+    const fetchProductSizeQuantity = async () => {
+      const response = await fetch(
+        `/api/product/quantity?productId=${item?.data?.id}&selectedSize=${item?.selectedSize}`
+      );
+      const data = await response.json();
+      console.log(
+        '🚀 ~ file: CartLineItems.tsx:44 ~ fetchProductDetail ~ data:',
+        data
+      );
+      setProductSizeQuantity(data);
+    };
+    fetchProductSizeQuantity();
+  }, [item]);
+
+  useEffect(() => {
+    if (
+      productSizeQuantity &&
+      item.quantity >= productSizeQuantity[0]?.quantity
+    ) {
+      setDisableIncrease(true);
+    } else {
+      setDisableIncrease(false);
+    }
+  }, [item, productSizeQuantity]);
 
   const handleIncreaseItemQuantity = async () => {
     setIsLoading(true);
@@ -152,7 +183,7 @@ const CartItem = ({ item }) => {
                   size="icon"
                   className="h-8 w-8 rounded-l-none"
                   onClick={handleIncreaseItemQuantity}
-                  disabled={isLoading}
+                  disabled={isLoading || disableIncrease}
                 >
                   {CommonSvg.add({ className: 'h-3 w-3' })}
                   <span className="sr-only">Add one item</span>
@@ -181,7 +212,46 @@ export function CartLineItems({
   ...props
 }: CartLineItemsProps) {
   const Wrapper = isScrollable ? ScrollArea : Slot;
-  const [isLoading, setIsLoading] = useState(true);
+
+  // Start set-up infinite scroll
+  const fetchCartItem = async (page: number) => {
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    const start = (page - 1) * 3;
+    return items.slice(start, start + 3);
+  };
+
+  const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
+    ['cartQuery'],
+    async ({ pageParam = 1 }) => {
+      const response = await fetchCartItem(pageParam);
+      return response;
+    },
+    {
+      getNextPageParam: (_, pages) => {
+        return pages.length + 1;
+      },
+      initialData: {
+        pages: [items.slice(0, 3)],
+        pageParams: [1],
+      },
+    }
+  );
+
+  const lastCartRef = useRef<HTMLElement>(null);
+  const { ref, entry } = useIntersection({
+    root: lastCartRef.current,
+    threshold: 0.5,
+  });
+
+  useEffect(() => {
+    if (entry?.isIntersecting) {
+      fetchNextPage();
+    }
+  }, [entry]);
+
+  const _items = data?.pages.flatMap((page) => page);
+
+  // End set-up infinite scroll
 
   useEffect(() => {
     if (items) {
@@ -199,17 +269,33 @@ export function CartLineItems({
         )}
         {...props}
       >
-        {isLoading ? (
-          <Skeleton className="h-full w-full rounded-lg" /> // Hiển thị Skeleton khi isLoading là true
-        ) : (
-          items.map((item) => (
-            <CartItem
+        {_items?.map((item, i) => {
+          if (i === _items.length - 1) {
+            return (
+              <div
+                ref={ref}
+                key={`${item?.data?.id}-${item?.data?.name}-${item?.selectedSize}`}
+              >
+                <CartItem item={item} />
+              </div>
+            );
+          }
+
+          return (
+            <div
               key={`${item?.data?.id}-${item?.data?.name}-${item?.selectedSize}`}
-              item={item}
-            />
-          ))
-        )}
+            >
+              <CartItem item={item} />
+            </div>
+          );
+        })}
       </div>
+
+      {isFetchingNextPage && (
+        <div className="flex justify-center">
+          <Spinner size="lg" />
+        </div>
+      )}
     </Wrapper>
   );
 }
