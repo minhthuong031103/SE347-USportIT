@@ -5,7 +5,8 @@ import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { useSession } from 'next-auth/react';
 import { useUser } from '@/hooks/useUser';
-
+import { Zoom } from '@/components/ui/zoom-image';
+import { ImageCus } from '@/components/ui/ImageCus';
 import Avatar1 from '@/components/Avatar';
 import { User } from '@prisma/client';
 
@@ -24,7 +25,7 @@ const NewMessage: React.FC<MessageBoxProps> = ({ data }) => {
   const message = clsx(
     'text-sm w-fit overflow-hidden',
     isOwn ? 'bg-sky-500 text-white' : 'bg-gray-100',
-    'rounded-full py-2 px-3'
+    data?.fileUrl ? 'rounded-md p-0' : 'rounded-full py-2 px-3'
   );
   const [otherUser, setOtherUser] = useState<User>();
 
@@ -50,7 +51,17 @@ const NewMessage: React.FC<MessageBoxProps> = ({ data }) => {
           <div className="text-xs text-gray-400">{format(Date.now(), 'p')}</div>
         </div>
         <div className={message}>
-          <div>{data}</div>
+          {data?.fileUrl ? (
+            <Zoom>
+              <ImageCus
+                src={data?.fileUrl}
+                alt={'file'}
+                className={`h-[200px] w-[200px] shrink-0 rounded-md object-cover object-center`}
+              />
+            </Zoom>
+          ) : (
+            <div>{data.content}</div>
+          )}
         </div>
       </div>
     </div>

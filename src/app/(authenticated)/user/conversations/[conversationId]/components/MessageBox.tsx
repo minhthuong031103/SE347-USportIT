@@ -32,7 +32,7 @@ const MessageBox: React.FC<MessageBoxProps> = ({ data, isLast }) => {
   const message = clsx(
     'text-sm w-fit overflow-hidden',
     isOwn ? 'bg-sky-500 text-white' : 'bg-gray-100',
-    data.image ? 'rounded-md p-0' : 'rounded-full py-2 px-3'
+    data.fileUrl ? 'rounded-md p-0' : 'rounded-full py-2 px-3'
   );
   const [otherUser, setOtherUser] = useState<User>();
 
@@ -65,13 +65,13 @@ const MessageBox: React.FC<MessageBoxProps> = ({ data, isLast }) => {
             isOpen={imageModalOpen}
             onClose={() => setImageModalOpen(false)}
           />
-          {data.image ? (
+          {data.fileUrl ? (
             <Image
               alt="Image"
               height="288"
               width="288"
               onClick={() => setImageModalOpen(true)}
-              src={data.image}
+              src={data.fileUrl}
               className="
                 object-cover 
                 cursor-pointer 
