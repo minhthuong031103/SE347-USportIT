@@ -14,6 +14,7 @@ export async function GET(req: Request) {
       name: {
         contains: search,
       },
+      isdeleted: false,
     },
     include: {
       productSizes: true,
@@ -27,6 +28,7 @@ export async function GET(req: Request) {
       name: {
         contains: search,
       },
+      isdeleted: false,
     },
   });
   const totalPage = Math.ceil(total / limit);
