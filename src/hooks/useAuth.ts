@@ -1,4 +1,4 @@
-import { postRequest, putRequest } from '@/lib/fetch';
+import { getRequest, postRequest, putRequest } from '@/lib/fetch';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import { signIn } from 'next-auth/react';
@@ -89,11 +89,20 @@ export const useAuth = () => {
       isFormData: false,
     });
   };
+
+  const onGetUserDetail = async ({ userId }) => {
+    const user = await getRequest({
+      endPoint: `/api/user?userId=${userId}`,
+    });
+    console.log('🚀 ~ file: useAuth.ts:97 ~ onGetUserDetail ~ user:', user);
+    return user;
+  };
   return {
     onRegister,
     onRegister1,
     onSendAgain,
     onVerifyOtp,
     onFirstSend,
+    onGetUserDetail,
   };
 };

@@ -17,17 +17,29 @@ model User {
   avatar                 String?           @default("https://i0.wp.com/www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg?ssl=1")
   isEmailVerified        Boolean           @default(false)
   otp                    String?
+  isOnline               Boolean           @default(false)
+  lastSeen               DateTime?
   orders                 Order[]
   reviews                Review[]
   shoppingCart           ShoppingCart?
   payments               Payment[]
   shippingAddresses      ShippingAddress[]
   wishlist               Wishlist?
-  Shipment               Shipment[]
+  // Shipment               Shipment[]
   directMessages         DirectMessage[]
   conversationsInitiated Conversation[]    @relation("userOne")
   conversationsReceived  Conversation[]    @relation("userTwo")
   seenMessages           SeenMessage[]
+  wallets                Wallet[]
+}
+
+model Wallet {
+  id      Int    @id @default(autoincrement())
+  userId  Int
+  address String @unique
+  user    User   @relation(fields: [userId], references: [id])
+
+  @@index([userId])
 }
 
 model Product {
@@ -42,6 +54,7 @@ model Product {
   subcategoryId Int?
   genderId      Int?
   name          String
+  isdeleted     Boolean
   category      Category?     @relation(fields: [categoryId], references: [id])
   type          ProductType?  @relation(fields: [typeId], references: [id])
   subcategory   Subcategory?  @relation(fields: [subcategoryId], references: [id])
@@ -89,11 +102,12 @@ model Gender {
 }
 
 model ProductSize {
-  id   Int    @id @default(autoincrement())
-  size String
-  quantity Int
-  product Product? @relation(fields: [productId], references: [id])
+  id        Int      @id @default(autoincrement())
+  size      String
   productId Int?
+  quantity  Int
+  product   Product? @relation(fields: [productId], references: [id])
+
   @@index([productId])
 }
 
@@ -122,14 +136,17 @@ model Sale {
 
 model Order {
   id         Int         @id @default(autoincrement())
-  orderDate  DateTime
+  orderDate  DateTime       @default(now())
   total      Float
   userId     Int
   user       User        @relation(fields: [userId], references: [id])
-  orderItems OrderItem[]
-  shipment   Shipment[]
+  orderItems OrderItem[] 
+  status  String   @default("Pending")
+  shippingAddressId Int
+  shippingAddress   ShippingAddress @relation(fields: [shippingAddressId], references: [id])
 
   @@index([userId])
+  @@index([shippingAddressId])
 }
 
 model OrderItem {
@@ -137,6 +154,8 @@ model OrderItem {
   quantity  Int
   productId Int
   orderId   Int
+  selectedSize   String?       @db.VarChar(255)
+
   product   Product @relation(fields: [productId], references: [id])
   order     Order   @relation(fields: [orderId], references: [id])
 
@@ -158,6 +177,7 @@ model CartItem {
   quantity       Int
   productId      Int
   shoppingCartId Int
+  selectedSize   String       @db.VarChar(255)
   product        Product      @relation(fields: [productId], references: [id])
   shoppingCart   ShoppingCart @relation(fields: [shoppingCartId], references: [id])
 
@@ -179,42 +199,37 @@ model Payment {
 model ShippingAddress {
   id         Int        @id @default(autoincrement())
   address    String
-  city       String
-  postalCode String
-  country    String
   userId     Int
   user       User       @relation(fields: [userId], references: [id])
-  shipments  Shipment[]
-
+  Order      Order[]
   @@index([userId])
 }
 
-model ShippingMethod {
-  id                    Int        @id @default(autoincrement())
-  name                  String
-  estimatedDeliveryTime String
-  shipments             Shipment[]
-}
+// model ShippingMethod {
+//   id                    Int        @id @default(autoincrement())
+//   name                  String
+//   estimatedDeliveryTime String
+//   shipments             Shipment[]
+// }
 
-model Shipment {
-  id                    Int             @id @default(autoincrement())
-  trackingCode          String
-  shipDate              DateTime
-  estimatedDeliveryDate DateTime
-  userId                Int
-  orderId               Int
-  shippingMethodId      Int
-  shippingAddressId     Int
-  user                  User            @relation(fields: [userId], references: [id])
-  order                 Order           @relation(fields: [orderId], references: [id])
-  shippingMethod        ShippingMethod  @relation(fields: [shippingMethodId], references: [id])
-  shippingAddress       ShippingAddress @relation(fields: [shippingAddressId], references: [id])
+// model Shipment {
+//   id                    Int             @id @default(autoincrement())
+//   trackingCode          String
+//   shipDate              DateTime
+//   estimatedDeliveryDate DateTime
+//   userId                Int
+//   orderId               Int
+//   shippingMethodId      Int
+//   shippingAddressId     Int
+//   user                  User            @relation(fields: [userId], references: [id])
+//   shippingMethod        ShippingMethod  @relation(fields: [shippingMethodId], references: [id])
+//   shippingAddress       ShippingAddress @relation(fields: [shippingAddressId], references: [id])
 
-  @@index([shippingAddressId])
-  @@index([shippingMethodId])
-  @@index([orderId])
-  @@index([userId])
-}
+//   @@index([shippingAddressId])
+//   @@index([shippingMethodId])
+//   @@index([orderId])
+//   @@index([userId])
+// }
 
 model Promotion {
   id          Int          @id @default(autoincrement())
@@ -250,7 +265,7 @@ model Conversation {
   id             String          @id @default(uuid())
   userOneId      Int
   userTwoId      Int
-  lastMessageAt  DateTime        @default(now())
+  lastMessageAt  DateTime
   lastMessage    String?
   userOne        User            @relation("userOne", fields: [userOneId], references: [id], onDelete: Cascade)
   userTwo        User            @relation("userTwo", fields: [userTwoId], references: [id], onDelete: Cascade)
