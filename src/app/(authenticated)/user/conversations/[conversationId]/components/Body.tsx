@@ -361,7 +361,7 @@ const Body = ({ session, className }) => {
           py-2
           px-4
           bg-neutral-100 
-          w-[90%] lg:w-[50%] 
+          w-[90%] lg:w-[70%] 
           rounded-full
           focus:outline-none
         "
