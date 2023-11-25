@@ -13,6 +13,7 @@ export async function GET(request: Request) {
       productSizes: true,
     },
   });
+  console.log('🚀 ~ file: route.ts:16 ~ GET ~ productDetail:', productDetail);
   if (!productDetail) return new Response(JSON.stringify({}), { status: 404 });
   return new Response(JSON.stringify(productDetail), { status: 200 });
 }

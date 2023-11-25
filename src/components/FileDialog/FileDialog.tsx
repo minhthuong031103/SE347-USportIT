@@ -13,7 +13,7 @@ import { Button } from '@components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@components/ui/dialog';
 import { Icons } from '@/assets/Icons';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { ImageCus } from '@/components/ui/image';
+import { ImageCus } from '@/components/ui/ImageCus';
 
 // FIXME Your proposed upload exceeds the maximum allowed size, this should trigger toast.error too
 type FileWithPreview = FileWithPath & {
@@ -25,11 +25,12 @@ interface FileDialogProps<
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > extends React.HTMLAttributes<HTMLDivElement> {
   name: TName;
-  setValue: UseFormSetValue<TFieldValues>;
+  setValue?: UseFormSetValue<TFieldValues>;
   accept?: Accept;
   maxSize?: number;
   maxFiles?: number;
   files: FileWithPreview[] | null;
+  customButton?: React.ReactNode;
   setFiles: React.Dispatch<React.SetStateAction<FileWithPreview[] | null>>;
   isUploading?: boolean;
   disabled?: boolean;
@@ -48,6 +49,7 @@ export function FileDialog<TFieldValues extends FieldValues>({
   isUploading = false,
   disabled = false,
   className,
+  customButton,
   ...props
 }: FileDialogProps<TFieldValues>) {
   const onDrop = React.useCallback(
@@ -80,7 +82,7 @@ export function FileDialog<TFieldValues extends FieldValues>({
 
   // Register files to react-hook-form
   React.useEffect(() => {
-    setValue(name, files as PathValue<TFieldValues, Path<TFieldValues>>);
+    setValue?.(name, files as PathValue<TFieldValues, Path<TFieldValues>>);
   }, [files]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -105,10 +107,13 @@ export function FileDialog<TFieldValues extends FieldValues>({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant='outline' disabled={disabled}>
-          Upload Images
-          <span className='sr-only'>Upload Images</span>
-        </Button>
+        {
+customButton ?  customButton  :<Button variant='outline' disabled={disabled}>
+Upload Images
+<span className='sr-only'>Upload Images</span>
+</Button>
+        }
+       
       </DialogTrigger>
       <DialogContent className='sm:max-w-[480px]'>
         <p className='absolute left-5 top-4 text-base font-medium text-muted-foreground'>

@@ -38,7 +38,7 @@ const ProductReviewForm = ({
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [isVisible, setIsVisible] = React.useState(false);
-  //Loading, success, invalid
+  //Loading and success
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [isInvalid, setIsInvalid] = useState(false);

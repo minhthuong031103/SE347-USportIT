@@ -25,6 +25,7 @@ import { Dialog, DialogContent, DialogTrigger } from '@components/ui/dialog';
 import { Icons } from '@/assets/Icons';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ImageCus } from '@/components/ui/ImageCus';
+import { Zoom } from '../ui/zoom-image';
 
 // FIXME Your proposed upload exceeds the maximum allowed size, this should trigger toast.error too
 type FileWithPreview = FileWithPath & {
@@ -40,6 +41,7 @@ interface FileDialogProps<
   accept?: Accept;
   maxSize?: number;
   maxFiles?: number;
+  customButton?: React.ReactNode;
   files: FileWithPreview[] | null;
   setFiles: React.Dispatch<React.SetStateAction<FileWithPreview[] | null>>;
   isUploading?: boolean;
@@ -59,6 +61,7 @@ export function ImageDialog<TFieldValues extends FieldValues>({
   isUploading = false,
   disabled = false,
   className,
+  customButton,
   ...props
 }: FileDialogProps<TFieldValues>) {
   const onDrop = React.useCallback(
@@ -120,10 +123,13 @@ export function ImageDialog<TFieldValues extends FieldValues>({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className={className} variant="outline" disabled={disabled}>
-          Upload files
-          <span className="sr-only">Upload files</span>
-        </Button>
+        {
+customButton ?  customButton  :<Button variant='outline' disabled={disabled}>
+Upload Images
+<span className='sr-only'>Upload Images</span>
+</Button>
+        }
+       
       </DialogTrigger>
       <DialogContent className="sm:max-w-[480px]">
         <p className="absolute left-5 top-4 text-base font-medium text-muted-foreground">
@@ -260,11 +266,12 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
   return (
     <div className="relative flex items-center justify-between gap-2.5">
       <div className="flex items-center gap-2">
-        <ImageCus
+        <Zoom><ImageCus
           src={cropData ? cropData : file.preview}
           alt={file.name}
           className="h-12 w-12 shrink-0 rounded-md"
-        />
+        /></Zoom>
+        
         <div className="flex flex-col">
           <p className="line-clamp-1 text-sm font-medium text-muted-foreground">
             {file.name.length > 30 ? file.name.slice(0, 30) + '...' : file.name}
@@ -291,7 +298,7 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
                 <span className="sr-only"> Crop image</span>
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className='w-[80%] lg:w-[70%]'>
               <p className="absolute left-5 top-4 text-base font-medium text-muted-foreground">
                 Crop image{' '}
               </p>

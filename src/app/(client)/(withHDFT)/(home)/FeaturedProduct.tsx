@@ -58,24 +58,25 @@ function FeaturedProduct() {
                 '--swiper-button-next': '12px',
               } as React.CSSProperties
             }
+            direction="horizontal"
             slidesPerView={1}
             spaceBetween={10}
             navigation={true}
             breakpoints={{
               700: {
-                slidesPerView: 2,
+                slidesPerView: 1,
                 spaceBetween: 10,
               },
               900: {
-                slidesPerView: 3,
+                slidesPerView: 2,
                 spaceBetween: 10,
               },
               1100: {
-                slidesPerView: 4,
+                slidesPerView: 3,
                 spaceBetween: 20,
               },
               1300: {
-                slidesPerView: 5,
+                slidesPerView: 4,
                 spaceBetween: 10,
               },
             }}
@@ -84,7 +85,7 @@ function FeaturedProduct() {
           >
             {featuredProducts ? (
               featuredProducts?.map((product, index) => (
-                <SwiperSlide key={index}>
+                <SwiperSlide key={index} virtualIndex={index}>
                   <ProductCard product={product} />
                 </SwiperSlide>
               ))
