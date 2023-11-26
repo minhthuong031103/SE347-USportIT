@@ -125,6 +125,7 @@ const Body = ({ session }) => {
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor || null,
         keepPreviousData: true,
+        refetchOnWindowFocus: false,
       }
     );
   };
@@ -299,9 +300,12 @@ const Body = ({ session }) => {
             loader={<h4>Loading...</h4>}
             scrollableTarget="scrollableDiv"
           >
-            {temporaryMessages.map((message) => (
-              <NewMessage key={message.id} data={message} />
-            ))}
+            {temporaryMessages
+              .slice() // Create a shallow copy to avoid modifying the original array
+              .reverse() // Reverse the order
+              .map((message) => (
+                <NewMessage key={message.id} data={message} />
+              ))}
             {data?.pages.map((page, index) => (
               <React.Fragment key={index}>
                 {page.messages.map((message) => (
