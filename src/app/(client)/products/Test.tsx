@@ -70,7 +70,7 @@ export default function Test({
     isFetchingNextPage,
   } = useInfiniteQuery(
     ['products', q, sort, gender, categories, subcategories, price_range],
-    ({ pageParam = 1 }) =>
+    ({ pageParam = 0 }) =>
       fetchProduct({
         page: pageParam,
         q,

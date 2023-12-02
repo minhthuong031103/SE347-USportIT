@@ -46,19 +46,19 @@ const mainNavItems = [
     items: [
       {
         title: 'Shoes',
-        href: '/shoes',
+        href: '/products?gender=1&subcategories=1.2.3.4.9.10',
         description: 'All the products we have to offer.',
         items: [],
       },
       {
         title: 'Clothing',
-        href: '/clothes',
+        href: '/products?gender=1&subcategories=5.6.11.12.13.14',
         description: 'Build your own custom skateboard.',
         items: [],
       },
       {
         title: 'Accessories and Equipment',
-        href: '/accessories',
+        href: '/products?gender=1&subcategories=7.8.15.16.17.18',
         description: 'Read our latest blog posts.',
         items: [],
       },
@@ -69,19 +69,19 @@ const mainNavItems = [
     items: [
       {
         title: 'Shoes',
-        href: '/shoes',
+        href: '/products?gender=2&subcategories=1.2.3.4.9.10',
         description: 'All the products we have to offer.',
         items: [],
       },
       {
         title: 'Clothing',
-        href: '/clothes',
+        href: '/products?gender=2&subcategories=5.6.11.12.13.14',
         description: 'Build your own custom skateboard.',
         items: [],
       },
       {
         title: 'Accessories and Equipment',
-        href: '/accessories',
+        href: '/products?gender=2&subcategories=7.8.15.16.17.18',
         description: 'Read our latest blog posts.',
         items: [],
       },
@@ -92,19 +92,19 @@ const mainNavItems = [
     items: [
       {
         title: 'Shoes',
-        href: '/shoes',
+        href: '/products?gender=3&subcategories=1.2.3.4.9.10',
         description: 'All the products we have to offer.',
         items: [],
       },
       {
         title: 'Clothing',
-        href: '/clothes',
+        href: '/products?gender=3&subcategories=5.6.11.12.13.14',
         description: 'Build your own custom skateboard.',
         items: [],
       },
       {
         title: 'Accessories and Equipment',
-        href: '/accessories',
+        href: '/products?gender=3&subcategories=7.8.15.16.17.18',
         description: 'Read our latest blog posts.',
         items: [],
       },
