@@ -21,7 +21,8 @@ import { Spinner } from '@nextui-org/react';
 import { ImageListChat } from '@/components/imageList/ImageListChat';
 import NewMessage from './NewMessage';
 
-const Body = ({ session, className }) => {
+const Body = ({ session }) => {
+  console.log('🚀 ~ file: Body.tsx:25 ~ Body ~ session:', session);
   const [isUploading, setIsUploading] = useState(false);
 
   const [isSent, setIsSent] = useState(true);
@@ -124,6 +125,7 @@ const Body = ({ session, className }) => {
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor || null,
         keepPreviousData: true,
+        refetchOnWindowFocus: false,
       }
     );
   };
@@ -180,14 +182,14 @@ const Body = ({ session, className }) => {
             images.forEach((image) => {
               const newMessage = {
                 content: 'Hình ảnh', // Assuming you want to send the image URL as content
-                userId: 4,
+                userId: session.user.id,
                 conversationId,
                 fileUrl: image.url, // Replace 'yourConversationId' with the actual conversation ID
               };
               const temporaryMessage = {
                 id: temporaryMessages.length + 1, // Generate a unique ID for the temporary message
                 content: 'Hình ảnh',
-                userId: 4,
+                userId: session.user.id,
                 conversationId,
                 fileUrl: image.url,
               };
@@ -221,13 +223,13 @@ const Body = ({ session, className }) => {
         const temporaryMessage = {
           id: temporaryMessages.length + 1, // Generate a unique ID for the temporary message
           content: newMessage,
-          userId: 4,
+          userId: session.user.id,
           conversationId,
         };
         setTemporaryMessages([...temporaryMessages, temporaryMessage]);
         socket.emit('newMessage', {
           content: newMessage,
-          userId: 4,
+          userId: session.user.id,
           conversationId,
         });
 
@@ -244,7 +246,7 @@ const Body = ({ session, className }) => {
     setFormData({ ...formData, images: imageFiles });
   };
   return (
-    <div className={'h-[80%]'}>
+    <div className=" overflow-hidden">
       {isUploading ? (
         <DialogCustom
           className="w-[60%] lg:w-[50%] h-fit items-center justify-center"
@@ -259,7 +261,7 @@ const Body = ({ session, className }) => {
           </div>
         </DialogCustom>
       ) : null}
-      <div>
+      {/* <div>
         <Button
           onClick={() => {
             if (hasNextPage) {
@@ -270,49 +272,55 @@ const Body = ({ session, className }) => {
           load more
         </Button>
         <SocketIndicator isConnected={isConnected} />
-      </div>
-      <div
-        id="scrollableDiv"
-        className="h-[600px] lg:h-[550px] overflow-y-auto flex flex-col-reverse"
-      >
-        <InfiniteScroll
-          dataLength={
-            data
-              ? data.pages.reduce(
-                  (acc, page) => acc + page.messages.length,
-                  0
-                ) + 1
-              : 0
-          }
-          next={() => {
-            toast.success('fetching next page');
-            fetchNextPage();
-          }}
-          style={{
-            display: 'flex',
-            flexDirection: 'column-reverse',
-          }}
-          inverse={true}
-          hasMore={hasNextPage || false}
-          loader={<h4>Loading...</h4>}
-          scrollableTarget="scrollableDiv"
+      </div> */}
+      <div className="w-full h-[75%]">
+        <div
+          id="scrollableDiv"
+          className="h-[650px] lg:h-[550px] w-full overflow-y-auto flex flex-col-reverse "
         >
-          {temporaryMessages.map((message) => (
-            <NewMessage key={message.id} data={message} />
-          ))}
-          {data?.pages.map((page, index) => (
-            <React.Fragment key={index}>
-              {page.messages.map((message) => (
-                <MessageBox
-                  isLast={index === page.messages.length - 1}
-                  key={message.id}
-                  data={message}
-                />
+          <InfiniteScroll
+            dataLength={
+              data
+                ? data.pages.reduce(
+                    (acc, page) => acc + page.messages.length,
+                    0
+                  ) + 1
+                : 0
+            }
+            next={() => {
+              toast.success('fetching next page');
+              fetchNextPage();
+            }}
+            style={{
+              display: 'flex',
+              flexDirection: 'column-reverse',
+            }}
+            inverse={true}
+            hasMore={hasNextPage || false}
+            loader={<h4>Loading...</h4>}
+            scrollableTarget="scrollableDiv"
+          >
+            {temporaryMessages
+              .slice() // Create a shallow copy to avoid modifying the original array
+              .reverse() // Reverse the order
+              .map((message) => (
+                <NewMessage key={message.id} data={message} />
               ))}
-            </React.Fragment>
-          ))}
-        </InfiniteScroll>
+            {data?.pages.map((page, index) => (
+              <React.Fragment key={index}>
+                {page.messages.map((message) => (
+                  <MessageBox
+                    isLast={index === page.messages.length - 1}
+                    key={message.id}
+                    data={message}
+                  />
+                ))}
+              </React.Fragment>
+            ))}
+          </InfiniteScroll>
+        </div>
       </div>
+
       <div
         className="
         fixed
@@ -350,7 +358,7 @@ const Body = ({ session, className }) => {
             disabled={false}
           />
 
-          <div className="flex items-center gap-2 lg:gap-4 w-full">
+          <div className="flex items-center gap-2 lg:gap-4 w-full ">
             <textarea
               value={newMessage}
               onChange={handleNewMessageChange}

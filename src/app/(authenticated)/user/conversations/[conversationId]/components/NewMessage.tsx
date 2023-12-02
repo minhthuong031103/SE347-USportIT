@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 import { useUser } from '@/hooks/useUser';
 import { Zoom } from '@/components/ui/zoom-image';
 import { ImageCus } from '@/components/ui/ImageCus';
-import Avatar1 from '@/components/Avatar';
+// import Avatar1 from '@/components/Avatar';
 import { User } from '@prisma/client';
 
 interface MessageBoxProps {
@@ -20,7 +20,7 @@ const NewMessage: React.FC<MessageBoxProps> = ({ data }) => {
   const isOwn = true;
 
   const container = clsx('flex gap-3 p-4', isOwn && 'justify-end');
-  const avatar = clsx(isOwn && 'order-2');
+  // const avatar = clsx(isOwn && 'order-2');
   const body = clsx('flex flex-col gap-2', isOwn && 'items-end');
   const message = clsx(
     'text-sm w-fit overflow-hidden',
@@ -40,9 +40,6 @@ const NewMessage: React.FC<MessageBoxProps> = ({ data }) => {
   }, []);
   return (
     <div className={container}>
-      <div className={avatar}>
-        <Avatar1 user={otherUser} />
-      </div>
       <div className={body}>
         <div className="flex items-center gap-1">
           <div className="text-sm text-gray-500">
