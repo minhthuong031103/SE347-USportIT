@@ -2,9 +2,10 @@ import getConversationById from '@actions/getConversationById';
 // import getMessages from '@actions/getMessages';
 
 import Header from './components/Header';
-import Body from './components/Body';
 import EmptyState from '@components/EmptyState';
+import dynamic from 'next/dynamic';
 import { getSession } from '@/lib/auth';
+const Body = dynamic(() => import('./components/Body'), { ssr: false });
 interface IParams {
   conversationId: string;
 }
@@ -25,10 +26,10 @@ const ChatId = async ({ params }: { params: IParams }) => {
   }
 
   return (
-    <div className="lg:pl-80 h-full">
+    <div className="w-full h-full">
       <div className="h-full flex flex-col">
         <Header conversation={conversation} />
-        <Body className="h-[80%] " session={session} />
+        <Body session={session} />
         {/* <Form /> */}
       </div>
     </div>

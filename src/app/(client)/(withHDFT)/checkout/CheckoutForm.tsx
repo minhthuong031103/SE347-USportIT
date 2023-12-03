@@ -4,8 +4,8 @@ import React, { useEffect } from 'react';
 
 import DialogCustom from '@/components/ui/dialogCustom';
 import { Select, SelectItem } from '@nextui-org/react';
-import { Web3Checkout } from './Web3Checkout';
-import { StripeCheckout } from './StripeCheckout';
+import { Web3Checkout } from './components/Web3Checkout';
+import { StripeCheckout } from './components/StripeCheckout';
 
 interface CheckoutProps {
   setIsModalOpen: (value: boolean) => void;
@@ -27,6 +27,7 @@ export const CheckoutForm = ({
       setMethod(noiThatValueArray?.[0]);
     }
   }, [selectedType]);
+  
   return (
     <div className="w-full h-full px-1">
       <DialogCustom

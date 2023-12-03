@@ -31,6 +31,7 @@ const ConversationPage = ({ session }) => {
     //when it changes, the query is refetched
     {
       refetchOnWindowFocus: false,
+      keepPreviousData: true,
       getNextPageParam: (lastPage, pages) => {
         //pages is an array of all the pages fetched so far
         //last page is the last page fetched

@@ -7,20 +7,42 @@ import { useChatSocket } from '@/hooks/useChatSocket';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import useConversation from '@hooks/useConversation';
 import MessageBox from './MessageBox';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { SocketIndicator } from '@/components/socket-indicator';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
 import { HiPaperAirplane, HiPhoto } from 'react-icons/hi2';
 import { ImageDialog } from '@/components/imageDialog';
+import { z } from 'zod';
+import { useImage } from '@/hooks/useImage';
+import DialogCustom from '@/components/ui/dialogCustom';
+import { Spinner } from '@nextui-org/react';
+import { ImageListChat } from '@/components/imageList/ImageListChat';
 import NewMessage from './NewMessage';
 
-const Body = ({ session, className }) => {
-  // const bottomRef = useRef<HTMLDivElement>(null);
+const Body = ({ session }) => {
+  console.log('🚀 ~ file: Body.tsx:25 ~ Body ~ session:', session);
+  const [isUploading, setIsUploading] = useState(false);
+
   const [isSent, setIsSent] = useState(true);
   const [newMessage1, setNewMessage1] = useState('');
   const [imageFiles, setImageFiles] = useState([]);
+  const { onUploadImage } = useImage();
+  const [formData, setFormData] = useState({
+    images: null,
+  });
+  //Create ZodSchema
+  const fileSchema = z.instanceof(File);
+  const imageJSONSchema = z.object({
+    id: z.string().min(1, 'Image must not be empty'),
+    name: z.string().min(1, 'Image must not be empty'),
+    url: z.string().min(1, 'Image must not be empty'),
+  });
+  const imageSchema = z.union([fileSchema, imageJSONSchema]);
+  const formDataSchema = z.object({
+    images: z.array(imageSchema),
+  });
   const { conversationId } = useConversation();
   const queryClient = useQueryClient();
   const [lastToastId, setLastToastId] = useState<any>();
@@ -47,16 +69,6 @@ const Body = ({ session, className }) => {
 
       //o day se handle message duoc gui toi
       console.log('🚀 ~ file: Body.tsx:36 ~ Body ~ lastToastId:', lastToastId);
-      // queryClient.setQueryData(['messages', conversationId], (oldData: any) => {
-      //   const newPages = [...oldData.pages];
-      //   newPages[0] = {
-      //     ...newPages[0],
-      //     messages: [data.content, ...newPages[0].messages],
-      //   };
-      //   console.log('newPages', newPages);
-      //   // neu thanh cong thi fetch luon cai conversation
-      //   return { ...oldData, pages: newPages };
-      // });
       queryClient.refetchQueries(['messages', conversationId]);
       setIsSent(true);
       const i = toast.custom((t) => (
@@ -98,7 +110,9 @@ const Body = ({ session, className }) => {
       }, 2000);
 
       queryClient.refetchQueries(['conversations']);
-
+      setTimeout(() => {
+        setTemporaryMessages([]);
+      }, 100);
       // khong duoc dung refetchQueries vi no se goi lai ham fetchMessages
       // dieu nay se fetch nhieu lan
     },
@@ -111,6 +125,7 @@ const Body = ({ session, className }) => {
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor || null,
         keepPreviousData: true,
+        refetchOnWindowFocus: false,
       }
     );
   };
@@ -119,38 +134,134 @@ const Body = ({ session, className }) => {
   const { data, error, isFetching, fetchNextPage, hasNextPage } =
     useInfiniteMessagesQuery(conversationId, pageSize);
   const [newMessage, setNewMessage] = useState('');
+  const [temporaryMessages, setTemporaryMessages] = useState([]);
   const handleNewMessageChange = (e) => {
     setNewMessage(e.target.value);
   };
-  const handleSendMessage = () => {
-    setIsSent(false);
-    setNewMessage1(newMessage);
-    if (!newMessage) return;
+  const handleSendMessage = async () => {
+    if (!newMessage && imageFiles.length === 0) return;
 
     // setMessages((messages) => [...messages, newMessage]);
 
     if (socket) {
-      socket.emit('newMessage', {
-        content: newMessage,
-        userId: session?.user?.id,
-        conversationId,
-      });
+      if (imageFiles.length > 0) {
+        const validationResult = formDataSchema.safeParse(formData);
+        if (validationResult.success) {
+          setIsUploading(true);
+          const formData1 = new FormData();
+          imageFiles.forEach((file) => {
+            formData1.append('images', file);
+          });
+          console.log(
+            '🚀 ~ file: Body.tsx:157 ~ handleSendMessage ~ formData1:',
+            formData1
+          );
+          const response = await onUploadImage({
+            formData: formData1,
+            callback: () => {
+              setFormData({
+                images: null,
+              });
+              setImageFiles([]);
+              setIsUploading(false);
+            },
+          });
+          console.log(
+            '🚀 ~ file: Body.tsx:157 ~ handleSendMessage ~ respones:',
+            response
+          );
+          try {
+            // Parse the JSON data into an array of objects
+            const images = JSON.parse(response.uploadImages);
+            console.log(
+              '🚀 ~ file: Body.tsx:177 ~ handleSendMessage ~ images:',
+              images
+            );
 
-      setNewMessage('');
+            // Iterate over the images array and emit a socket event for each image
+            images.forEach((image) => {
+              const newMessage = {
+                content: 'Hình ảnh', // Assuming you want to send the image URL as content
+                userId: session.user.id,
+                conversationId,
+                fileUrl: image.url, // Replace 'yourConversationId' with the actual conversation ID
+              };
+              const temporaryMessage = {
+                id: temporaryMessages.length + 1, // Generate a unique ID for the temporary message
+                content: 'Hình ảnh',
+                userId: session.user.id,
+                conversationId,
+                fileUrl: image.url,
+              };
+              setTemporaryMessages([...temporaryMessages, temporaryMessage]);
+
+              // Emit the 'newMessage' event with the newMessage object
+              socket.emit('newMessage', newMessage);
+            });
+          } catch (error) {
+            console.error('Error parsing JSON:', error);
+          }
+          // setIsUploading(false);
+          // const temporaryMessage = {
+          //   id: temporaryMessages.length + 1, // Generate a unique ID for the temporary message
+          //   content: newMessage,
+          //   userId: 4,
+          //   conversationId,
+          //   images: data,
+          // };
+          // setTemporaryMessages([...temporaryMessages, temporaryMessage]);
+          // socket.emit('newMessage', {
+          //   content: newMessage,
+          //   userId: 4,
+          //   conversationId,
+          //   images: data,
+          // });
+          setImageFiles([]);
+        }
+      }
+      if (newMessage) {
+        const temporaryMessage = {
+          id: temporaryMessages.length + 1, // Generate a unique ID for the temporary message
+          content: newMessage,
+          userId: session.user.id,
+          conversationId,
+        };
+        setTemporaryMessages([...temporaryMessages, temporaryMessage]);
+        socket.emit('newMessage', {
+          content: newMessage,
+          userId: session.user.id,
+          conversationId,
+        });
+
+        setNewMessage('');
+      }
     }
   };
-  console.log('isSent', isSent);
-  console.log(data);
-  console.log(
-    data ? data.pages.reduce((acc, page) => acc + page.messages.length, 0) : 0
-  );
-  // useEffect(() => {
-  //   axios.post(`/api/conversations/${conversationId}/seen`);
-  // }, [conversationId]);
-  console.log(hasNextPage);
+  const handleDelete = (index) => {
+    const updatedFiles = [...imageFiles];
+    updatedFiles.splice(index, 1);
+    setImageFiles(updatedFiles);
+  };
+  const handleImagesChange = () => {
+    setFormData({ ...formData, images: imageFiles });
+  };
   return (
-    <div className={'h-[80%]'}>
-      <div>
+    <div className=" overflow-hidden">
+      {isUploading ? (
+        <DialogCustom
+          className="w-[60%] lg:w-[50%] h-fit items-center justify-center"
+          isModalOpen={isUploading}
+          notShowClose={true}
+        >
+          <div className="flex flex-col gap-3 items-center justify-center">
+            <Spinner size="lg" />
+            <div className="text-center font-semibold text-xs sm:text-sm">
+              Upload Image...
+            </div>
+          </div>
+        </DialogCustom>
+      ) : null}
+      {/* <div>
         <Button
           onClick={() => {
             if (hasNextPage) {
@@ -161,44 +272,55 @@ const Body = ({ session, className }) => {
           load more
         </Button>
         <SocketIndicator isConnected={isConnected} />
-      </div>
-      <div
-        id="scrollableDiv"
-        className="h-[600px] lg:h-[500px] overflow-y-auto flex flex-col-reverse"
-      >
-        <InfiniteScroll
-          dataLength={
-            data
-              ? data.pages.reduce((acc, page) => acc + page.messages.length, 0)
-              : 0
-          }
-          next={() => {
-            fetchNextPage();
-          }}
-          style={{
-            display: 'flex',
-            flexDirection: 'column-reverse',
-          }}
-          inverse={true}
-          hasMore={hasNextPage || false}
-          loader={<h4>Loading...</h4>}
-          scrollableTarget="scrollableDiv"
+      </div> */}
+      <div className="w-full h-[75%]">
+        <div
+          id="scrollableDiv"
+          className="h-[650px] lg:h-[550px] w-full overflow-y-auto flex flex-col-reverse "
         >
-          {data?.pages.map((page, index) => (
-            <React.Fragment key={index}>
-              {page.messages.map((message) => (
-                <MessageBox
-                  isLast={index === page.messages.length - 1}
-                  key={message.id}
-                  data={message}
-                />
+          <InfiniteScroll
+            dataLength={
+              data
+                ? data.pages.reduce(
+                    (acc, page) => acc + page.messages.length,
+                    0
+                  ) + 1
+                : 0
+            }
+            next={() => {
+              toast.success('fetching next page');
+              fetchNextPage();
+            }}
+            style={{
+              display: 'flex',
+              flexDirection: 'column-reverse',
+            }}
+            inverse={true}
+            hasMore={hasNextPage || false}
+            loader={<h4>Loading...</h4>}
+            scrollableTarget="scrollableDiv"
+          >
+            {temporaryMessages
+              .slice() // Create a shallow copy to avoid modifying the original array
+              .reverse() // Reverse the order
+              .map((message) => (
+                <NewMessage key={message.id} data={message} />
               ))}
-              {/* o duoi nay se la messages dang duoc gui toi */}
-              {isSent ? null : <NewMessage data={newMessage1} />}
-            </React.Fragment>
-          ))}
-        </InfiniteScroll>
+            {data?.pages.map((page, index) => (
+              <React.Fragment key={index}>
+                {page.messages.map((message) => (
+                  <MessageBox
+                    isLast={index === page.messages.length - 1}
+                    key={message.id}
+                    data={message}
+                  />
+                ))}
+              </React.Fragment>
+            ))}
+          </InfiniteScroll>
+        </div>
       </div>
+
       <div
         className="
         fixed
@@ -208,43 +330,55 @@ const Body = ({ session, className }) => {
         bg-white 
         border-t 
         flex 
+        flex-col
         items-center 
         gap-2 
-        lg:gap-2
+        lg:gap-4 
         w-full
+        z-1000 
       "
       >
-        <ImageDialog
-          name="images"
-          maxFiles={8}
-          customButton={<HiPhoto size={30} className="text-sky-500" />}
-          maxSize={1024 * 1024 * 4}
-          files={imageFiles}
-          setFiles={setImageFiles}
-          disabled={false}
-        />
+        {imageFiles?.length ? (
+          <ImageListChat
+            files={imageFiles}
+            height={16}
+            width={16}
+            onDelete={handleDelete}
+          />
+        ) : null}
+        <div className="flex items-center flex-row w-full">
+          <ImageDialog
+            name="images"
+            maxFiles={8}
+            customButton={<HiPhoto size={30} className="text-sky-500" />}
+            maxSize={1024 * 1024 * 4}
+            files={imageFiles}
+            setFiles={setImageFiles}
+            setValue={handleImagesChange}
+            disabled={false}
+          />
 
-        <div className="flex items-center gap-2 lg:gap-4 w-full">
-          <textarea
-            value={newMessage}
-            onChange={handleNewMessageChange}
-            placeholder="Type a message..."
-            className="
+          <div className="flex items-center gap-2 lg:gap-4 w-full ">
+            <textarea
+              value={newMessage}
+              onChange={handleNewMessageChange}
+              placeholder="Type a message..."
+              className="
           text-black
           font-light
           py-2
           px-4
           bg-neutral-100 
-          w-full lg:w-[70%]
+          w-[90%] lg:w-[70%] 
           rounded-full
           focus:outline-none
         "
-          />
+            />
 
-          <button
-            type="button"
-            onClick={handleSendMessage}
-            className="
+            <button
+              type="button"
+              onClick={handleSendMessage}
+              className="
             rounded-full 
             p-2 
             bg-sky-500 
@@ -252,9 +386,10 @@ const Body = ({ session, className }) => {
             hover:bg-sky-600 
             transition
           "
-          >
-            <HiPaperAirplane size={18} className="text-white" />
-          </button>
+            >
+              <HiPaperAirplane size={18} className="text-white" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
