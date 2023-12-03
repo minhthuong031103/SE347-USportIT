@@ -26,7 +26,7 @@ const [fullName, setFullName]=useState('')
     </div>
     <div className="mt-10 w-full flex justify-center">
     <Button onClick={()=>{
-        setPage(2)
+        setPage("2")
     }}>
         Next
     </Button>

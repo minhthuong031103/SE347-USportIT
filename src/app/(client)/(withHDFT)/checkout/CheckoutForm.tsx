@@ -27,6 +27,7 @@ export const CheckoutForm = ({
       setMethod(noiThatValueArray?.[0]);
     }
   }, [selectedType]);
+  
   return (
     <div className="w-full h-full px-1">
       <DialogCustom

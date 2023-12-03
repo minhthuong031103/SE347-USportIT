@@ -30,9 +30,7 @@ const CheckoutModal=({isModalOpen, setIsModalOpen}:CheckoutModalProps)=>{
 
 <Tabs  
         selectedKey={page}
-    onSelectionChange={(key)=>{
-      setPage(key.toString())
-    }}
+  
 
 classNames={{
           tabList: "gap-6 w-full  ",
