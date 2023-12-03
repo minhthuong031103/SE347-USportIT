@@ -22,7 +22,6 @@ import { MobileNav } from './MobileNavBar';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { CartSheet } from '../CartSheet';
 import { Badge } from '../ui/badge';
-import { SocketIndicator } from '../socket-indicator';
 import Logo from '../logo';
 const NavigationMenuDemo = ({ session }) => {
   const [user] = useState(session?.user);
@@ -58,7 +57,6 @@ const NavigationMenuDemo = ({ session }) => {
       <div className="hidden lg:flex py-2  ">
         {' '}
         <Logo />
-        <SocketIndicator />
         <NavigationMenu.Root className="NavigationMenuRoot">
           <NavigationMenu.List className="NavigationMenuList">
             <NavigationMenu.Item>

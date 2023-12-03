@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
-import { CheckoutForm } from './CheckoutForm';
 import { Button } from '@/components/ui/button';
+import CheckoutModal from './CheckoutModal';
 
 export const Checkout = () => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -18,12 +18,16 @@ export const Checkout = () => {
 
       {isModalOpen && (
         <div>
-          <CheckoutForm
+          {/* <CheckoutForm
             isModalOpen={isModalOpen}
             setIsModalOpen={setIsModalOpen}
-          />
+          /> */}
+
+          <CheckoutModal    isModalOpen={isModalOpen}
+            setIsModalOpen={setIsModalOpen}  />
         </div>
       )}
+             
     </div>
   );
 };
