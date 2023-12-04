@@ -142,7 +142,7 @@ export async function POST(request: Request) {
       });
       return NextResponse.json(
         {
-          message: `You have already reached limited purchased of ${updatedCartItem.quantity} products.`,
+          message: `Product ${cartItem.name}, size ${cartItem.selectedSize}, has already reached the limited purchase quantity of ${updatedCartItem.quantity} products.`,
         },
         { status: 201 }
       );
@@ -189,55 +189,78 @@ export async function POST(request: Request) {
   }
 }
 
-// export async function PUT(request: Request) {
-//   const { searchParams } = new URL(request.url);
-//   if (!searchParams.get('userId')) {
-//     return new Response(JSON.stringify({}), { status: 400 });
-//   }
-//   const userId = parseInt(searchParams.get('userId'));
+export async function PUT(request: Request) {
+  const { searchParams } = new URL(request.url);
+  if (!searchParams.get('userId')) {
+    return new Response(JSON.stringify({}), { status: 400 });
+  }
+  const userId = parseInt(searchParams.get('userId'));
 
-//   // Lấy shopping cart, nếu chưa có, tạo mới.
-//   let shoppingCart = await prisma.shoppingCart.findFirst({
-//     include: {
-//       cartItems: {
-//         include: {
-//           product: true,
-//         },
-//       },
-//     },
-//     where: {
-//       userId,
-//     },
-//   });
+  // Lấy shopping cart để kiểm tra cartItem đã tồn tại hay chưa
+  const shoppingCart = await prisma.shoppingCart.findFirst({
+    include: {
+      cartItems: {
+        include: {
+          product: true,
+        },
+      },
+    },
+    where: {
+      userId,
+    },
+  });
+  console.log('🚀 ~ file: route.ts:212 ~ PUT ~ shoppingCart:', shoppingCart);
 
-//   const cartItem: CartItem = await request.json();
+  let cartItem: CartItem = await request.json();
+  cartItem = {
+    ...cartItem,
+    shoppingCartId: shoppingCart?.id || 0,
+  };
 
-//   if (!cartItem)
-//     return NextResponse.json(
-//       { message: 'Cart item is required' },
-//       { status: 400 }
-//     );
+  console.log('🚀 ~ file: route.ts:215 ~ PUT ~ cartItem:', cartItem);
 
-//   try {
-//     const updatedCartItem = await prisma.cartItem.update({
-//       where: { id: cartItem.id },
-//       data: cartItem,
-//     });
+  if (!cartItem)
+    return NextResponse.json(
+      { message: 'Cart item is required' },
+      { status: 400 }
+    );
 
-//     return NextResponse.json(
-//       `Update cart Item succesfully ${updatedCartItem}`,
-//       { status: 200 }
-//     );
-//   } catch (error) {
-//     console.error(error);
-//     return NextResponse.json(
-//       { message: `Error occurred while updating cart item` },
-//       { status: 500 }
-//     );
-//   } finally {
-//     await prisma.$disconnect();
-//   }
-// }
+  const existingCartItem = shoppingCart?.cartItems.find(
+    (item) =>
+      item.productId === cartItem.id &&
+      item.shoppingCartId === cartItem.shoppingCartId &&
+      item.selectedSize === cartItem.selectedSize
+  );
+
+  console.log(existingCartItem, 'Day neeeee');
+
+  if (!existingCartItem)
+    return NextResponse.json(
+      { message: 'Cart item not found' },
+      { status: 404 }
+    );
+
+  try {
+    // Cập nhật mục giỏ hàng
+    const updatedCartItem = await prisma.cartItem.update({
+      where: { id: existingCartItem.id },
+      data: { quantity: cartItem.quantity },
+    });
+
+    return NextResponse.json(
+      `Update cart Item successfully ${updatedCartItem}`,
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { message: `Error occurred while updating cart item` },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+}
 
 export async function DELETE(request: Request) {
   // Lấy Param

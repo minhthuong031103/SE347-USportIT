@@ -7,13 +7,14 @@ import { useSelectedProduct } from '@/hooks/useSelectedProduct';
 import { parseJSON } from '@/lib/utils';
 import Image from 'next/image';
 import { Controller, useForm } from 'react-hook-form';
-import { Input, Spinner } from '@nextui-org/react';
+import { Input } from '@nextui-org/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useCart } from '@/hooks/useCart';
 import toast from 'react-hot-toast';
 import { Skeleton } from '@/components/ui/skeleton';
-import { FaCheckCircle } from 'react-icons/fa';
+// import { FaCheckCircle } from 'react-icons/fa';
+// import { useQueryClient } from '@tanstack/react-query';
 
 const schema = z.object({
   quantity: z
@@ -36,7 +37,7 @@ const AddProductDialog = () => {
   const [selectedSize, setSizeSelected] = useState(null);
   const [selectedQuantity, setSelectedQuantity] = useState(null);
   const [showError, setShowError] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+  // const [showSuccess, setShowSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { onAddToCart } = useCart();
 
@@ -51,56 +52,35 @@ const AddProductDialog = () => {
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    setIsLoading(true);
-
     if (errors.quantity) {
       return;
     }
 
     // Kiểm tra xem người dùng đã chọn đủ thông tin chưa
     if (!selectedSize) {
-      toast.error('Size selection is required');
-      return;
+      return Promise.reject('Size selection is required');
     } else if (!selectedQuantity) {
-      toast.error('Quantity selection is required');
-      return;
+      return Promise.reject('Quantity selection is required');
     }
 
     if (data.quantity > selectedQuantity) {
-      console.log(
-        '🚀 ~ file: AddProductDialog.tsx:52 ~ onSubmit ~ selectedQuantity:',
-        selectedQuantity
-      );
-      toast.error('Quantity cannot exceed available stock');
-      return;
+      return Promise.reject('Quantity cannot exceed available stock');
     }
 
-    if (!selectedSize) {
-      setShowError(true);
-      return;
-    }
-
-    console.log(
-      '🚀 ~ file: AddProductDialog.tsx:65 ~ onSubmit ~ selectedProduct:',
-      selectedProduct
-    );
     try {
+      onToggleDialog();
+      await new Promise((resolve) => setTimeout(resolve, 4000));
+      onToggleSuccess();
+      resetFormAndState();
+
       await onAddToCart({
         data: selectedProduct,
         quantity: data.quantity,
         selectedSize: selectedSize,
       });
-      setIsLoading(false);
-      setShowSuccess(true);
-
-      // Chờ cho đến khi onAddToCart hoàn thành trước khi gọi onToggleDialog
-      setTimeout(() => {
-        onToggleDialog();
-        onToggleSuccess();
-        resetFormAndState();
-      }, 2000);
     } catch (error) {
       console.error('Failed to add product to cart:', error);
+      return Promise.reject(error);
     }
   });
 
@@ -118,8 +98,8 @@ const AddProductDialog = () => {
     reset();
     setSizeSelected(null);
     setSelectedQuantity(null);
-    setShowSuccess(false);
-    setIsLoading(false);
+    // setShowSuccess(false);
+    setIsLoading(true);
   }, []);
 
   return isShowDialog ? (
@@ -245,12 +225,34 @@ const AddProductDialog = () => {
               );
             }}
           />
+
+          {/* Start In Inventory */}
+          <Label className="font-normal italic text-[10px] sm:text-[14px]">
+            In inventory: {selectedQuantity}
+          </Label>
+          {/* End In Inventory */}
         </div>
 
         <div className="flex w-full mt-5 justify-center items-center">
           <Button
             className="w-[50%] inset-0 border-transparent hover:scale-105 hover:transition text-[13px] sm:text-[16px] hover:duration-200 font-semibold text-white rounded-md"
-            onClick={onSubmit}
+            onClick={() => {
+              toast.promise(
+                onSubmit(),
+                {
+                  loading: 'Adding to cart ...',
+                  success: 'Successfully added',
+                  error: (err) => `${err}`,
+                },
+                {
+                  style: {
+                    minWidth: '200px',
+                    minHeight: '50px',
+                  },
+                  position: 'bottom-right',
+                }
+              );
+            }}
             disabled={!isValid}
           >
             Submit
@@ -260,10 +262,10 @@ const AddProductDialog = () => {
 
       <div className="flex flex-col gap-3 items-center justify-center">
         {/* Loading Dialog */}
-        {isLoading && selectedSize && selectedQuantity && (
+        {/* {isAddingToCart && selectedSize && selectedQuantity && (
           <DialogCustom
             className="w-[90%] lg:w-[50%] h-fit items-center justify-center"
-            isModalOpen={isLoading}
+            isModalOpen={isAddingToCart}
             notShowClose={true}
           >
             <div className="flex flex-col gap-3 items-center justify-center">
@@ -273,13 +275,13 @@ const AddProductDialog = () => {
               </div>
             </div>
           </DialogCustom>
-        )}
+        )} */}
 
         {/* Success Dialog */}
-        {showSuccess && (
+        {/* {successAdded && (
           <DialogCustom
             className="w-[90%] lg:w-[50%] h-fit items-center justify-center"
-            isModalOpen={!isLoading}
+            isModalOpen={isAddingToCart}
             notShowClose={true}
           >
             <div className="flex flex-col gap-3 items-center justify-center">
@@ -289,7 +291,7 @@ const AddProductDialog = () => {
               </div>
             </div>
           </DialogCustom>
-        )}
+        )} */}
       </div>
     </DialogCustom>
   ) : null;

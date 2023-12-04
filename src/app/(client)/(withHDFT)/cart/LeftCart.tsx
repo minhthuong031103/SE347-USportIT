@@ -9,16 +9,16 @@ function LeftCart({ checkedItems, setCheckedItems }) {
   const { cart } = useCart();
   const [itemCount, setItemCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true); // Thêm trạng thái loading
-  const cartLineItems = cart.listItem;
+  const cartLineItems = cart?.listItem;
 
   useEffect(() => {
     setItemCount(
-      cart.listItem.reduce((total, item) => total + item.quantity, 0)
+      cart?.listItem.reduce((total, item) => total + item.quantity, 0)
     );
-  }, [cart.listItem]);
+  }, [cart?.listItem]);
 
   useEffect(() => {
-    if (cartLineItems.length > 0) {
+    if (cartLineItems?.length > 0) {
       setIsLoading(false);
     }
     console.log(
