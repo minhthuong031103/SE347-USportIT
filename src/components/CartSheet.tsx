@@ -2,7 +2,9 @@
 
 import Link from 'next/link';
 
-import { cn, currencyFormat } from '@/lib/utils';
+import { cn } from '@/lib/utils';
+// import { currencyFormat } from '@/lib/utils';
+
 import { Badge } from './ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -20,19 +22,42 @@ import { useCart } from '@/hooks/useCart';
 import { CommonSvg } from '@/assets/CommonSvg';
 import { CartLineItems } from './CartLineItems';
 import { useEffect, useState } from 'react';
+// import { useQueryClient } from '@tanstack/react-query';
 
 export function CartSheet() {
   const { cart } = useCart();
   const [itemCount, setItemCount] = useState(0);
-  const cartLineItems = cart.listItem;
-  const cartTotal = cart.total ?? 0;
+  const [cartTotal, setCartTotal] = useState(0);
+  console.log(
+    '🚀 ~ file: CartSheet.tsx:31 ~ CartSheet ~ cartTotal:',
+    cartTotal
+  );
   const [checkedItems, setCheckedItems] = useState({});
+  // const queryClient = useQueryClient();
 
   useEffect(() => {
-    setItemCount(
-      cart.listItem.reduce((total, item) => total + item.quantity, 0)
-    );
-  }, [cart.listItem]);
+    // Update số lượng sản phẩm trong giỏ và các sản phẩm có trong giỏ
+    const updateCartSheet = async () => {
+      setItemCount(
+        cart?.listItem.reduce((total, item) => total + item.quantity, 0)
+      );
+
+      setCartTotal(
+        Object.keys(checkedItems).length > 0
+          ? Object.values(checkedItems).reduce(
+              (
+                sum: number,
+                item: { data: { price: number }; quantity: number }
+              ) => sum + (item?.data.price * item?.quantity || 0),
+              0
+            )
+          : 0
+      );
+    };
+
+    updateCartSheet();
+  }, [cart?.listItem]);
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -64,13 +89,14 @@ export function CartSheet() {
           <>
             <div className="flex flex-1 flex-col gap-5 overflow-hidden">
               <CartLineItems
-                items={cartLineItems}
+                items={cart?.listItem}
                 checkedItems={checkedItems}
                 setCheckedItems={setCheckedItems}
+                enableCheck={false}
               />
             </div>
             <div className="grid gap-1.5 pr-6 text-sm">
-              <Separator className="mb-2" />
+              {/* <Separator className="mb-2" />
               <div className="flex">
                 <span className="flex-1">Subtotal</span>
                 <span>{currencyFormat(cartTotal)}</span>
@@ -82,12 +108,12 @@ export function CartSheet() {
               <div className="flex">
                 <span className="flex-1">Taxes</span>
                 <span>Calculated at checkout</span>
-              </div>
+              </div> */}
               <Separator className="mt-2" />
-              <div className="flex">
+              {/* <div className="flex">
                 <span className="flex-1">Total</span>
                 <span>{currencyFormat(cartTotal)}</span>
-              </div>
+              </div> */}
               <SheetFooter className="mt-1.5">
                 <SheetTrigger asChild>
                   <Link
