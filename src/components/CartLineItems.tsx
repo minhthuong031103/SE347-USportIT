@@ -196,7 +196,7 @@ const CartItem = ({ item, isChecked, onCheck, enableCheck }) => {
           <Skeleton className="h-full w-full rounded-b-lg" />
         ) : (
           <div className="flex flex-row flex-wrap justify-between mt-4 gap-2 text-black/[0.5] text-sm md:text-md">
-            <div className="flex items-center gap-1 flex-wrap ">
+            <div className="flex items-center gap-1 flex-wrap md:mt-0 mt-4">
               <div className="font-semibold">Size:</div>
               {item.selectedSize}
             </div>
@@ -215,13 +215,14 @@ const CartItem = ({ item, isChecked, onCheck, enableCheck }) => {
                 >
                   {CommonSvg.subtract({ className: 'h-3 w-3' })}
                 </Button>
+
                 <div>
                   <Input
                     id={`${item?.data?.id}-quantity`}
                     type="text"
                     min="0"
                     className="h-8 w-11 rounded-none border-x-0 text-black 
-                    text-sm items-center justify-center"
+                    text-sm mb-3"
                     value={quantity}
                     disabled
                     // onChange={(e) => {
@@ -275,6 +276,7 @@ const CartItem = ({ item, isChecked, onCheck, enableCheck }) => {
               }}
               size={'sm'}
               variant={'outline'}
+              className="md:mt-2 mt-8"
             >
               <Icons.trash className="h-4 w-4 text-primary" />
             </Button>

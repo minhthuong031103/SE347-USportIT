@@ -25,27 +25,23 @@ model User {
   payments               Payment[]
   shippingAddresses      ShippingAddress[]
   wishlist               Wishlist?
-  // Shipment               Shipment[]
   directMessages         DirectMessage[]
   conversationsInitiated Conversation[]    @relation("userOne")
   conversationsReceived  Conversation[]    @relation("userTwo")
   seenMessages           SeenMessage[]
   wallets                Wallet[]
-  addresses             Address[]
+  addresses              Address[]
 }
 
 model Address {
-  id                Int        @id  @default(autoincrement())
-  city              String    
-  district          String
-  ward              String
-  street            String
-  houseNumber       String
-  userId            Int
-  user              User         @relation(fields: [userId], references: [id])
-
-
-
+  id          Int    @id @default(autoincrement())
+  city        String
+  district    String
+  ward        String
+  street      String
+  houseNumber String
+  userId      Int
+  user        User   @relation(fields: [userId], references: [id])
 
   @@index([userId])
 }
@@ -152,14 +148,14 @@ model Sale {
 }
 
 model Order {
-  id         Int         @id @default(autoincrement())
-  orderDate  DateTime       @default(now())
-  total      Float
-  userId     Int
-  user       User        @relation(fields: [userId], references: [id])
-  orderItems OrderItem[] 
-  status  String   @default("Pending")
+  id                Int             @id @default(autoincrement())
+  orderDate         DateTime        @default(now())
+  total             Float
+  userId            Int
+  status            String          @default("Pending")
   shippingAddressId Int
+  user              User            @relation(fields: [userId], references: [id])
+  orderItems        OrderItem[]
   shippingAddress   ShippingAddress @relation(fields: [shippingAddressId], references: [id])
 
   @@index([userId])
@@ -167,14 +163,13 @@ model Order {
 }
 
 model OrderItem {
-  id        Int     @id @default(autoincrement())
-  quantity  Int
-  productId Int
-  orderId   Int
-  selectedSize   String?       @db.VarChar(255)
-
-  product   Product @relation(fields: [productId], references: [id])
-  order     Order   @relation(fields: [orderId], references: [id])
+  id           Int     @id @default(autoincrement())
+  quantity     Int
+  productId    Int
+  orderId      Int
+  selectedSize String? @db.VarChar(255)
+  product      Product @relation(fields: [productId], references: [id])
+  order        Order   @relation(fields: [orderId], references: [id])
 
   @@index([productId])
   @@index([orderId])
@@ -214,39 +209,14 @@ model Payment {
 }
 
 model ShippingAddress {
-  id         Int        @id @default(autoincrement())
-  address    String
-  userId     Int
-  user       User       @relation(fields: [userId], references: [id])
-  Order      Order[]
+  id      Int     @id @default(autoincrement())
+  address String
+  userId  Int
+  user    User    @relation(fields: [userId], references: [id])
+  Order   Order[]
+
   @@index([userId])
 }
-
-// model ShippingMethod {
-//   id                    Int        @id @default(autoincrement())
-//   name                  String
-//   estimatedDeliveryTime String
-//   shipments             Shipment[]
-// }
-
-// model Shipment {
-//   id                    Int             @id @default(autoincrement())
-//   trackingCode          String
-//   shipDate              DateTime
-//   estimatedDeliveryDate DateTime
-//   userId                Int
-//   orderId               Int
-//   shippingMethodId      Int
-//   shippingAddressId     Int
-//   user                  User            @relation(fields: [userId], references: [id])
-//   shippingMethod        ShippingMethod  @relation(fields: [shippingMethodId], references: [id])
-//   shippingAddress       ShippingAddress @relation(fields: [shippingAddressId], references: [id])
-
-//   @@index([shippingAddressId])
-//   @@index([shippingMethodId])
-//   @@index([orderId])
-//   @@index([userId])
-// }
 
 model Promotion {
   id          Int          @id @default(autoincrement())
@@ -337,12 +307,4 @@ model ProductToWishlist {
   @@unique([A, B], map: "_ProductToWishlist_AB_unique")
   @@index([B], map: "_ProductToWishlist_B_index")
   @@map("_ProductToWishlist")
-}
-
-model Wallet {
-  id      Int    @id @default(autoincrement())
-  userId  Int
-  address String @unique
-
-  @@index([userId])
 }
