@@ -1,70 +1,106 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import DialogCustom from '@/components/ui/dialogCustom';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useSelectedProduct } from '@/hooks/useSelectedProduct';
 import { parseJSON } from '@/lib/utils';
 import Image from 'next/image';
-import { useProduct } from '@/hooks/useProduct';
 import { Controller, useForm } from 'react-hook-form';
 import { Input } from '@nextui-org/react';
-// import { yup } from 'yup';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useCart } from '@/hooks/useCart';
+import toast from 'react-hot-toast';
+import { Skeleton } from '@/components/ui/skeleton';
+// import { FaCheckCircle } from 'react-icons/fa';
+// import { useQueryClient } from '@tanstack/react-query';
 
-const AddProductDialog = ({
-  // reset,
-  // setRating,
-  // setHover,
-  // setIsInvalid,
-  onSubmit,
-  rating,
-  // hover,
-  isInvalid,
-  isLoading,
-  showSuccess,
-}) => {
-  const { isShowDialog, selectedProduct, onToggleDialog } =
-    useSelectedProduct();
+const schema = z.object({
+  quantity: z
+    .string()
+    .refine((val) => val.length > 0, { message: 'Quantity is required' })
+    .transform(Number)
+    .refine((value) => Number.isInteger(value) && value >= 0, {
+      message: 'Quantity must be a nonnegative integer',
+    }),
+});
+
+const AddProductDialog = () => {
+  const {
+    isShowDialog,
+    selectedProduct,
+    onToggleDialog,
+    onToggleSuccess,
+    // onUnselectProduct,
+  } = useSelectedProduct();
   const [selectedSize, setSizeSelected] = useState(null);
+  const [selectedQuantity, setSelectedQuantity] = useState(null);
   const [showError, setShowError] = useState(false);
-  const [selectDetailData, setSelectDetailData] = useState('');
+  // const [showSuccess, setShowSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const { onAddToCart } = useCart();
 
-  /* Form Validation */
-  /*   const schema = yup.object().shape({
-    quantity: yup
-      .number()
-      .typeError('Quantity must be a number') // Thông báo lỗi kiểu dữ liệu
-      .required('Quantity is required') // Thông báo lỗi khi trống
-      .positive('Quantity must be a positive number') // Kiểm tra số dương
-      .integer('Quantity must be an integer'), // Kiểm tra số nguyên
-  }); */
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors, isValid },
+  } = useForm({
+    resolver: zodResolver(schema),
+    mode: 'onChange',
+  });
 
-  const { onGetProductDetail } = useProduct();
-  const { control, handleSubmit, getValues } = useForm({
-    // validationSchema: schema,
+  const onSubmit = handleSubmit(async (data) => {
+    if (errors.quantity) {
+      return;
+    }
+
+    // Kiểm tra xem người dùng đã chọn đủ thông tin chưa
+    if (!selectedSize) {
+      return Promise.reject('Size selection is required');
+    } else if (!selectedQuantity) {
+      return Promise.reject('Quantity selection is required');
+    }
+
+    if (data.quantity > selectedQuantity) {
+      return Promise.reject('Quantity cannot exceed available stock');
+    }
+
+    try {
+      onToggleDialog();
+      await new Promise((resolve) => setTimeout(resolve, 4000));
+      onToggleSuccess();
+      resetFormAndState();
+
+      await onAddToCart({
+        data: selectedProduct,
+        quantity: data.quantity,
+        selectedSize: selectedSize,
+      });
+    } catch (error) {
+      console.error('Failed to add product to cart:', error);
+      return Promise.reject(error);
+    }
   });
 
   useEffect(() => {
-    /* Get product detail */
-    const getProductDetails = async () => {
-      const fetchProductDetails = await onGetProductDetail(
-        selectedProduct?.data.id
-      );
-      if (fetchProductDetails) {
-        console.log(fetchProductDetails);
-      }
-      const data = parseJSON(JSON.stringify(fetchProductDetails));
-      setSelectDetailData(data);
-    };
+    setIsLoading(!selectedProduct);
+  }, [selectedProduct]);
 
-    if (isShowDialog) {
-      getProductDetails();
-      console.log(
-        '🚀 ~ file: AddProductDialog.tsx:57 ~ useEffect ~ getValues:',
-        getValues('title')
-      );
-    }
-  }, [isShowDialog]);
+  // useEffect(() => {
+  //   if (!isShowDialog) {
+  //     onUnselectProduct();
+  //   }
+  // }, [isShowDialog, onUnselectProduct]);
+
+  const resetFormAndState = useCallback(() => {
+    reset();
+    setSizeSelected(null);
+    setSelectedQuantity(null);
+    // setShowSuccess(false);
+    setIsLoading(true);
+  }, []);
 
   return isShowDialog ? (
     <DialogCustom
@@ -72,14 +108,7 @@ const AddProductDialog = ({
       className="flex justify-center items-center w-[90%] lg:w-[60%] h-[90%]"
       isModalOpen={isShowDialog}
       setIsModalOpen={onToggleDialog}
-      callBack={() => {
-        // Reset form details and state variables
-        // when the dialog is closed
-        // reset();
-        // setRating(0);
-        // setHover(0);
-        // setIsInvalid(false);
-      }}
+      callBack={resetFormAndState}
     >
       <div className="flex flex-col w-full h-auto pr-4 gap-6">
         <div className="w-full h-fit flex flex-col pt-2 items-center gap-3">
@@ -90,16 +119,24 @@ const AddProductDialog = ({
             Choose the right product details
           </span>
           <div className="w-full h-fit mt-2 flex flex-row gap-3 items-center">
-            <Image
-              src={parseJSON(selectedProduct?.data.images)[0].url}
-              alt={selectedProduct?.name}
-              width={60}
-              height={50}
-              className="rounded-md object-cover object-center"
-            />
-            <span className="text-[10px] sm:text-sm text-gray-700">
-              {selectedProduct?.data.name}
-            </span>
+            {isLoading ? (
+              <Skeleton className="h-20 w-20 rounded-lg" />
+            ) : (
+              <Image
+                src={parseJSON(selectedProduct.images)[0].url}
+                alt={selectedProduct?.name}
+                width={60}
+                height={50}
+                className="rounded-md object-cover object-center"
+              />
+            )}
+            {isLoading ? (
+              <Skeleton className="w-20 h-10" /> // Sử dụng component Skeleton từ thư viện react-loading-skeleton
+            ) : (
+              <span className="text-[10px] sm:text-sm text-gray-700">
+                {selectedProduct?.name}
+              </span>
+            )}
           </div>
         </div>
 
@@ -114,27 +151,45 @@ const AddProductDialog = ({
           {/* Heading */}
 
           {/* Size start */}
-          <div id="sizesGrid" className="grid grid-cols-3 gap-2">
-            {selectDetailData.productSizes?.map((size, index) => (
-              <div
-                onClick={
-                  size.quantity > 0
-                    ? () => {
-                        setSizeSelected(size.size);
-                        setShowError(false);
-                      }
-                    : () => {}
-                }
-                key={index}
-                className={`border-2 rounded-md text-center py-2.5 font-medium hover:bg-slate-300 cursor-pointer ${
-                  size.quantity > 0
-                    ? 'hover:border-black cursor-pointer'
-                    : 'cursor-not-allowed disabled bg-black/[0.1] opacity-50'
-                } ${selectedSize === size.size ? 'border-black' : ''} `}
-              >
-                {size.size}
-              </div>
-            ))}
+          <div id="sizesGrid" className="grid grid-cols-4 gap-2">
+            {isLoading ? (
+              <>
+                <div className="col-span-1">
+                  <Skeleton className="h-10 border-2 rounded-md py-2.5" />
+                </div>
+                <div className="col-span-1">
+                  <Skeleton className="h-10 border-2 rounded-md py-2.5" />
+                </div>
+                <div className="col-span-1">
+                  <Skeleton className="h-10 border-2 rounded-md py-2.5" />
+                </div>
+                <div className="col-span-1">
+                  <Skeleton className="h-10 border-2 rounded-md py-2.5" />
+                </div>
+              </>
+            ) : (
+              selectedProduct.productSizes?.map((size, index) => (
+                <div
+                  onClick={
+                    size.quantity > 0
+                      ? () => {
+                          setSizeSelected(size.size);
+                          setSelectedQuantity(size.quantity);
+                          setShowError(false);
+                        }
+                      : () => {}
+                  }
+                  key={index}
+                  className={`border-2 rounded-md text-center py-2.5 font-medium hover:bg-slate-300 cursor-pointer ${
+                    size.quantity > 0
+                      ? 'hover:border-black cursor-pointer'
+                      : 'cursor-not-allowed disabled bg-black/[0.1] opacity-50'
+                  } ${selectedSize === size.size ? 'border-black' : ''} `}
+                >
+                  {size.size}
+                </div>
+              ))
+            )}
           </div>
           {/* Size end */}
 
@@ -155,111 +210,88 @@ const AddProductDialog = ({
             name="quantity"
             render={({ field }) => {
               return (
-                <Input
-                  radius="sm"
-                  type="text"
-                  size="sm"
-                  value={field.value}
-                  onChange={field.onChange}
-                />
+                <div>
+                  <Input
+                    radius="sm"
+                    type="text"
+                    size="sm"
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                  {errors.quantity && (
+                    <p className="text-red-500">{errors.quantity.message}</p>
+                  )}
+                </div>
               );
             }}
           />
+
+          {/* Start In Inventory */}
+          <Label className="font-normal italic text-[10px] sm:text-[14px]">
+            In inventory: {selectedQuantity}
+          </Label>
+          {/* End In Inventory */}
         </div>
 
         <div className="flex w-full mt-5 justify-center items-center">
           <Button
             className="w-[50%] inset-0 border-transparent hover:scale-105 hover:transition text-[13px] sm:text-[16px] hover:duration-200 font-semibold text-white rounded-md"
-            onClick={async () => {
-              try {
-                await handleSubmit(onSubmit)();
-              } catch (e) {
-                // Handle submission error if needed
-              }
+            onClick={() => {
+              toast.promise(
+                onSubmit(),
+                {
+                  loading: 'Adding to cart ...',
+                  success: 'Successfully added',
+                  error: (err) => `${err}`,
+                },
+                {
+                  style: {
+                    minWidth: '200px',
+                    minHeight: '50px',
+                  },
+                  position: 'bottom-right',
+                }
+              );
             }}
+            disabled={!isValid}
           >
             Submit
           </Button>
         </div>
-        <div className="flex flex-col gap-3 items-center justify-center">
-          {/* Loading Dialog */}
-          {isLoading &&
-            !showSuccess &&
-            rating !== 0 &&
-            isTitleValid &&
-            isContentValid && (
-              <DialogCustom
-                className="w-[90%] lg:w-[50%] h-fit items-center justify-center"
-                isModalOpen={isLoading}
-                notShowClose={true}
-              >
-                <div className="flex flex-col gap-3 items-center justify-center">
-                  <Spinner size="lg" />
-                  <div className="text-center font-semibold text-xs sm:text-sm">
-                    Submitting Review...
-                  </div>
-                </div>
-              </DialogCustom>
-            )}
+      </div>
 
-          {/* Invalid Dialog */}
-          {isInvalid ? (
-            <DialogCustom
-              className="w-[90%] lg:w-[50%] h-fit items-center justify-center"
-              isModalOpen={!isLoading}
-            >
-              <div className="flex flex-col gap-3 items-center justify-center">
-                {rating === 0 ? (
-                  <>
-                    <FaExclamationTriangle
-                      className="text-gray-700"
-                      size={35}
-                    />
-                    <div className="text-center font-semibold text-xs sm:text-sm">
-                      Please type in your rating!
-                    </div>
-                  </>
-                ) : !isTitleValid ? (
-                  <>
-                    <FaExclamationTriangle
-                      className="text-gray-700"
-                      size={35}
-                    />
-                    <div className="text-center font-semibold text-xs sm:text-sm">
-                      Please type in your title!
-                    </div>
-                  </>
-                ) : !isContentValid ? (
-                  <>
-                    <FaExclamationTriangle
-                      className="text-gray-700"
-                      size={35}
-                    />
-                    <div className="text-center font-semibold text-xs sm:text-sm">
-                      Please type in your content!
-                    </div>
-                  </>
-                ) : null}
+      <div className="flex flex-col gap-3 items-center justify-center">
+        {/* Loading Dialog */}
+        {/* {isAddingToCart && selectedSize && selectedQuantity && (
+          <DialogCustom
+            className="w-[90%] lg:w-[50%] h-fit items-center justify-center"
+            isModalOpen={isAddingToCart}
+            notShowClose={true}
+          >
+            <div className="flex flex-col gap-3 items-center justify-center">
+              <Spinner size="lg" />
+              <div className="text-center font-semibold text-xs sm:text-sm">
+                Adding to cart ...
               </div>
-            </DialogCustom>
-          ) : null}
+            </div>
+          </DialogCustom>
+        )} */}
 
-          {/* Success Dialog */}
-          {showSuccess && (
-            <DialogCustom
-              className="w-[90%] lg:w-[50%] h-fit items-center justify-center"
-              isModalOpen={!isLoading}
-              notShowClose={true}
-            >
-              <div className="flex flex-col gap-3 items-center justify-center">
-                <FaCheckCircle className="text-gray-700" size={35} />
-                <div className="text-center font-semibold text-xs sm:text-sm">
-                  Review Submitted!
-                </div>
+        {/* Success Dialog */}
+        {/* {successAdded && (
+          <DialogCustom
+            className="w-[90%] lg:w-[50%] h-fit items-center justify-center"
+            isModalOpen={isAddingToCart}
+            notShowClose={true}
+          >
+            <div className="flex flex-col gap-3 items-center justify-center">
+              <FaCheckCircle className="text-gray-700" size={35} />
+              <div className="text-center font-semibold text-xs sm:text-sm">
+                Added to cart!
               </div>
-            </DialogCustom>
-          )}
-        </div>
+            </div>
+          </DialogCustom>
+        )} */}
       </div>
     </DialogCustom>
   ) : null;
