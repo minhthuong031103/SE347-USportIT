@@ -125,7 +125,7 @@ const Body = ({ session }) => {
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor || null,
         keepPreviousData: true,
-        refetchOnWindowFocus: false,
+        // refetchOnWindowFocus: false,
       }
     );
   };

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
-
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import React, { useEffect, useMemo } from 'react';
@@ -10,6 +10,7 @@ import useConversation from '@hooks/useConversation';
 import ConversationBox from './ConversationBox';
 import { FullConversationType } from '@/types';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import { BiArrowBack } from 'react-icons/bi';
 
 interface ConversationListProps {
   initialItems?: FullConversationType[];
@@ -78,7 +79,10 @@ const ConversationList: React.FC<ConversationListProps> = ({
         )}
       >
         <div className="px-5">
-          <div className="flex justify-center mb-4 pt-4">
+          <div className="flex justify-between mb-4 pt-4">
+            <Link aria-label="Home" href="/">
+              <BiArrowBack className="text-2xl text-neutral-800 " />
+            </Link>
             <div className="text-2xl font-bold text-neutral-800">Messages</div>
           </div>
           {data?.pages.map((page, index) => (

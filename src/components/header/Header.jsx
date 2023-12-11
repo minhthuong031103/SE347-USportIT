@@ -146,7 +146,7 @@ const NavigationMenuDemo = ({ session }) => {
               </NavigationMenu.Trigger>
               <NavigationMenu.Content className="NavigationMenuContent">
                 <ul className="List two">
-                <ListItem
+                  <ListItem
                     title="Shoes"
                     href="/products?gender=2&subcategories=1.2.3.4.9.10"
                   >
@@ -175,7 +175,7 @@ const NavigationMenuDemo = ({ session }) => {
               </NavigationMenu.Trigger>
               <NavigationMenu.Content className="NavigationMenuContent">
                 <ul className="List two">
-                <ListItem
+                  <ListItem
                     title="Shoes"
                     href="/products?gender=3&subcategories=1.2.3.4.9.10"
                   >
@@ -249,7 +249,9 @@ const NavigationMenuDemo = ({ session }) => {
                 <DropdownMenuItem>
                   <Link href={'/admin/add-product'}>Add Product</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>Team</DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href={'/user/conversations'}>Chatting</Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => signOut({ callbackUrl: '/auth/login' })}
                   className="border-solid border-t-2 mt-2  gap-2"

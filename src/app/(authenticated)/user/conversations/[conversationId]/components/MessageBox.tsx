@@ -43,6 +43,7 @@ const MessageBox: React.FC<MessageBoxProps> = ({ data, isLast }) => {
       });
 
       return res;
+      console.log('🚀 ~ file: MessageBox.tsx:46 ~ queryFn: ~ res:', res);
     },
     staleTime: 60000,
     enabled: !!data.userId,
