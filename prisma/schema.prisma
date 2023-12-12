@@ -30,21 +30,18 @@ model User {
   conversationsReceived  Conversation[]    @relation("userTwo")
   seenMessages           SeenMessage[]
   wallets                Wallet[]
-  addresses             Address[]
+  addresses              Address[]
 }
 
 model Address {
-  id                Int        @id  @default(autoincrement())
-  city              String    
-  district          String
-  ward              String
-  street            String
-  houseNumber       String
-  userId            Int
-  user              User         @relation(fields: [userId], references: [id])
-
-
-
+  id          Int    @id @default(autoincrement())
+  city        String
+  district    String
+  ward        String
+  street      String
+  houseNumber String
+  userId      Int
+  user        User   @relation(fields: [userId], references: [id])
 
   @@index([userId])
 }

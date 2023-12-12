@@ -5,10 +5,22 @@ import { Separator } from '@/components/ui/separator';
 import { useCart } from '@/hooks/useCart';
 import { currencyFormat } from '@/lib/utils';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-function RightCart() {
+function RightCart({ checkedItems }) {
   const { cart } = useCart();
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    const newTotal = Object.values(checkedItems)
+      .filter((item) => item !== null) // Lọc ra các mục đã được chọn
+      .reduce(
+        (sum: number, item: any) => sum + item.data.price * item.quantity,
+        0
+      );
+    setTotal(newTotal);
+  }, [checkedItems]);
+
   console.log(cart);
   return (
     <div className="sticky bottom-0 lg:top-[100px] z-20 bg-white lg:bg-transparent">
@@ -30,7 +42,7 @@ function RightCart() {
         <Separator className="mt-2" />
         <div className="flex">
           <span className="flex-1">Total</span>
-          <span>{currencyFormat(cart.total)}</span>
+          <span>{currencyFormat(total)}</span>
         </div>
 
         <Link

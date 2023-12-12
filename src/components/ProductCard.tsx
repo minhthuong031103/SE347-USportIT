@@ -15,7 +15,6 @@ import {
 } from 'react-icons/ai';
 import { useFavorite } from '@/hooks/useFavorite';
 import { useCart } from '@/hooks/useCart';
-import { toast } from 'react-hot-toast';
 
 // import { Input, Spinner, Textarea } from '@nextui-org/react';
 // import { FaCheckCircle, FaStar, FaExclamationTriangle } from 'react-icons/fa';
@@ -24,7 +23,7 @@ import { useSelectedProduct } from '@/hooks/useSelectedProduct';
 export default function ProductCard({ product }) {
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [isAddToCart, setIsAddToCart] = useState<boolean>(false);
-  // const [isShowDialog, setIsShowDialog] = useState(false);
+  const [isShowDialog, setIsShowDialog] = useState<boolean>(false);
   // const [isLoading, setIsLoading] = useState(false);
   // const [isInvalid, setIsInvalid] = useState(false);
   // const [showSuccess, setShowSuccess] = useState(false);
@@ -32,7 +31,7 @@ export default function ProductCard({ product }) {
   // const [hover, setHover] = useState(0);
 
   const { onAddFavorite, onDeleteFavorite } = useFavorite();
-  const { onAddToCart, onDeleteItemFromCart, cart } = useCart();
+  const { cart } = useCart();
   const { onSelectProduct, onToggleDialog } = useSelectedProduct();
   // const { handleSubmit, control, reset } = useForm();
 
@@ -116,20 +115,15 @@ export default function ProductCard({ product }) {
   // };
 
   useEffect(() => {
-    const found = cart.listItem.find((item) => item.data.id === product?.id);
+    console.log(isAddToCart, isShowDialog);
+  }, []);
+
+  useEffect(() => {
+    const found = cart?.listItem.find((item) => item.data.id === product?.id);
     if (found) {
       setIsAddToCart(true);
-      console.log(
-        '🚀 ~ file: ProductCard.tsx:27 ~ useEffect ~ cart.listItem:',
-        cart.listItem
-      );
-
-      console.log(
-        '🚀 ~ file: ProductCard.tsx:32 ~ useEffect ~ isAddToCart:',
-        isAddToCart
-      );
     }
-  }, [cart.listItem]);
+  }, [cart?.listItem]);
 
   return (
     <div>
@@ -175,27 +169,27 @@ export default function ProductCard({ product }) {
 
         <div
           onClick={() => {
-            if (!isAddToCart) {
-              setIsShowDialog(true);
-              onAddToCart({ data: product });
-              onSelectProduct({ data: product });
-              onToggleDialog();
-              toast.success('Add to cart successfully');
-            } else {
-              onDeleteItemFromCart({ data: product });
-              toast.success('Delete from cart successfully');
-            }
-            setIsAddToCart((prev) => !prev);
+            // Doan nay su dung cho favorite
+            // if (!isAddToCart) {
+            //   setIsShowDialog(true);
+            //   await onSelectProduct({ data: product });
+            //   onToggleDialog();
+            // }
+            // setIsAddToCart((prev) => !prev);
+
+            setIsShowDialog(true);
+            onSelectProduct({ data: product });
+            onToggleDialog();
           }}
           className="transform duration-200 
     hover:scale-105 absolute items-center justify-center cursor-pointer flex left-3 top-3 w-[30px] h-[30px] rounded-full bg-white"
         >
-          {isAddToCart ? (
+          {/* {isAddToCart ? (
             <AiFillHeart className="text-red-400 w-5 h-5 " />
           ) : (
             <AiOutlineShoppingCart className="text-slate-600 w-5 h-5 " />
-          )}
-          {/* <AiOutlineShoppingCart className="text-slate-600 w-5 h-5 " /> */}
+          )} */}
+          <AiOutlineShoppingCart className="text-slate-600 w-5 h-5 " />
         </div>
       </div>
       <Link className="" href={`/product/${product?.id}`}>

@@ -14,11 +14,13 @@ import { IoMdHeartEmpty } from 'react-icons/io';
 import { BsFillCheckCircleFill } from 'react-icons/bs';
 import Image from 'next/image';
 import { useCart } from '@/hooks/useCart';
+import { useSelectedProduct } from '@/hooks/useSelectedProduct';
 
 function ProductDetailRight({ data }) {
   const [selectedSize, setSizeSelected] = useState(null);
   const [showError, setShowError] = useState(false);
-  const { onAddToCart, cart } = useCart();
+  const { cart } = useCart();
+  const { onSelectProduct, onToggleDialog } = useSelectedProduct();
 
   console.log(cart);
   return (
@@ -93,7 +95,7 @@ function ProductDetailRight({ data }) {
       </div>
       <div className="flex flex-col gap-2 w-full items-center justify-center">
         {/* Product size */}
-        {selectedSize ? (
+        {!selectedSize ? (
           <Sheet>
             <SheetTrigger className="w-full mx-0 flex items-center justify-center  ">
               <Button
@@ -101,7 +103,8 @@ function ProductDetailRight({ data }) {
                   font-medium transition-transform active:scale-95 mb-3 hover:opacity-75
                   "
                 onClick={() => {
-                  onAddToCart({ data, selectedSize });
+                  onSelectProduct({ data: data });
+                  onToggleDialog();
                 }}
               >
                 Add to cart

@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  product: null,
+  productData: null,
   isShowDialog: false,
+  isShowSuccess: false,
 };
 
 const selectedProductSlice = createSlice({
@@ -10,14 +11,21 @@ const selectedProductSlice = createSlice({
   initialState,
   reducers: {
     selectProduct: (state, action) => {
-      state.product = action.payload;
+      state.productData = action.payload;
     },
     toggleDialog: (state) => {
       state.isShowDialog = !state.isShowDialog;
     },
+    toggleSuccess: (state) => {
+      state.isShowSuccess = !state.isShowSuccess;
+    },
+    unselectProduct: (state) => {
+      state.productData = null;
+    },
   },
 });
 
-export const { selectProduct, toggleDialog } = selectedProductSlice.actions;
+export const { selectProduct, toggleDialog, unselectProduct, toggleSuccess } =
+  selectedProductSlice.actions;
 
 export default selectedProductSlice.reducer;

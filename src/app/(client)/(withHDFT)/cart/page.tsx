@@ -6,6 +6,7 @@ import RightCart from './RightCart';
 
 function page() {
   const [width, setWidth] = useState(window?.innerWidth);
+  const [checkedItems, setCheckedItems] = useState({});
   useEffect(() => {
     // Function to update the window width whenever it changes
     const handleResize = () => {
@@ -20,6 +21,14 @@ function page() {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    console.log(
+      '🚀 ~ file: page.tsx:54 ~ useEffect ~ checkedItems:',
+      checkedItems
+    );
+  }, [checkedItems]);
+
   return (
     <div className="w-full py-10 md:py-20">
       <div
@@ -28,12 +37,15 @@ md:px-10 mx-auto relative"
       >
         <div className="flex flex-col lg:flex-row gap-[50px] lg:gap-[100px]">
           <div className=" w-full md:w-auto flex-[1.8] max-w-[500px] lg:max-w-full lg:mx-0">
-            <LeftCart />
-            {width < 1024 ? <RightCart /> : null}
+            <LeftCart
+              checkedItems={checkedItems}
+              setCheckedItems={setCheckedItems}
+            />
+            {width < 1024 ? <RightCart checkedItems={checkedItems} /> : null}
           </div>
           {width > 1024 ? (
             <div className="flex-[1] py-5">
-              <RightCart />
+              <RightCart checkedItems={checkedItems} />
             </div>
           ) : null}
         </div>
