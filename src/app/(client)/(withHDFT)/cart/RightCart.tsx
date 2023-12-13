@@ -1,14 +1,28 @@
 'use client';
 
-import { buttonVariants } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useCart } from '@/hooks/useCart';
 import { currencyFormat } from '@/lib/utils';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import CheckoutModal from './checkout/CheckoutModal';
 
-function RightCart() {
+function RightCart({ checkedItems }) {
   const { cart } = useCart();
+  const [total, setTotal] = useState(0);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  useEffect(() => {
+    const newTotal = Object.values(checkedItems)
+      .filter((item) => item !== null) // Lọc ra các mục đã được chọn
+      .reduce(
+        (sum: number, item: any) => sum + item.data.price * item.quantity,
+        0
+      );
+    setTotal(newTotal);
+  }, [checkedItems]);
+
   console.log(cart);
   return (
     <div className="sticky bottom-0 lg:top-[100px] z-20 bg-white lg:bg-transparent">
@@ -30,19 +44,32 @@ function RightCart() {
         <Separator className="mt-2" />
         <div className="flex">
           <span className="flex-1">Total</span>
-          <span>{currencyFormat(cart.total)}</span>
+          <span>{currencyFormat(total)}</span>
         </div>
+        <div>
+          <Button
+            className="w-full h-full"
+            onClick={() => {
+              setIsModalOpen(true);
+            }}
+          >
+            Check out
+          </Button>
 
-        <Link
-          aria-label="View your cart"
-          href="/cart"
-          className={buttonVariants({
-            size: 'lg',
-            className: 'w-full mt-5',
-          })}
-        >
-          Check out
-        </Link>
+          {isModalOpen && (
+            <div>
+              {/* <CheckoutForm
+            isModalOpen={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
+          /> */}
+
+              <CheckoutModal
+                isModalOpen={isModalOpen}
+                setIsModalOpen={setIsModalOpen}
+              />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

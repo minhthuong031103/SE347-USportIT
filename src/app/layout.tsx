@@ -1,15 +1,16 @@
 import { ReduxProvider } from '@/redux/Provider';
 import './globals.css';
 import type { Metadata } from 'next';
-import { Poppins } from 'next/font/google';
+import { Roboto } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
 import { QueryProvider } from '@/components/providers/query-provider';
 import AuthProvider from '../../context/AuthProvider';
 import { Web3Provider } from '@/components/providers/web3-provider';
 import { ChainProvider } from '@/components/providers/chain-provider';
-const poppins = Poppins({
+const roboto = Roboto({
   subsets: ['latin'],
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800'],
+  variable: '--font-rob',
+  weight: '500',
 });
 
 const metadata: Metadata = {
@@ -26,7 +27,9 @@ const metadata: Metadata = {
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
-      <body className={poppins.className}>
+      <body
+        className={`${roboto.variable} ${roboto.style.fontWeight} font-rob`}
+      >
         <ChainProvider>
           <AuthProvider>
             <Web3Provider>

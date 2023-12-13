@@ -22,7 +22,6 @@ import { MobileNav } from './MobileNavBar';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { CartSheet } from '../CartSheet';
 import { Badge } from '../ui/badge';
-import { SocketIndicator } from '../socket-indicator';
 import Logo from '../logo';
 const NavigationMenuDemo = ({ session }) => {
   const [user] = useState(session?.user);
@@ -58,7 +57,6 @@ const NavigationMenuDemo = ({ session }) => {
       <div className="hidden lg:flex py-2  ">
         {' '}
         <Logo />
-        <SocketIndicator />
         <NavigationMenu.Root className="NavigationMenuRoot">
           <NavigationMenu.List className="NavigationMenuList">
             <NavigationMenu.Item>
@@ -245,7 +243,10 @@ const NavigationMenuDemo = ({ session }) => {
               <DropdownMenuContent>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <DropdownMenuItem>
+                  {' '}
+                  <Link href={'/user/profile'}>Profile</Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Link href={'/admin/add-product'}>Add Product</Link>
                 </DropdownMenuItem>
@@ -263,9 +264,12 @@ const NavigationMenuDemo = ({ session }) => {
             </DropdownMenu>
           </div>
         ) : (
-          <Button className="w-[70px] h-8">
-            <Link href={'/auth/login'}>Login</Link>
-          </Button>
+          <div className="flex space-x-4 items-center">
+            <Button className="w-[70px] h-8">
+              <Link href={'/auth/login'}>Login</Link>
+            </Button>
+            <CartSheet />
+          </div>
         )}
       </div>
     </div>
