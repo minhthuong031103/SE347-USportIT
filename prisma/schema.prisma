@@ -9,25 +9,24 @@ datasource db {
 }
 
 model User {
-  id                     Int               @id @default(autoincrement())
+  id                     Int             @id @default(autoincrement())
   name                   String
-  email                  String            @unique
+  email                  String          @unique
   password               String
-  role                   String?           @default("user")
-  avatar                 String?           @default("https://i0.wp.com/www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg?ssl=1")
-  isEmailVerified        Boolean           @default(false)
+  role                   String?         @default("user")
+  avatar                 String?         @default("https://i0.wp.com/www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg?ssl=1")
+  isEmailVerified        Boolean         @default(false)
   otp                    String?
-  isOnline               Boolean           @default(false)
+  isOnline               Boolean         @default(false)
   lastSeen               DateTime?
   orders                 Order[]
   reviews                Review[]
   shoppingCart           ShoppingCart?
   payments               Payment[]
-  shippingAddresses      ShippingAddress[]
   wishlist               Wishlist?
   directMessages         DirectMessage[]
-  conversationsInitiated Conversation[]    @relation("userOne")
-  conversationsReceived  Conversation[]    @relation("userTwo")
+  conversationsInitiated Conversation[]  @relation("userOne")
+  conversationsReceived  Conversation[]  @relation("userTwo")
   seenMessages           SeenMessage[]
   wallets                Wallet[]
   addresses              Address[]
@@ -148,18 +147,18 @@ model Sale {
 }
 
 model Order {
-  id                Int             @id @default(autoincrement())
-  orderDate         DateTime        @default(now())
-  total             Float
-  userId            Int
-  status            String          @default("Pending")
-  shippingAddressId Int
-  user              User            @relation(fields: [userId], references: [id])
-  orderItems        OrderItem[]
-  shippingAddress   ShippingAddress @relation(fields: [shippingAddressId], references: [id])
+  id                 Int         @id @default(autoincrement())
+  orderDate          DateTime    @default(now())
+  total              Float
+  userId             Int?
+  annonymousUser     String?
+  annonymousUserName String?
+  status             String      @default("Pending")
+  address            String
+  user               User?        @relation(fields: [userId], references: [id])
+  orderItems         OrderItem[]
 
   @@index([userId])
-  @@index([shippingAddressId])
 }
 
 model OrderItem {
@@ -204,16 +203,6 @@ model Payment {
   paymentDate   DateTime
   userId        Int
   user          User     @relation(fields: [userId], references: [id])
-
-  @@index([userId])
-}
-
-model ShippingAddress {
-  id      Int     @id @default(autoincrement())
-  address String
-  userId  Int
-  user    User    @relation(fields: [userId], references: [id])
-  Order   Order[]
 
   @@index([userId])
 }
