@@ -9,7 +9,6 @@ interface AvatarProps {
 }
 
 const Avatar1: React.FC<AvatarProps> = ({ user }) => {
-  console.log('🚀 ~ file: Avatar.tsx:12 ~ user:', user);
   const { members } = useActiveList();
   const isActive = members.indexOf(user?.email) !== -1;
 

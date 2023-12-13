@@ -2,45 +2,41 @@
 'use client';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 import React, { useEffect, useMemo } from 'react';
 import clsx from 'clsx';
-
+import { Button } from '@/components/ui/button';
 import useConversation from '@hooks/useConversation';
 import ConversationBox from './ConversationBox';
 import { FullConversationType } from '@/types';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { BiArrowBack } from 'react-icons/bi';
-
+import { useChatSocket } from '@/hooks/useChatSocket';
+import { AvatarImage, Avatar } from '@/components/ui/avatar';
 interface ConversationListProps {
   initialItems?: FullConversationType[];
   title?: string;
+  session: any;
 }
 
-const ConversationList: React.FC<ConversationListProps> = ({
-  initialItems,
-}) => {
-  // const [items, setItems] = useState(initialItems);
-  // console.log("🚀 ~ file: ConversationList.tsx:21 ~ initialItems:", initialItems)
-
+const ConversationList: React.FC<ConversationListProps> = ({ session }) => {
   const router = useRouter();
-  const session = useSession();
-  console.log('🚀 ~ file: ConversationList.tsx:47 ~ session:', session);
 
   const { conversationId, isOpen } = useConversation();
 
   const pusherKey = useMemo(() => {
-    return session.data?.user?.email;
-  }, [session.data?.user?.email]);
+    return session.user.email;
+  }, [session.user.email]);
 
   useEffect(() => {
     if (!pusherKey) {
       return;
     }
   }, [pusherKey, router]);
+
+  const { goToConversation } = useChatSocket({ session });
   const fetchConversations = async ({ cursor, pageSize }) => {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SOCKET_URL}/conversations/all?cursor=${cursor}&pageSize=${pageSize}&userId=${session?.data?.user?.id}`
+      `${process.env.NEXT_PUBLIC_SOCKET_URL}/conversations/all?cursor=${cursor}&pageSize=${pageSize}&userId=${session.user.id}`
     );
     const data = await response.json();
     return data;
@@ -52,7 +48,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
       ({ pageParam }) => fetchConversations({ cursor: pageParam, pageSize }),
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor || null,
-        enabled: !!session.data?.user?.id,
+        enabled: !!session.user.id,
       }
     );
   };
@@ -61,6 +57,9 @@ const ConversationList: React.FC<ConversationListProps> = ({
   const { data, error, isFetching, fetchNextPage, hasNextPage } =
     useInfiniteMessagesQuery(pageSize);
   console.log('🚀 ~ file: ConversationList.tsx:60 ~ data:', data);
+  const handleClick = () => {
+    goToConversation(session.user.id, 4);
+  };
   return (
     <>
       <aside
@@ -96,6 +95,20 @@ const ConversationList: React.FC<ConversationListProps> = ({
               ))}
             </React.Fragment>
           ))}
+          {data?.pages[0].conversations.length === 0 && (
+            <div
+              onClick={handleClick}
+              className=" w-full relative flex items-center space-x-3 p-3 hover:bg-neutral-100
+              rounded-lg transition cursor-pointer bg-white"
+            >
+              <div className="relative inline-block rounded-full overflow-hidden h-9 w-9 md:h-11 md:w-11">
+                <Avatar>
+                  <AvatarImage src="https://utfs.io/f/10c68314-965c-430d-87a8-b4de0f3f023f-20h4l.jpg" />
+                </Avatar>
+              </div>
+              <div className="text-gray-900">Started a conversation</div>
+            </div>
+          )}
         </div>
       </aside>
     </>
