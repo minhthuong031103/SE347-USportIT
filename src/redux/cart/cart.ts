@@ -29,8 +29,6 @@ const cartSlice = createSlice({
       };
     },
     addToCart: (state, { payload }: { payload: any }) => {
-      // console.log(state);
-      // console.log('payload', payload.data.price);
       const productIndex = state.listItem.findIndex(
         (product) =>
           product.data.id === payload.data.id &&
@@ -39,7 +37,7 @@ const cartSlice = createSlice({
       if (!state.listItem[productIndex]) {
         state.listItem.push({
           data: payload.data,
-          quantity: 1,
+          quantity: payload.quantity,
           selectedSize: payload.selectedSize,
         });
         state.total += payload.data.price;

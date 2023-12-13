@@ -1,16 +1,22 @@
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
+import { Label } from './label';
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   renderRight?: React.ReactNode;
+  label?:string
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, renderRight, ...props }, ref) => {
+  ({ className, type, renderRight,label, ...props }, ref) => {
     return (
-      <div className="relative flex w-full flex-row items-center">
+      <div className='w-full flex flex-col gap-y-3'>
+        <Label>
+          {label}
+        </Label>
+<div className="relative flex w-full flex-row items-center">
         <input
           type={type}
           className={cn(
@@ -28,6 +34,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <div className="absolute right-5">{renderRight}</div>
         ) : null}
       </div>
+      </div>
+      
     );
   }
 );

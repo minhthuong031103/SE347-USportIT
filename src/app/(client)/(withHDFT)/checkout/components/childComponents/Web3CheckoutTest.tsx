@@ -26,7 +26,7 @@ const contractAddress = '0xD5b2d91f7E04667728eb2E38327f559D998d6919';
 const receiver = '0x9feacc5E9509C1A198ff4E65B4096C289A176287';
 const USDTAddress = '0xdAC17F958D2ee523a2206206994597C13D831ec7';
 const uitContractAddress = '0xf0698869A8DCb2175b84059D7DF8A20AB233cf53';
-export const Web3Checkout = () => {
+export const Web3CheckoutTest = () => {
   const address = useAddress();
   const { data: uitContract } = useContract(uitContractAddress);
   const { data: uitBalance } = useTokenBalance(uitContract, address);
