@@ -23,7 +23,6 @@ model User {
   reviews                Review[]
   shoppingCart           ShoppingCart?
   payments               Payment[]
-  shippingAddresses      ShippingAddress[]
   wishlist               Wishlist?
   directMessages         DirectMessage[]
   conversationsInitiated Conversation[]    @relation("userOne")
@@ -34,15 +33,14 @@ model User {
 }
 
 model Address {
-  id          Int    @id @default(autoincrement())
-  city        String
-  district    String
-  ward        String
-  street      String
-  houseNumber String
-  userId      Int
-  user        User   @relation(fields: [userId], references: [id])
-
+  id                Int        @id  @default(autoincrement())
+  city              String    
+  district          String
+  ward              String
+  street            String
+  houseNumber       String
+  userId            Int
+  user              User         @relation(fields: [userId], references: [id])
   @@index([userId])
 }
 
@@ -148,18 +146,18 @@ model Sale {
 }
 
 model Order {
-  id                Int             @id @default(autoincrement())
-  orderDate         DateTime        @default(now())
-  total             Float
-  userId            Int
-  status            String          @default("Pending")
-  shippingAddressId Int
-  user              User            @relation(fields: [userId], references: [id])
-  orderItems        OrderItem[]
-  shippingAddress   ShippingAddress @relation(fields: [shippingAddressId], references: [id])
+  id         Int         @id @default(autoincrement())
+  orderDate  DateTime       @default(now())
+  total      Float
+  userId     Int?
+  user       User?       @relation(fields: [userId], references: [id])
+  annonymousUser    String?
+  annonymousUserName String?
+  orderItems OrderItem[] 
+  status  String   @default("Pending")
+  address         String
 
   @@index([userId])
-  @@index([shippingAddressId])
 }
 
 model OrderItem {
@@ -208,15 +206,32 @@ model Payment {
   @@index([userId])
 }
 
-model ShippingAddress {
-  id      Int     @id @default(autoincrement())
-  address String
-  userId  Int
-  user    User    @relation(fields: [userId], references: [id])
-  Order   Order[]
 
-  @@index([userId])
-}
+// model ShippingMethod {
+//   id                    Int        @id @default(autoincrement())
+//   name                  String
+//   estimatedDeliveryTime String
+//   shipments             Shipment[]
+// }
+
+// model Shipment {
+//   id                    Int             @id @default(autoincrement())
+//   trackingCode          String
+//   shipDate              DateTime
+//   estimatedDeliveryDate DateTime
+//   userId                Int
+//   orderId               Int
+//   shippingMethodId      Int
+//   shippingAddressId     Int
+//   user                  User            @relation(fields: [userId], references: [id])
+//   shippingMethod        ShippingMethod  @relation(fields: [shippingMethodId], references: [id])
+//   shippingAddress       ShippingAddress @relation(fields: [shippingAddressId], references: [id])
+
+//   @@index([shippingAddressId])
+//   @@index([shippingMethodId])
+//   @@index([orderId])
+//   @@index([userId])
+// }
 
 model Promotion {
   id          Int          @id @default(autoincrement())

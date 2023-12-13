@@ -107,8 +107,7 @@ function DialogCustom({
   };
   return (
     isVisible && (
-      <div className="w-full h-full">
-        <div className="absolute">
+      <div className="absolute w-full h-full z-500 rounded-md">
           <div
             className={`fixed inset-0 z-50 bg-background/80 backdrop-blur-sm ${
               isModalOpen ? `animate-in fade-in-0` : ''
@@ -212,7 +211,6 @@ function DialogCustom({
             </div>
           </div>
         </div>
-      </div>
     )
   );
 }

@@ -237,7 +237,10 @@ const NavigationMenuDemo = ({ session }) => {
               <DropdownMenuContent>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <DropdownMenuItem>
+                  {' '}
+                  <Link href={'/user/profile'}>Profile</Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Link href={'/admin/add-product'}>Add Product</Link>
                 </DropdownMenuItem>
