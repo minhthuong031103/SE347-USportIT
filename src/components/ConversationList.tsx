@@ -106,7 +106,10 @@ const ConversationList: React.FC<ConversationListProps> = ({ session }) => {
                   <AvatarImage src="https://utfs.io/f/10c68314-965c-430d-87a8-b4de0f3f023f-20h4l.jpg" />
                 </Avatar>
               </div>
-              <div className="text-gray-900">Started a conversation</div>
+              <div className="flex flex-col">
+                <div className="text-gray-900">Admin</div>
+                <div className="text-gray-900">Started a conversation</div>
+              </div>
             </div>
           )}
         </div>
