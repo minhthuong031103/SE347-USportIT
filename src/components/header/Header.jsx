@@ -60,6 +60,14 @@ const NavigationMenuDemo = ({ session }) => {
         <NavigationMenu.Root className="NavigationMenuRoot">
           <NavigationMenu.List className="NavigationMenuList">
             <NavigationMenu.Item>
+              <NavigationMenu.Link
+                className="NavigationMenuLink"
+                href={'/products'}
+              >
+                All Products
+              </NavigationMenu.Link>
+            </NavigationMenu.Item>
+            <NavigationMenu.Item>
               <NavigationMenu.Trigger className="NavigationMenuTrigger">
                 Sports <CaretDownIcon className="CaretDown" aria-hidden />
               </NavigationMenu.Trigger>

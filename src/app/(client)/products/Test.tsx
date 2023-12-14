@@ -315,6 +315,31 @@ export default function Test({
     });
     refetchData();
   }, [debouncedSearch]);
+
+  React.useEffect(() => {
+    if (gender) {
+      const genders = gender.split('.').map((g) => parseInt(g, 10));
+      setSelectedGenders(genders);
+    }
+  }, [gender]);
+
+  // Category filter initialization from query parameter
+  React.useEffect(() => {
+    if (categories) {
+      const categoryIds = categories.split('.').map((c) => parseInt(c, 10));
+      setSelectedCategories(categoryIds);
+    }
+  }, [categories]);
+
+  // SubCategory filter initialization from query parameter
+  React.useEffect(() => {
+    if (subcategories) {
+      const subCategoryIds = subcategories
+        .split('.')
+        .map((s) => parseInt(s, 10));
+      setSelectedSubCategories(subCategoryIds);
+    }
+  }, [subcategories]);
   return (
     <section className="flex flex-col space-y-6" {...props}>
       <div className="flex space-x-2 items-end px-4">
@@ -626,9 +651,12 @@ export default function Test({
               <div className="px-4">
                 {data?.pages?.map((item, index) => {
                   return (
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" key={index}>
-                      {item.data.map((product,index) => {
-                        return <ProductCard product={product}  key={index}/>;
+                    <div
+                      className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                      key={index}
+                    >
+                      {item.data.map((product, index) => {
+                        return <ProductCard product={product} key={index} />;
                       })}
                     </div>
                   );
