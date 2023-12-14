@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSession } from 'next-auth/react';
 // import { User } from '@/models';
@@ -60,6 +60,12 @@ export const useCart = () => {
       ? convertToReduxCart(userCart)
       : null
     : reduxCart;
+
+  useEffect(() => {
+    if (session) {
+      queryClient.removeQueries(['cartQuery']);
+    }
+  }, [session]);
 
   const queryClient = useQueryClient();
   const addToCartMutationFn = async ({ data, selectedSize, quantity }) => {
