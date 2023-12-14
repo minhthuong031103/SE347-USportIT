@@ -60,6 +60,14 @@ const NavigationMenuDemo = ({ session }) => {
         <NavigationMenu.Root className="NavigationMenuRoot">
           <NavigationMenu.List className="NavigationMenuList">
             <NavigationMenu.Item>
+              <NavigationMenu.Link
+                className="NavigationMenuLink"
+                href={'/products'}
+              >
+                All Products
+              </NavigationMenu.Link>
+            </NavigationMenu.Item>
+            <NavigationMenu.Item>
               <NavigationMenu.Trigger className="NavigationMenuTrigger">
                 Sports <CaretDownIcon className="CaretDown" aria-hidden />
               </NavigationMenu.Trigger>
@@ -88,16 +96,22 @@ const NavigationMenuDemo = ({ session }) => {
                     </NavigationMenu.Link>
                   </li>
 
-                  <ListItem href="https://stitches.dev/" title="Football">
+                  <ListItem href="/products?categories=1" title="Football">
                     CSS-in-JS with best-in-class developer experience.
                   </ListItem>
-                  <ListItem href="/colors" title="Basketball">
+                  <ListItem href="/products?categories=2" title="Basketball">
                     Beautiful, thought-out palettes with auto dark mode.
                   </ListItem>
-                  <ListItem href="https://icons.radix-ui.com/" title="Running">
+                  <ListItem href="/products?categories=3" title="Volleyball">
                     A crisp set of 15x15 icons, balanced and consistent.
                   </ListItem>
-                  <ListItem href="https://icons.radix-ui.com/" title="Gym">
+                  <ListItem href="/products?categories=4" title="Tennis">
+                    A crisp set of 15x15 icons, balanced and consistent.
+                  </ListItem>
+                  <ListItem href="/products?categories=5" title="Running">
+                    A crisp set of 15x15 icons, balanced and consistent.
+                  </ListItem>
+                  <ListItem href="/products?categories=6" title="Gym">
                     A crisp set of 15x15 icons, balanced and consistent.
                   </ListItem>
                 </ul>
@@ -111,20 +125,20 @@ const NavigationMenuDemo = ({ session }) => {
                 <ul className="List two">
                   <ListItem
                     title="Shoes"
-                    href="/primitives/docs/overview/introduction"
+                    href="/products?gender=1&subcategories=1.2.3.4.9.10"
                   >
                     Build high-quality, accessible design systems and web apps.
                   </ListItem>
                   <ListItem
                     title="Clothing"
-                    href="/primitives/docs/overview/getting-started"
+                    href="/products?gender=1&subcategories=5.6.11.12.13.14"
                   >
                     A quick tutorial to get you up and running with Radix
                     Primitives.
                   </ListItem>
                   <ListItem
                     title="Accessories and Equipment"
-                    href="/primitives/docs/guides/styling"
+                    href="/products?gender=1&subcategories=7.8.15.16.17.18"
                   >
                     Unstyled and compatible with any styling solution.
                   </ListItem>
@@ -140,20 +154,20 @@ const NavigationMenuDemo = ({ session }) => {
                 <ul className="List two">
                   <ListItem
                     title="Shoes"
-                    href="/primitives/docs/overview/introduction"
+                    href="/products?gender=2&subcategories=1.2.3.4.9.10"
                   >
                     Build high-quality, accessible design systems and web apps.
                   </ListItem>
                   <ListItem
                     title="Clothing"
-                    href="/primitives/docs/overview/getting-started"
+                    href="/products?gender=2&subcategories=5.6.11.12.13.14"
                   >
                     A quick tutorial to get you up and running with Radix
                     Primitives.
                   </ListItem>
                   <ListItem
                     title="Accessories and Equipment"
-                    href="/primitives/docs/guides/styling"
+                    href="/products?gender=2&subcategories=7.8.15.16.17.18"
                   >
                     Unstyled and compatible with any styling solution.
                   </ListItem>
@@ -169,20 +183,20 @@ const NavigationMenuDemo = ({ session }) => {
                 <ul className="List two">
                   <ListItem
                     title="Shoes"
-                    href="/primitives/docs/overview/introduction"
+                    href="/products?gender=3&subcategories=1.2.3.4.9.10"
                   >
                     Build high-quality, accessible design systems and web apps.
                   </ListItem>
                   <ListItem
                     title="Clothing"
-                    href="/primitives/docs/overview/getting-started"
+                    href="/products?gender=3&subcategories=5.6.11.12.13.14"
                   >
                     A quick tutorial to get you up and running with Radix
                     Primitives.
                   </ListItem>
                   <ListItem
                     title="Accessories and Equipment"
-                    href="/primitives/docs/guides/styling"
+                    href="/products?gender=3&subcategories=7.8.15.16.17.18"
                   >
                     Unstyled and compatible with any styling solution.
                   </ListItem>
@@ -244,7 +258,9 @@ const NavigationMenuDemo = ({ session }) => {
                 <DropdownMenuItem>
                   <Link href={'/admin/add-product'}>Add Product</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>Team</DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href={'/user/conversations'}>Chatting</Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => signOut({ callbackUrl: '/auth/login' })}
                   className="border-solid border-t-2 mt-2  gap-2"

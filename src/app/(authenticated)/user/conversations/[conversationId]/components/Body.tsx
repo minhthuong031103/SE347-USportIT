@@ -143,7 +143,7 @@ const Body = ({ session }) => {
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor || null,
         keepPreviousData: true,
-        refetchOnWindowFocus: false,
+        // refetchOnWindowFocus: false,
       }
     );
   };
@@ -212,7 +212,7 @@ const Body = ({ session }) => {
                 fileUrl: image.url,
               };
               setTemporaryMessages([...temporaryMessages, temporaryMessage]);
-
+              updateMessages([temporaryMessage]);
               // Emit the 'newMessage' event with the newMessage object
               socket.emit('newMessage', newMessage);
             });
@@ -297,7 +297,7 @@ const Body = ({ session }) => {
       <div className="w-full h-[75%]">
         <div
           id="scrollableDiv"
-          className="h-[650px] lg:h-[550px] w-full overflow-y-auto flex flex-col-reverse "
+          className="h-[650px] lg:h-[550px] w-full overflow-y-auto flex flex-col-reverse"
         >
           <InfiniteScroll
             dataLength={
@@ -309,7 +309,6 @@ const Body = ({ session }) => {
                 : 0
             }
             next={() => {
-              toast.success('fetching next page');
               fetchNextPage();
             }}
             style={{
