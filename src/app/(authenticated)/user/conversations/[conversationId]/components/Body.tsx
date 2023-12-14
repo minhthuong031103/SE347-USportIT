@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
@@ -47,7 +48,24 @@ const Body = ({ session }) => {
   const queryClient = useQueryClient();
   const [lastToastId, setLastToastId] = useState<any>();
   // Getting conversationId from the query parameters
+  const updateMessages = (newMessage) => {
+    queryClient.setQueryData(['messages', conversationId], (prevData) => {
+      if (prevData?.pages[0]) {
+        const newData = {
+          pages: [
+            {
+              messages: [...newMessage, ...prevData?.pages[0]?.messages],
+              nextCursor: prevData.pages[0]?.nextCursor,
+            },
+            ...prevData.pages.slice(1),
+          ],
+        };
 
+        return newData;
+      }
+      // Assume your data structure has a 'pages' array
+    });
+  };
   const fetchMessages = async ({ conversationId, cursor, pageSize }) => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_SOCKET_URL}/conversations/messages?conversationId=${conversationId}&cursor=${cursor}&pageSize=${pageSize}`
@@ -225,8 +243,11 @@ const Body = ({ session }) => {
           content: newMessage,
           userId: session.user.id,
           conversationId,
+          createdAt: new Date().toISOString(), //it will be like: 2021-08-31T07:00:00.000Z
         };
         setTemporaryMessages([...temporaryMessages, temporaryMessage]);
+        updateMessages([temporaryMessage]);
+        console.log(data);
         socket.emit('newMessage', {
           content: newMessage,
           userId: session.user.id,
@@ -300,12 +321,12 @@ const Body = ({ session }) => {
             loader={<h4>Loading...</h4>}
             scrollableTarget="scrollableDiv"
           >
-            {temporaryMessages
+            {/* {temporaryMessages
               .slice() // Create a shallow copy to avoid modifying the original array
               .reverse() // Reverse the order
               .map((message) => (
                 <NewMessage key={message.id} data={message} />
-              ))}
+              ))} */}
             {data?.pages.map((page, index) => (
               <React.Fragment key={index}>
                 {page.messages.map((message) => (
