@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { format } from 'date-fns';
+import { format, isToday } from 'date-fns';
 import clsx from 'clsx';
 
 import Avatar1 from '@/components/Avatar';
@@ -59,7 +59,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
 
     return 'Started a conversation';
   }, [lastMessage]);
-
+  const messageDate = new Date(data.lastMessageAt);
   return (
     <div
       onClick={handleClick}
@@ -96,7 +96,11 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
                   font-light
                 "
               >
-                {format(new Date(data.lastMessageAt), 'p')}
+                {
+                  isToday(messageDate)
+                    ? format(messageDate, 'p') // Display time if today
+                    : format(messageDate, 'M/d/yy p') // Display day, month, and year otherwise
+                }
               </p>
             )}
           </div>

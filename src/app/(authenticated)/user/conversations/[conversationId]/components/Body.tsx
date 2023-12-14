@@ -309,7 +309,6 @@ const Body = ({ session }) => {
                 : 0
             }
             next={() => {
-              toast.success('fetching next page');
               fetchNextPage();
             }}
             style={{
