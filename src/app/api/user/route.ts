@@ -9,6 +9,9 @@ export async function GET(request: Request) {
     where: {
       id: parseInt(userId),
     },
+    include: {
+      addresses: true,
+    },
   });
   if (!userDetail) return new Response(JSON.stringify({}), { status: 404 });
   return new Response(JSON.stringify(userDetail), { status: 200 });

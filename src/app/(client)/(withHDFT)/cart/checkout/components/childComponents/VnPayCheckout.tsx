@@ -3,14 +3,17 @@ import { Button } from '@/components/ui/button';
 import { postRequest } from '@/lib/fetch';
 import React, { useEffect, useState } from 'react';
 
-const VnPayCheckout = () => {
+const VnPayCheckout = ({ checkedItems, total }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [paymentUrl, setPaymentUrl] = useState('');
   useEffect(() => {
     const getPaymentUrl = async () => {
       const res = await postRequest({
         endPoint: '/api/vnpay/checkout',
-        formData: {},
+        formData: {
+          total,
+          checkedItems,
+        },
         isFormData: false,
       });
       console.log(

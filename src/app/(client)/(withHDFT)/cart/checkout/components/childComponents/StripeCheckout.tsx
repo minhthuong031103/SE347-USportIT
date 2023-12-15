@@ -11,10 +11,31 @@ import { postRequest } from '@/lib/fetch';
 import Loader from '@/components/Loader';
 import { useSession } from 'next-auth/react';
 
-export const StripeCheckout = () => {
+export const StripeCheckout = ({
+  checkedItems,
+  total,
+  userFullName,
+  userAddress,
+  userEmail,
+}) => {
   const [clientSecret, setClientSecret] = React.useState();
   const [stripePromise, setStripePromise] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
+  const uuid = localStorage.getItem('uuid');
+  const dataArray = Object.values(checkedItems).map((item) => {
+    return {
+      id: item.data.id,
+      quantity: item.quantity,
+      selectedSize: item.selectedSize,
+    };
+  });
+  console.log(
+    '🚀 ~ file: StripeCheckout.tsx:23 ~ dataArray ~ dataArray:',
+    dataArray,
+    userFullName,
+    userAddress,
+    userEmail
+  );
 
   useEffect(() => {
     setStripePromise(
@@ -28,7 +49,12 @@ export const StripeCheckout = () => {
       const checkoutSession = await postRequest({
         endPoint: '/api/stripe/checkout-session/checkout',
         formData: {
-          amount: 1000,
+          checkedItems: dataArray,
+          amount: total,
+          userFullName,
+          userAddress,
+          userEmail,
+          uuid,
         },
         isFormData: false,
       });

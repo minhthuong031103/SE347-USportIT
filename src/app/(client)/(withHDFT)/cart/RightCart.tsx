@@ -29,17 +29,17 @@ function RightCart({ checkedItems }) {
       <h2 className="text-lg font-semibold">Summary</h2>
       <div className="grid gap-1.5 lg:gap-4 pr-6 text-sm ">
         <Separator className="mb-2" />
-        <div className="flex">
+        {/* <div className="flex">
           <span className="flex-1">Subtotal</span>
           <span>{currencyFormat(10000000)}</span>
-        </div>
+        </div> */}
         <div className="flex">
           <span className="flex-1">Shipping</span>
           <span>Free</span>
         </div>
         <div className="flex">
           <span className="flex-1">Taxes</span>
-          <span>Calculated at checkout</span>
+          <span>Free</span>
         </div>
         <Separator className="mt-2" />
         <div className="flex">
@@ -49,6 +49,7 @@ function RightCart({ checkedItems }) {
         <div>
           <Button
             className="w-full h-full"
+            disabled={total === 0 || !Object.values(checkedItems).length}
             onClick={() => {
               setIsModalOpen(true);
             }}
@@ -64,6 +65,8 @@ function RightCart({ checkedItems }) {
           /> */}
 
               <CheckoutModal
+                checkedItems={checkedItems}
+                total={total}
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
               />

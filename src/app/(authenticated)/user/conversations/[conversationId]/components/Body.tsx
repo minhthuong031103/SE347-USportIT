@@ -10,8 +10,7 @@ import useConversation from '@hooks/useConversation';
 import MessageBox from './MessageBox';
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { SocketIndicator } from '@/components/socket-indicator';
-import { Button } from '@/components/ui/button';
+
 import toast from 'react-hot-toast';
 import { HiPaperAirplane, HiPhoto } from 'react-icons/hi2';
 import { ImageDialog } from '@/components/imageDialog';

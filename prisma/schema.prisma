@@ -36,6 +36,7 @@ model Address {
   id                Int        @id  @default(autoincrement())
   city              String    
   district          String
+  selected          Boolean    @default(false)  
   ward              String
   street            String
   houseNumber       String
@@ -82,6 +83,15 @@ model Product {
   @@index([subcategoryId])
   @@index([genderId])
 }
+model ProductSize {
+  id        Int      @id @default(autoincrement())
+  size      String
+  productId Int?
+  quantity  Int
+  product   Product? @relation(fields: [productId], references: [id])
+
+  @@index([productId])
+}
 
 model Category {
   id       Int       @id @default(autoincrement())
@@ -112,15 +122,6 @@ model Gender {
   products Product[]
 }
 
-model ProductSize {
-  id        Int      @id @default(autoincrement())
-  size      String
-  productId Int?
-  quantity  Int
-  product   Product? @relation(fields: [productId], references: [id])
-
-  @@index([productId])
-}
 
 model Review {
   id         Int      @id @default(autoincrement())
@@ -151,8 +152,9 @@ model Order {
   total      Float
   userId     Int?
   user       User?       @relation(fields: [userId], references: [id])
-  annonymousUser    String?
-  annonymousUserName String?
+  anonymousUser    String?
+  anonymousUserName String?
+  anonymousUserEmail String?
   orderItems OrderItem[] 
   status  String   @default("Pending")
   address         String
@@ -313,7 +315,7 @@ model ProductToSale {
   @@unique([A, B], map: "_ProductToSale_AB_unique")
   @@index([B], map: "_ProductToSale_B_index")
   @@map("_ProductToSale")
-}
+} 
 
 model ProductToWishlist {
   A Int

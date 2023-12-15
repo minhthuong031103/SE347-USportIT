@@ -192,7 +192,7 @@ const Login = ({ className }: { className?: string; providers: unknown }) => {
             disabled={isLoading}
           >
             <div>
-              <Icons.discord className="mr-2 h-4 w-4" />
+              <Icons.google className="mr-2 h-4 w-4" />
             </div>{' '}
             Google
           </Button>

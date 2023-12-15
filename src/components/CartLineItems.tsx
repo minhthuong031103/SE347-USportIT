@@ -309,7 +309,7 @@ export function CartLineItems({
   const [allSelected, setAllSelected] = useState(false);
 
   const areAllItemsChecked = () => {
-    return items.every(
+    return items?.every(
       (item) =>
         !!checkedItems[
           `${item?.data?.id}-${item?.data?.name}-${item?.selectedSize}`
@@ -372,7 +372,7 @@ export function CartLineItems({
         return pages.length + 1;
       },
       initialData: {
-        pages: [items.slice(0, 3)],
+        pages: [items?.slice(0, 3)],
         pageParams: [1],
       },
     }

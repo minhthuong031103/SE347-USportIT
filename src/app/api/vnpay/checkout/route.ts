@@ -19,7 +19,7 @@ function sortObject(obj) {
 }
 export async function POST(req: Request, res: Response) {
   process.env.TZ = 'Asia/Ho_Chi_Minh';
-
+  const body = await req.json();
   const date = new Date();
   const createDate = moment(date).format('YYYYMMDDHHmmss');
 
@@ -32,7 +32,7 @@ export async function POST(req: Request, res: Response) {
   let vnpUrl = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
   const returnUrl = 'http://localhost:3000/';
   const orderId = moment(date).format('DDHHmmss');
-  const amount = 200000 * 100;
+  const amount = parseInt(body.total) * 100;
   const bankCode = 'NCB';
 
   const locale = 'en';

@@ -38,6 +38,7 @@ export const Web3Checkout = () => {
   const { data: userDetail } = useQuery({
     queryKey: ['userDetail', session?.data?.user?.id],
     queryFn: () => onGetUserDetail({ userId: session?.data?.user?.id }),
+    enabled: !!session?.data?.user?.id,
   });
   console.log(userDetail);
 
@@ -59,8 +60,9 @@ export const Web3Checkout = () => {
     }
   }, []);
   return (
-    <div>
+    <div className="flex flex-col gap-y-3 w-max-[30%] items-center justify-center">
       <ConnectWallet
+        className=""
         displayBalanceToken={
           selectedChain === FantomTestnet.slug ||
           chainId === FantomTestnet.chainId
@@ -73,15 +75,15 @@ export const Web3Checkout = () => {
         }
       />
       {address && (
-        <>
-          <Input
+        <div className="flex flex-row gap-x-5">
+          {/* <Input
             value={inputSend}
             onChange={(e) => {
               setInputSend(e.target.value);
               console.log(parseFloat(inputSend));
             }}
             placeholder="Enter amount to send"
-          />
+          /> */}
           {chainId === FantomTestnet.chainId && (
             <Web3Button
               contractAddress={uitContractAddress}
@@ -96,7 +98,7 @@ export const Web3Checkout = () => {
                 ]);
               }}
             >
-              send
+              Check out
             </Web3Button>
           )}
           {chainId === Ethereum.chainId && (
@@ -113,7 +115,7 @@ export const Web3Checkout = () => {
                 ]);
               }}
             >
-              send
+              Check out
             </Web3Button>
           )}
           <Button
@@ -129,9 +131,9 @@ export const Web3Checkout = () => {
               }
             }}
           >
-            switch chain{' '}
+            Switch Chain{' '}
           </Button>
-          <Button
+          {/* <Button
             onClick={() => {
               window.ethereum?.request({
                 method: 'wallet_watchAsset',
@@ -142,15 +144,12 @@ export const Web3Checkout = () => {
                     symbol: 'UIT',
                     decimals: 18,
                     image:
-                      'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Logo_UIT_updated.jpg/1200px-Logo_UIT_updated.jpg',
-                  },
-                },
-              });
+                      'https://upload  <>
             }}
           >
             add
-          </Button>
-        </>
+          </Button> */}
+        </div>
       )}
     </div>
   );
