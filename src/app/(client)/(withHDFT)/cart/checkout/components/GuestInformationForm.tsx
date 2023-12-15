@@ -5,10 +5,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
 
-const InformationForm = ({ setPage }) => {
-  const [addressValue, setAddressValue] = useState('');
-  const [fullName, setFullName] = useState('');
-
+const GuestInformationForm = ({
+  setPage,
+  addressValue,
+  setAddressValue,
+  fullName,
+  setFullName,
+  email,
+  setEmail,
+}) => {
   return (
     <div className="flex flex-col h-full justify-between">
       <div className="w-[95%] h-full flex flex-col gap-y-6">
@@ -19,6 +24,14 @@ const InformationForm = ({ setPage }) => {
             setFullName(e.target.value);
           }}
           label="Full name"
+        />
+        <Input
+          placeholder="Enter your Email"
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
+          label="Email"
         />
 
         <SelectAddress
@@ -31,6 +44,7 @@ const InformationForm = ({ setPage }) => {
           onClick={() => {
             setPage('2');
           }}
+          disabled={!addressValue || !fullName || !email}
         >
           Next
         </Button>
@@ -39,4 +53,4 @@ const InformationForm = ({ setPage }) => {
   );
 };
 
-export default InformationForm;
+export default GuestInformationForm;

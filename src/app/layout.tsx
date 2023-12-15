@@ -7,6 +7,8 @@ import { QueryProvider } from '@/components/providers/query-provider';
 import AuthProvider from '../../context/AuthProvider';
 import { Web3Provider } from '@/components/providers/web3-provider';
 import { ChainProvider } from '@/components/providers/chain-provider';
+import UniqueIdProvider from '@/components/providers/unique-id-provider';
+
 const roboto = Roboto({
   subsets: ['latin'],
   variable: '--font-rob',
@@ -32,14 +34,16 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       >
         <ChainProvider>
           <AuthProvider>
-            <Web3Provider>
-              <ReduxProvider>
-                <QueryProvider>
-                  <Toaster />
-                  {children}
-                </QueryProvider>
-              </ReduxProvider>
-            </Web3Provider>
+            <UniqueIdProvider>
+              <Web3Provider>
+                <ReduxProvider>
+                  <QueryProvider>
+                    <Toaster />
+                    {children}
+                  </QueryProvider>
+                </ReduxProvider>
+              </Web3Provider>
+            </UniqueIdProvider>
           </AuthProvider>
         </ChainProvider>
       </body>

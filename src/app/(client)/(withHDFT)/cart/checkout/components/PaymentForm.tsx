@@ -12,7 +12,13 @@ const checkOutConst = [
   { value: 'Block chain Wallet' },
   { value: 'VnPay' },
 ];
-export const PaymentForm = () => {
+export const PaymentForm = ({
+  checkedItems,
+  total,
+  userFullName,
+  userAddress,
+  userEmail,
+}) => {
   const [selectedType, setSelectedType] = React.useState(new Set([]));
   const [typeTouched, setTypeTouched] = React.useState(false);
   const [method, setMethod] = React.useState('');
@@ -49,9 +55,19 @@ export const PaymentForm = () => {
           </SelectItem>
         ))}
       </Select>
-      {method === 'Stripe' && <StripeCheckout />}
+      {method === 'Stripe' && (
+        <StripeCheckout
+          userAddress={userAddress}
+          userFullName={userFullName}
+          userEmail={userEmail}
+          checkedItems={checkedItems}
+          total={total}
+        />
+      )}
       {method === 'Block chain Wallet' && <Web3Checkout />}
-      {method === 'VnPay' && <VnPayCheckout />}
+      {method === 'VnPay' && (
+        <VnPayCheckout checkedItems={checkedItems} total={total} />
+      )}
     </div>
   );
 };

@@ -59,17 +59,17 @@ export function FilterSheet() {
             </div>
             <div className="grid gap-1.5 pr-6 text-sm">
               <Separator className="mb-2" />
-              <div className="flex">
+              {/* <div className="flex">
                 <span className="flex-1">Subtotal</span>
                 <span>{currencyFormat(cartTotal)}</span>
-              </div>
+              </div> */}
               <div className="flex">
                 <span className="flex-1">Shipping</span>
                 <span>Free</span>
               </div>
               <div className="flex">
                 <span className="flex-1">Taxes</span>
-                <span>Calculated at checkout</span>
+                <span>Free</span>
               </div>
               <Separator className="mt-2" />
               <div className="flex">
