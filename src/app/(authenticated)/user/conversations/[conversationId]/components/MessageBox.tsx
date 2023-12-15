@@ -3,7 +3,7 @@
 import clsx from 'clsx';
 import Image from 'next/image';
 import { useState } from 'react';
-import { format } from 'date-fns';
+import { format, isToday } from 'date-fns';
 import { useSession } from 'next-auth/react';
 
 import Avatar1 from '@/components/Avatar';
@@ -43,10 +43,12 @@ const MessageBox: React.FC<MessageBoxProps> = ({ data, isLast }) => {
       });
 
       return res;
+      console.log('🚀 ~ file: MessageBox.tsx:46 ~ queryFn: ~ res:', res);
     },
     staleTime: 60000,
     enabled: !!data.userId,
   });
+  const messageDate = new Date(data.createdAt);
   // const { onGetUserDetail } = useUser();
   // useEffect(() => {
   //   async function getData() {
@@ -70,7 +72,11 @@ const MessageBox: React.FC<MessageBoxProps> = ({ data, isLast }) => {
             {isOwn ? 'You' : userDetail?.name}
           </div>
           <div className="text-xs text-gray-400">
-            {format(new Date(data.createdAt), 'p')}
+            {
+              isToday(messageDate)
+                ? format(messageDate, 'p') // Display time if today
+                : format(messageDate, 'M/d/yy p') // Display day, month, and year otherwise
+            }
           </div>
         </div>
         <div className={message}>

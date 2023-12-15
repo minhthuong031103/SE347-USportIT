@@ -95,7 +95,7 @@ export const useChatSocket = ({
     console.log(res);
     const { conversationId } = res;
 
-    router.push(`/user/chat/conversation?conversationId=${conversationId}`);
+    router.push(`/user/conversations/${conversationId}`);
   };
 
   const getConversations = async ({ userId, page }) => {
