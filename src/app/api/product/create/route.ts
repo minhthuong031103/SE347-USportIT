@@ -47,6 +47,7 @@ export async function POST(req: Request) {
       typeId: parseInt(formData.get('productType')?.toString() ?? '0'),
       subcategoryId: parseInt(formData.get('subCategory')?.toString() ?? '0'),
       genderId: parseInt(formData.get('gender')?.toString() ?? '0'),
+      isdeleted: false,
     },
   });
   //If product created successfully

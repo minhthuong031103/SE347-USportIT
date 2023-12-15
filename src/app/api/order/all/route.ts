@@ -5,30 +5,35 @@ export async function GET(req: Request) {
 
   const page = parseInt(searchParams.get('page') || '1');
   const limit = parseInt(searchParams.get('limit') || '10');
-  const search = searchParams.get('search') || '';
+  const search = parseInt(searchParams.get('search') || '0');
 
-  const all = await prisma.product.findMany({
+  const all = await prisma.order.findMany({
     skip: (page - 1) * limit,
     take: limit,
     where: {
-      name: {
-        contains: search,
-      },
-      isdeleted: false,
+      id: search === 0 ? undefined : search,
     },
     include: {
-      productSizes: true,
+      user: true,
+      orderItems: true,
     },
     orderBy: {
       id: 'desc',
     },
   });
-  const total = await prisma.product.count({
+
+  //Add new field: Username
+  all.forEach((order) => {
+    if (order.userId != null) {
+      order.username = order.user?.name;
+    } else {
+      order.username = 'Anonymous';
+    }
+  });
+
+  const total = await prisma.order.count({
     where: {
-      name: {
-        contains: search,
-      },
-      isdeleted: false,
+      id: search === 0 ? undefined : search,
     },
   });
   const totalPage = Math.ceil(total / limit);

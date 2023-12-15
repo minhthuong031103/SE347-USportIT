@@ -9,15 +9,15 @@ datasource db {
 }
 
 model User {
-  id                     Int               @id @default(autoincrement())
+  id                     Int             @id @default(autoincrement())
   name                   String
-  email                  String            @unique
+  email                  String          @unique
   password               String
-  role                   String?           @default("user")
-  avatar                 String?           @default("https://i0.wp.com/www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg?ssl=1")
-  isEmailVerified        Boolean           @default(false)
+  role                   String?         @default("user")
+  avatar                 String?         @default("https://i0.wp.com/www.repol.copl.ulaval.ca/wp-content/uploads/2019/01/default-user-icon.jpg?ssl=1")
+  isEmailVerified        Boolean         @default(false)
   otp                    String?
-  isOnline               Boolean           @default(false)
+  isOnline               Boolean         @default(false)
   lastSeen               DateTime?
   orders                 Order[]
   reviews                Review[]
@@ -25,8 +25,8 @@ model User {
   payments               Payment[]
   wishlist               Wishlist?
   directMessages         DirectMessage[]
-  conversationsInitiated Conversation[]    @relation("userOne")
-  conversationsReceived  Conversation[]    @relation("userTwo")
+  conversationsInitiated Conversation[]  @relation("userOne")
+  conversationsReceived  Conversation[]  @relation("userTwo")
   seenMessages           SeenMessage[]
   wallets                Wallet[]
   addresses              Address[]
