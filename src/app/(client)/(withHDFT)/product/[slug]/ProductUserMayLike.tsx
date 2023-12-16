@@ -2,16 +2,18 @@
 import Loader from '@/components/Loader';
 import { parseJSON } from '@/lib/utils';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 const ProductUserMayLike = ({ data }) => {
+  const random = Math.floor(Math.random() * 1000000);
+  const router = useRouter();
   return (
     <div>
-      <div>You may also like:</div>
-
+      <div className="font-bold text-lg m-3">Có thể bạn sẽ thích:</div>
       <Swiper
         style={
           {
@@ -55,6 +57,10 @@ const ProductUserMayLike = ({ data }) => {
                 alt="Picture of the author"
                 width={500}
                 height={500}
+                onClick={() => {
+                  const Random = Math.floor(Math.random() * 15) + 1;
+                  router.push(`/product/${Random}`);
+                }}
               />
             </SwiperSlide>
           ))

@@ -39,15 +39,15 @@ const AuthInformationForm = ({
     <div className="flex flex-col h-full justify-between">
       <div className="w-[95%] h-full flex flex-col gap-y-6">
         <Input
-          placeholder="Enter your Full name"
+          placeholder="Nhập đầy đủ họ tên"
           value={fullName}
           onChange={(e) => {
             setUserFullname(e.target.value);
           }}
-          label="Full name"
+          label="Họ Tên"
         />
         <Input
-          placeholder="Enter your email"
+          placeholder="Nhập email"
           value={email}
           disabled
           onChange={(e) => {
@@ -61,11 +61,11 @@ const AuthInformationForm = ({
           setAddressValue={setAddressValue}
         /> */}
 
-        <Label>Address</Label>
+        <Label>Địa chỉ</Label>
         <Select
           key={'method'}
           radius={'md'}
-          label="Address"
+          label="Địa chỉ"
           disallowEmptySelection={true}
           autoFocus={false}
           placeholder="Select address"
@@ -90,7 +90,7 @@ const AuthInformationForm = ({
             setIsAddressModalOpen(true);
           }}
         >
-          Add address
+          Thêm địa chỉ
         </Button>
         <AddAddress
           isModalOpen={isAddressModalOpen}
@@ -104,7 +104,7 @@ const AuthInformationForm = ({
             setPage('2');
           }}
         >
-          Next
+          Tiếp tục
         </Button>
       </div>
     </div>

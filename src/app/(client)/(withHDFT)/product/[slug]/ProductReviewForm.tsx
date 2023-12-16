@@ -154,7 +154,7 @@ const ProductReviewForm = ({
             getSession();
           }}
         >
-          Write a Review
+          Viết Đánh Giá Sản Phẩm
         </Button>
       </div>
       {/* Check condition to open dialog */}
@@ -177,10 +177,10 @@ const ProductReviewForm = ({
           <div className="flex flex-col w-full h-auto pr-4 gap-6">
             <div className="w-full h-fit flex flex-col pt-2 items-center gap-3">
               <span className="text-[12px] sm:text-sm md:text-base font-semibold">
-                Write a Review
+                Viết Đánh Giá Sản Phẩm
               </span>
               <span className="text-[10px] sm:text-sm text-gray-500">
-                Share your thoughts with the community.
+                Chia sẻ những Trải nghiệm của bạn với Mọi người.
               </span>
               <div className="w-full h-fit mt-2 flex flex-row gap-3 items-center">
                 <Image
@@ -198,7 +198,7 @@ const ProductReviewForm = ({
 
             <div className="flex w-full h-fit mt-3 flex-col gap-3">
               <Label className="font-semibold text-[10px] sm:text-[14px]">
-                Overall Rating
+                Đánh giá tổng quan
               </Label>
               <div className="flex gap-2 justify-start">
                 {[1, 2, 3, 4, 5].map((star, index) => {
@@ -247,7 +247,7 @@ const ProductReviewForm = ({
 
             <div className="flex w-full flex-col flex-wrap md:flex-nowrap gap-3">
               <Label className="font-semibold text-[10px] sm:text-[14px]">
-                Title
+                Tiêu đề
               </Label>
               <Controller
                 control={control}
@@ -269,7 +269,7 @@ const ProductReviewForm = ({
 
             <div className="flex flex-col w-full h-fit gap-2">
               <Label className="font-semibold text-[10px] sm:text-[14px]">
-                Content
+                Nội dung chi tiết
               </Label>
               <Controller
                 defaultValue={''}
@@ -292,7 +292,7 @@ const ProductReviewForm = ({
 
             <div className="flex flex-col gap-3">
               <Label className="font-semibold text-[10px] sm:text-[14px]">
-                Image
+                Hình ảnh
               </Label>
               {files?.length ? (
                 <div className="flex items-center gap-2">
@@ -339,7 +339,7 @@ const ProductReviewForm = ({
                     }
                   }}
                 >
-                  Submit
+                  Xác nhận
                 </Button>
               </div>
             </div>
@@ -358,7 +358,7 @@ const ProductReviewForm = ({
                     <div className="flex flex-col gap-3 items-center justify-center">
                       <Spinner size="lg" />
                       <div className="text-center font-semibold text-xs sm:text-sm">
-                        Submitting Review...
+                        Đang lưu đánh giá của bạn...
                       </div>
                     </div>
                   </DialogCustom>
@@ -378,7 +378,7 @@ const ProductReviewForm = ({
                           size={35}
                         />
                         <div className="text-center font-semibold text-xs sm:text-sm">
-                          Please type in your rating!
+                          Vui lòng chọn số sao!
                         </div>
                       </>
                     ) : !isTitleValid ? (
@@ -388,7 +388,7 @@ const ProductReviewForm = ({
                           size={35}
                         />
                         <div className="text-center font-semibold text-xs sm:text-sm">
-                          Please type in your title!
+                          Vui lòng nhập tiêu đề!
                         </div>
                       </>
                     ) : !isContentValid ? (
@@ -398,7 +398,7 @@ const ProductReviewForm = ({
                           size={35}
                         />
                         <div className="text-center font-semibold text-xs sm:text-sm">
-                          Please type in your content!
+                          Vui lòng nhập nội dung!
                         </div>
                       </>
                     ) : null}
@@ -416,7 +416,7 @@ const ProductReviewForm = ({
                   <div className="flex flex-col gap-3 items-center justify-center">
                     <FaCheckCircle className="text-gray-700" size={35} />
                     <div className="text-center font-semibold text-xs sm:text-sm">
-                      Review Submitted!
+                      Đánh giá đã được lưu!
                     </div>
                   </div>
                 </DialogCustom>

@@ -29,11 +29,10 @@ function HomeBanner() {
           <div className="absolute bottom-20 z-20 mt-auto">
             <blockquote className="space-y-2">
               <p className="text-lg">
-                &ldquo;This library has saved me countless hours of work and
-                helped me deliver stunning designs to my clients faster than
-                ever before.&rdquo;
+                &ldquo;Tôi có thể chấp nhận thất bại, nhưng không chấp nhận bỏ
+                cuộc khi chưa nỗ lực hết mình.&rdquo;
               </p>
-              <footer className="text-sm">Sofia Davis</footer>
+              <footer className="text-sm">Sanya Richards-Ross</footer>
             </blockquote>
           </div>
           <div className="absolute inset-0 bg-black opacity-10" />
@@ -51,11 +50,10 @@ function HomeBanner() {
           <div className="absolute bottom-20 z-20 mt-auto">
             <blockquote className="space-y-2">
               <p className="text-lg">
-                &ldquo;This library has saved me countless hours of work and
-                helped me deliver stunning designs to my clients faster than
-                ever before.&rdquo;
+                &ldquo;Đừng ngại thất bại, đó là con đường dẫn đến thành
+                công.&rdquo;
               </p>
-              <footer className="text-sm">Sofia Davis</footer>
+              <footer className="text-sm">LeBron James</footer>
             </blockquote>
           </div>
         </div>
@@ -72,11 +70,11 @@ function HomeBanner() {
           <div className="absolute bottom-20 z-20 mt-auto">
             <blockquote className="space-y-2">
               <p className="text-lg">
-                &ldquo;This library has saved me countless hours of work and
-                helped me deliver stunning designs to my clients faster than
-                ever before.&rdquo;
+                &ldquo;Thể thao là một phần của cuộc sống, và chúng ta nên sống
+                cuộc đời của mình như một cuộc đua với sự kiên trì và nỗ
+                lực.&rdquo;
               </p>
-              <footer className="text-sm">Sofia Davis</footer>
+              <footer className="text-sm">Jesse Owens</footer>
             </blockquote>
           </div>
         </div>

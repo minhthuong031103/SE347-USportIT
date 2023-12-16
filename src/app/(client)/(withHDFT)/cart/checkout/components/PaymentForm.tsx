@@ -38,10 +38,12 @@ export const PaymentForm = ({
         label="Payment method"
         isInvalid={isTypeValid || !typeTouched ? false : true}
         errorMessage={
-          isTypeValid || !typeTouched ? '' : 'Please choose payment method'
+          isTypeValid || !typeTouched
+            ? ''
+            : 'Vui lòng chọn phương thức thanh toán'
         }
         autoFocus={false}
-        placeholder="Select payment method"
+        placeholder="Chọn phương thức thanh toán"
         selectedKeys={selectedType}
         onSelectionChange={(keys) => {
           setSelectedType(keys);

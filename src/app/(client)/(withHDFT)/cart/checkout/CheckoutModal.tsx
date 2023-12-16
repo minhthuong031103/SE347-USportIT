@@ -77,7 +77,7 @@ const CheckoutModal = ({
         ) : (
           <div className="flex w-full flex-col gap-y-5">
             <MultiStepProgressBar page={page} onPageNumberClick={() => {}} />
-            <Label>Your total is: {currencyFormat(total)} </Label>
+            <Label>Tổng thành tiền của bạn: {currencyFormat(total)} </Label>
             <Tabs
               selectedKey={page}
               classNames={{
@@ -85,7 +85,7 @@ const CheckoutModal = ({
               }}
               aria-label="Options"
             >
-              <Tab key={'1'} title="Information">
+              <Tab key={'1'} title="Thông tin">
                 {userInfo && userAddresses ? (
                   <AuthInformationForm
                     setUserEmail={setUserEmail}
@@ -107,7 +107,7 @@ const CheckoutModal = ({
                   />
                 )}
               </Tab>
-              <Tab key={'2'} title="Payment">
+              <Tab key={'2'} title="Thanh toán">
                 <div className="w-full h-full">
                   <PaymentForm
                     userFullName={userFullName}
@@ -123,16 +123,16 @@ const CheckoutModal = ({
                         setPage('1');
                       }}
                     >
-                      back
+                      Quay lại
                     </Button>
                   </div>
                 </div>
               </Tab>
-              <Tab key={'3'} title="Videos">
+              <Tab key={'3'} title="Hoàn tất">
                 <Card>
                   <CardBody>
-                    Excepteur sint occaecat cupidatat non proident, sunt in
-                    culpa qui officia deserunt mollit anim id est laborum.
+                    Xin cảm ơn quý khách vì đã mua hàng! Chúc quý khách có những
+                    trải nghiệm tốt nhất với sản phẩm của chúng tôi!
                   </CardBody>
                 </Card>
               </Tab>

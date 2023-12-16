@@ -53,9 +53,9 @@ function ProductDetailRight({ data }) {
       <div className="mb-10">
         {/* Heading */}
         <div className="flex justify-between mb-2">
-          <div className="text-md font-semibold">Select size</div>
+          <div className="text-md font-semibold">Chọn kích cỡ</div>
           <div className="text-md font-medium text-black/[0.5] cursor pointer">
-            Select guide
+            Kích cỡ
           </div>
         </div>
         {/* Heading */}
@@ -89,7 +89,9 @@ function ProductDetailRight({ data }) {
 
         {/* Show error */}
         {showError && (
-          <div className="text-red-600 mt-1">Size selection is required</div>
+          <div className="text-red-600 mt-1">
+            Vui lòng chọn kích cỡ sản phẩm
+          </div>
         )}
         {/* Show error */}
       </div>
@@ -107,7 +109,7 @@ function ProductDetailRight({ data }) {
                   onToggleDialog();
                 }}
               >
-                Add to cart
+                Thêm vào giỏ hàng
               </Button>
             </SheetTrigger>
             <SheetContent side={'topRight'} className="w-[400px]">
@@ -117,7 +119,7 @@ function ProductDetailRight({ data }) {
                     className="text-green-500 mr-2"
                     size={20}
                   />
-                  <SheetTitle>Added to Cart</SheetTitle>
+                  <SheetTitle>Đã thêm vào giỏ hàng!</SheetTitle>
                 </div>
                 <div className=" flex flex-row gap-4 w-full">
                   <div className="relative aspect-square h-24 w-16 min-w-fit overflow-hidden rounded">
@@ -144,7 +146,7 @@ function ProductDetailRight({ data }) {
                       className="text-black text-sm
         font-normal"
                     >
-                      Men's shoes
+                      Giày
                     </span>
                     <span
                       className="text-black text-sm
@@ -163,10 +165,10 @@ function ProductDetailRight({ data }) {
                 </div>
                 <div className="flex-row flex w-full py-3">
                   <Button variant={'outline'} className="w-full ">
-                    View Cart ({cart?.listItem.length})
+                    Xem giỏ hàng ({cart?.listItem.length})
                   </Button>
 
-                  <Button className="w-full">Check out</Button>
+                  <Button className="w-full">Thanh toán</Button>
                 </div>
               </SheetHeader>
             </SheetContent>
@@ -187,7 +189,7 @@ function ProductDetailRight({ data }) {
                 }
               }}
             >
-              Add to cart
+              Thêm vào giỏ hàng
             </Button>
           </div>
         )}
@@ -199,14 +201,14 @@ function ProductDetailRight({ data }) {
         justify-center gap-2 hover:opacity-75 mb-10
                 "
           >
-            Wish List
+            Yêu thích
             <IoMdHeartEmpty size={20} />
           </Button>
         </div>
       </div>
 
       <div>
-        <div className="text-lg font-bold mb-5">Product Details</div>
+        <div className="text-lg font-bold mb-5">Thông tin chi tiết</div>
         <div className="markdown text-md mb-5">{data.description}</div>
       </div>
     </div>
