@@ -64,12 +64,12 @@ const NavigationMenuDemo = ({ session }) => {
                 className="NavigationMenuLink"
                 href={'/products'}
               >
-                All Products
+                Tất Cả Sản Phẩm
               </NavigationMenu.Link>
             </NavigationMenu.Item>
             <NavigationMenu.Item>
               <NavigationMenu.Trigger className="NavigationMenuTrigger">
-                Sports <CaretDownIcon className="CaretDown" aria-hidden />
+                Thể Thao <CaretDownIcon className="CaretDown" aria-hidden />
               </NavigationMenu.Trigger>
               <NavigationMenu.Content className="NavigationMenuContent">
                 <ul className="List one">
@@ -87,119 +87,100 @@ const NavigationMenuDemo = ({ session }) => {
                           <path d="M12 0H4V8H12V0Z"></path>
                           <path d="M17 8C19.2091 8 21 6.20914 21 4C21 1.79086 19.2091 0 17 0C14.7909 0 13 1.79086 13 4C13 6.20914 14.7909 8 17 8Z"></path>
                         </svg>
-                        <div className="CalloutHeading">All</div>
-                        <p className="CalloutText">
-                          An open source e-commerce UIT Sport build with
-                          everything new in Next.js 13.
-                        </p>
+                        <div className="CalloutHeading">Tất Cả Sản Phẩm</div>
                       </a>
                     </NavigationMenu.Link>
                   </li>
 
-                  <ListItem href="/products?categories=1" title="Football">
-                    CSS-in-JS with best-in-class developer experience.
-                  </ListItem>
-                  <ListItem href="/products?categories=2" title="Basketball">
-                    Beautiful, thought-out palettes with auto dark mode.
-                  </ListItem>
-                  <ListItem href="/products?categories=3" title="Volleyball">
-                    A crisp set of 15x15 icons, balanced and consistent.
-                  </ListItem>
-                  <ListItem href="/products?categories=4" title="Tennis">
-                    A crisp set of 15x15 icons, balanced and consistent.
-                  </ListItem>
-                  <ListItem href="/products?categories=5" title="Running">
-                    A crisp set of 15x15 icons, balanced and consistent.
-                  </ListItem>
-                  <ListItem href="/products?categories=6" title="Gym">
-                    A crisp set of 15x15 icons, balanced and consistent.
-                  </ListItem>
+                  <ListItem
+                    href="/products?categories=1"
+                    title="Bóng Đá"
+                  ></ListItem>
+                  <ListItem
+                    href="/products?categories=2"
+                    title="Bóng Rổ"
+                  ></ListItem>
+                  <ListItem
+                    href="/products?categories=3"
+                    title="Bóng Chuyền"
+                  ></ListItem>
+                  <ListItem
+                    href="/products?categories=4"
+                    title="Quần Vợt"
+                  ></ListItem>
+                  <ListItem
+                    href="/products?categories=5"
+                    title="Chạy Bộ"
+                  ></ListItem>
+                  <ListItem
+                    href="/products?categories=6"
+                    title="Gym"
+                  ></ListItem>
                 </ul>
               </NavigationMenu.Content>
             </NavigationMenu.Item>
             <NavigationMenu.Item>
               <NavigationMenu.Trigger className="NavigationMenuTrigger">
-                Men <CaretDownIcon className="CaretDown" aria-hidden />
+                Đàn Ông <CaretDownIcon className="CaretDown" aria-hidden />
               </NavigationMenu.Trigger>
               <NavigationMenu.Content className="NavigationMenuContent">
                 <ul className="List two">
                   <ListItem
-                    title="Shoes"
+                    title="Giày"
                     href="/products?gender=1&subcategories=1.2.3.4.9.10"
-                  >
-                    Build high-quality, accessible design systems and web apps.
-                  </ListItem>
+                  ></ListItem>
                   <ListItem
-                    title="Clothing"
+                    title="Quần Áo"
                     href="/products?gender=1&subcategories=5.6.11.12.13.14"
-                  >
-                    A quick tutorial to get you up and running with Radix
-                    Primitives.
-                  </ListItem>
+                  ></ListItem>
                   <ListItem
-                    title="Accessories and Equipment"
+                    title="Phụ Kiện"
                     href="/products?gender=1&subcategories=7.8.15.16.17.18"
-                  >
-                    Unstyled and compatible with any styling solution.
-                  </ListItem>
+                  ></ListItem>
                 </ul>
               </NavigationMenu.Content>
             </NavigationMenu.Item>
 
             <NavigationMenu.Item>
               <NavigationMenu.Trigger className="NavigationMenuTrigger">
-                Women <CaretDownIcon className="CaretDown" aria-hidden />
+                Phụ Nữ <CaretDownIcon className="CaretDown" aria-hidden />
               </NavigationMenu.Trigger>
               <NavigationMenu.Content className="NavigationMenuContent">
                 <ul className="List two">
                   <ListItem
-                    title="Shoes"
+                    title="Giày"
                     href="/products?gender=2&subcategories=1.2.3.4.9.10"
-                  >
-                    Build high-quality, accessible design systems and web apps.
-                  </ListItem>
+                  ></ListItem>
                   <ListItem
-                    title="Clothing"
+                    title="Quần Áo"
                     href="/products?gender=2&subcategories=5.6.11.12.13.14"
-                  >
-                    A quick tutorial to get you up and running with Radix
-                    Primitives.
-                  </ListItem>
+                  ></ListItem>
                   <ListItem
-                    title="Accessories and Equipment"
+                    title="Phụ Kiện"
                     href="/products?gender=2&subcategories=7.8.15.16.17.18"
-                  >
-                    Unstyled and compatible with any styling solution.
-                  </ListItem>
+                  ></ListItem>
                 </ul>
               </NavigationMenu.Content>
             </NavigationMenu.Item>
 
             <NavigationMenu.Item>
               <NavigationMenu.Trigger className="NavigationMenuTrigger">
-                Kids <CaretDownIcon className="CaretDown" aria-hidden />
+                Trẻ Em <CaretDownIcon className="CaretDown" aria-hidden />
               </NavigationMenu.Trigger>
               <NavigationMenu.Content className="NavigationMenuContent">
                 <ul className="List two">
                   <ListItem
-                    title="Shoes"
+                    title="Giày"
                     href="/products?gender=3&subcategories=1.2.3.4.9.10"
-                  >
-                    Build high-quality, accessible design systems and web apps.
-                  </ListItem>
+                  ></ListItem>
                   <ListItem
-                    title="Clothing"
+                    title="Quần Áo"
                     href="/products?gender=3&subcategories=5.6.11.12.13.14"
-                  >
-                    A quick tutorial to get you up and running with Radix
-                    Primitives.
-                  </ListItem>
+                  ></ListItem>
                   <ListItem
-                    title="Accessories and Equipment"
+                    title="Phụ Kiện"
                     href="/products?gender=3&subcategories=7.8.15.16.17.18"
-                  >
-                    Unstyled and compatible with any styling solution.
-                  </ListItem>
+                  ></ListItem>
                 </ul>
               </NavigationMenu.Content>
             </NavigationMenu.Item>
@@ -249,24 +230,24 @@ const NavigationMenuDemo = ({ session }) => {
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>Tài khoản của tôi</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   {' '}
-                  <Link href={'/user/profile'}>Profile</Link>
+                  <Link href={'/user/profile'}>Hồ sơ</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link href={'/admin/add-product'}>Add Product</Link>
+                  <Link href={'/admin/add-product'}>Thêm sản phẩm</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link href={'/user/conversations'}>Chatting</Link>
+                  <Link href={'/user/conversations'}>Chat</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => signOut({ callbackUrl: '/auth/login' })}
                   className="border-solid border-t-2 mt-2  gap-2"
                 >
                   <div className="">{AuthSvg.signIn()}</div>
-                  Log out
+                  Đăng xuất
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -274,7 +255,7 @@ const NavigationMenuDemo = ({ session }) => {
         ) : (
           <div className="flex space-x-4 items-center">
             <Button className="w-[70px] h-8">
-              <Link href={'/auth/login'}>Login</Link>
+              <Link href={'/auth/login'}>Đăng nhập</Link>
             </Button>
             <CartSheet />
           </div>

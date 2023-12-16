@@ -10,22 +10,22 @@ import { Pagination } from 'swiper/modules';
 
 const productCategories = [
   {
-    title: 'Shoes',
+    title: 'Giày',
     image:
       'https://static.nike.com/a/images/f_auto/dpr_1.3,cs_srgb/w_1423,c_limit/57710a8d-e482-47df-a9c7-6a2d9f32604a/the-9-best-gifts-for-skateboarders.jpg',
   },
   {
-    title: 'Clothes',
+    title: 'Quần Áo',
     image:
       'https://static.nike.com/a/images/f_auto/dpr_3.0,cs_srgb/w_300,c_limit/e3360f9f-f648-45cf-8935-486edb7f372c/jordan.png',
   },
   {
-    title: 'Accessories',
+    title: 'Phụ Kiện',
     image:
       'https://static.nike.com/a/images/f_auto/dpr_1.3,cs_srgb/w_945,c_limit/3f089b69-4eba-469e-9d3b-b7c913d031f3/the-best-cargo-trousers-and-shorts-by-nike.jpg',
   },
   {
-    title: 'Sales',
+    title: 'Giảm Giá',
     image:
       'https://static.nike.com/a/images/f_auto/dpr_2.0,cs_srgb/h_500,c_limit/bb390638-9487-4fa9-a976-1b2a7eb37257/nike-just-do-it.png',
   },
@@ -39,10 +39,11 @@ function Categories() {
     >
       <div className="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center">
         <h2 className="text-3xl font-bold leading-[1.1] sm:text-3xl md:text-5xl">
-          Categories
+          LOẠI SẢN PHẨM
         </h2>
         <Balancer className="max-w-[46rem] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
-          Explore our categories and find the best products for you
+          Khám phá các loại sản phẩm của chúng tôi và tìm những sản phẩm hợp với
+          bạn
         </Balancer>
       </div>
       <div className="mx-auto pb-8 pt-12 relative px-4">

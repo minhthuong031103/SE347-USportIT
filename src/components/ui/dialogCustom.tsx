@@ -173,7 +173,7 @@ function DialogCustom({
                           <div className="w-full h-full py-3">
                             <div className="flex flex-col items-center justify-between h-full w-full lg:py-12">
                               <Label className="mb-24 font-bold text-lg">
-                                Do you want to close this dialog?
+                                Bạn có muốn đóng cửa sổ này không?
                               </Label>
                               <div className="flex items-center justify-center w-full">
                                 <Button
@@ -188,7 +188,7 @@ function DialogCustom({
                                     handleClose();
                                   }}
                                 >
-                                  Yes
+                                  Có
                                 </Button>
                                 <Button
                                   className="w-[30%]"
@@ -196,7 +196,7 @@ function DialogCustom({
                                     handleCloseWarning();
                                   }}
                                 >
-                                  No
+                                  Không
                                 </Button>
                               </div>
                             </div>

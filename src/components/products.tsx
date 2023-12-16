@@ -289,9 +289,11 @@ export function Products({
       </div>
       {!isPending && !products.length ? (
         <div className="mx-auto flex max-w-xs flex-col space-y-1.5">
-          <h1 className="text-center text-2xl font-bold">No products found</h1>
+          <h1 className="text-center text-2xl font-bold">
+            Không tìm thấy sản phẩm
+          </h1>
           <p className="text-center text-muted-foreground">
-            Try changing your filters, or check back later for new products
+            Vui lòng thử thay dổi bộ lọc hoặc quay lại sau để xem sản phẩm mới
           </p>
         </div>
       ) : null}

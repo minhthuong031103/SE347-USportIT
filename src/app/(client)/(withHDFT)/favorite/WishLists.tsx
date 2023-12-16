@@ -39,7 +39,7 @@ function WishLists({ session }) {
           className="space-y-6"
         >
           <div className="flex justify-between flex-wrap ">
-            <h2 className=" text-2xl font-medium sm:text-3xl">Favorite</h2>
+            <h2 className=" text-2xl font-medium sm:text-3xl">Yêu thích</h2>
             <Link aria-label="Products" href="/products">
               <div
                 className={cn(
@@ -48,7 +48,7 @@ function WishLists({ session }) {
                   })
                 )}
               >
-                View all
+                Xem tất cả
               </div>
             </Link>
           </div>

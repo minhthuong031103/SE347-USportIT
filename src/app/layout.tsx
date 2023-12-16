@@ -16,7 +16,7 @@ const roboto = Roboto({
 });
 
 const metadata: Metadata = {
-  title: 'Just Do It',
+  title: 'UIT Sport',
   description: 'Just Do It By UIT',
   openGraph: {
     images: [

@@ -113,10 +113,10 @@ const AddProductDialog = () => {
       <div className="flex flex-col w-full h-auto pr-4 gap-6">
         <div className="w-full h-fit flex flex-col pt-2 items-center gap-3">
           <span className="text-[12px] sm:text-sm md:text-base font-semibold">
-            Choose product details
+            Thông tin Sản phẩm
           </span>
           <span className="text-[10px] sm:text-sm text-gray-500">
-            Choose the right product details
+            Chọn thông tin chi tiết của sản phẩm
           </span>
           <div className="w-full h-fit mt-2 flex flex-row gap-3 items-center">
             {isLoading ? (
@@ -143,9 +143,9 @@ const AddProductDialog = () => {
         <div className="mb-10">
           {/* Heading */}
           <div className="flex justify-between mb-2">
-            <div className="text-md font-semibold">Select size</div>
+            <div className="text-md font-semibold">Chọn kích cỡ</div>
             <div className="text-md font-medium text-black/[0.5] cursor pointer">
-              Select guide
+              Kích cỡ
             </div>
           </div>
           {/* Heading */}
@@ -195,14 +195,16 @@ const AddProductDialog = () => {
 
           {/* Show error */}
           {showError && (
-            <div className="text-red-600 mt-1">Size selection is required</div>
+            <div className="text-red-600 mt-1">
+              Vui lòng chọn kích cỡ sản phẩm
+            </div>
           )}
           {/* Show error */}
         </div>
 
         <div className="flex w-full flex-col flex-wrap md:flex-nowrap gap-3">
           <Label className="font-semibold text-[10px] sm:text-[14px]">
-            Quantity
+            Số lượng
           </Label>
           <Controller
             control={control}
@@ -228,7 +230,7 @@ const AddProductDialog = () => {
 
           {/* Start In Inventory */}
           <Label className="font-normal italic text-[10px] sm:text-[14px]">
-            In inventory: {selectedQuantity}
+            Tồn kho: {selectedQuantity}
           </Label>
           {/* End In Inventory */}
         </div>
@@ -240,8 +242,8 @@ const AddProductDialog = () => {
               toast.promise(
                 onSubmit(),
                 {
-                  loading: 'Adding to cart ...',
-                  success: 'Successfully added',
+                  loading: 'Đang thêm vào giỏ hàng ...',
+                  success: 'Thêm vào giỏ hàng thành công!',
                   error: (err) => `${err}`,
                 },
                 {
@@ -255,7 +257,7 @@ const AddProductDialog = () => {
             }}
             disabled={!isValid}
           >
-            Submit
+            Xác nhận
           </Button>
         </div>
       </div>

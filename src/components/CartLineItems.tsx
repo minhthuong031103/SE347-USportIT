@@ -184,7 +184,7 @@ const CartItem = ({ item, isChecked, onCheck, enableCheck }) => {
               {item?.data?.name}
             </div>
             <div className="text-sm md:text-md font-medium text-black/[0.5] block ">
-              {item?.data?.subtitle ? item?.data?.subtitle : `Men's shoes`}
+              {item?.data?.subtitle ? item?.data?.subtitle : `Giày`}
             </div>
             <div className="text-sm md:text-md font-bold text-black/[0.5] mt-2">
               {currencyFormat(item?.data?.price)}
@@ -197,11 +197,11 @@ const CartItem = ({ item, isChecked, onCheck, enableCheck }) => {
         ) : (
           <div className="flex flex-row flex-wrap justify-between mt-4 gap-2 text-black/[0.5] text-sm md:text-md">
             <div className="flex items-center gap-1 flex-wrap md:mt-0 mt-4">
-              <div className="font-semibold">Size:</div>
+              <div className="font-semibold">Kích cỡ:</div>
               {item.selectedSize}
             </div>
             <div className="flex items-center justify-center gap-1 md:flex-row flex-col">
-              <div className="font-semibold">Quantity:</div>
+              <div className="font-semibold">Số lượng:</div>
 
               <div className="flex items-center justify-center">
                 <Button
@@ -253,7 +253,7 @@ const CartItem = ({ item, isChecked, onCheck, enableCheck }) => {
                   }
                 >
                   {CommonSvg.add({ className: 'h-3 w-3' })}
-                  <span className="sr-only">Add one item</span>
+                  <span className="sr-only">Thêm một sản phẩm</span>
                 </Button>
               </div>
             </div>
@@ -262,8 +262,8 @@ const CartItem = ({ item, isChecked, onCheck, enableCheck }) => {
                 toast.promise(
                   handleDeleteItem(),
                   {
-                    loading: 'Deleting from cart ...',
-                    success: 'Successfully deleted',
+                    loading: 'Đang xóa khỏi giỏ hàng...',
+                    success: 'Xóa khỏi giỏ hàng thành công!',
                     error: (err) => `This just happened: ${err.toString()}`,
                   },
                   {
@@ -285,8 +285,8 @@ const CartItem = ({ item, isChecked, onCheck, enableCheck }) => {
 
         {productSizeQuantity && quantity > productSizeQuantity[0]?.quantity ? (
           <div className="font-medium text-red-500">
-            You have reached the maximum allowable quantity for purchases.
-            Please reduce the quantity to proceed with the payment.
+            Bạn đã nhập vượt quá số lượng sản phẩm có sẵn. Vui lòng giảm số
+            lượng sản phẩm.
           </div>
         ) : null}
       </div>
@@ -408,7 +408,7 @@ export function CartLineItems({
           onClick={allSelected ? unselectAll : checkAll}
           className="mt-4 w-[80px] max-h-max cursor-pointer bg-black"
         >
-          {allSelected ? 'Unselect All' : 'Select All'}
+          {allSelected ? 'Bỏ chọn tất cả' : 'Chọn tất cả'}
         </Button>
       )}
 

@@ -13,19 +13,19 @@ const Footer = () => {
           {/* MENU START */}
           <div className="flex flex-col gap-3 shrink-0">
             <div className="font-oswald font-medium uppercase text-sm cursor-pointer">
-              Find a store
+              Tìm kiếm cửa hàng
             </div>
             <div className="font-oswald font-medium uppercase text-sm cursor-pointer">
-              become a partner
+              trở thành một đối tác
             </div>
             <div className="font-oswald font-medium uppercase text-sm cursor-pointer">
-              sign up for email
+              đăng ký email
             </div>
             <div className="font-oswald font-medium uppercase text-sm cursor-pointer">
-              send us feedback
+              gửi phản hồi
             </div>
             <div className="font-oswald font-medium uppercase text-sm cursor-pointer">
-              student discount
+              giảm giá cho sinh viên
             </div>
           </div>
           {/* MENU END */}
@@ -35,22 +35,22 @@ const Footer = () => {
             {/* MENU START */}
             <div className="flex flex-col gap-3">
               <div className="font-oswald font-medium uppercase text-sm">
-                get help
+                Tìm kiếm giúp đỡ
               </div>
               <div className="text-sm text-white/[0.5] hover:text-white cursor-pointer">
-                Order Status
+                Tình trạng đơn hàng
               </div>
               <div className="text-sm text-white/[0.5] hover:text-white cursor-pointer">
-                Delivery
+                Giao hàng
               </div>
               <div className="text-sm text-white/[0.5] hover:text-white cursor-pointer">
-                Returns
+                Trả hàng
               </div>
               <div className="text-sm text-white/[0.5] hover:text-white cursor-pointer">
-                Payment Options
+                Phương thức thanh toán
               </div>
               <div className="text-sm text-white/[0.5] hover:text-white cursor-pointer">
-                Contact Us
+                Liên lạc với chúng tôi
               </div>
             </div>
             {/* MENU END */}
@@ -58,19 +58,19 @@ const Footer = () => {
             {/* MENU START */}
             <div className="flex flex-col gap-3">
               <div className="font-oswald font-medium uppercase text-sm">
-                About nike
+                về UITSport
               </div>
               <div className="text-sm text-white/[0.5] hover:text-white cursor-pointer">
-                News
+                Tin tức
               </div>
               <div className="text-sm text-white/[0.5] hover:text-white cursor-pointer">
-                Careers
+                Thông tin doanh nghiệp
               </div>
               <div className="text-sm text-white/[0.5] hover:text-white cursor-pointer">
-                Investors
+                Nhà đầu tư
               </div>
               <div className="text-sm text-white/[0.5] hover:text-white cursor-pointer">
-                Sustainability
+                Phương châm
               </div>
             </div>
             {/* MENU END */}
@@ -102,7 +102,7 @@ const Footer = () => {
       >
         {/* LEFT START */}
         <div className="text-[12px] text-white/[0.5] hover:text-white cursor-pointer text-center md:text-left">
-          © 2023 Nike, Inc. All Rights Reserved
+          © 2023 UITSPORT, Inc. All Rights Reserved
         </div>
         {/* LEFT END */}
 

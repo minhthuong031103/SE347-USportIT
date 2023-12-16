@@ -19,10 +19,10 @@ function NewArrivals() {
           className="mx-auto flex w-full max-w-[64rem] flex-col items-center justify-center gap-4 pb-8 pt-6 text-center md:pb-12 md:pt-10 "
         >
           <h1 className="px-1 text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:text-6xl lg:leading-[1.1]">
-            SAVE UP TO 50%
+            TIẾT KIỆM TỚI 50%
           </h1>
           <Balancer className="max-w-[46rem] text-lg text-muted-foreground sm:text-xl">
-            Score up to 50% off on select sale styles – no code required.
+            Tiết kiệm lên tới 50% sản phẩm. Không cần mã giảm giá.
           </Balancer>
         </section>
         <section
@@ -32,7 +32,7 @@ function NewArrivals() {
         >
           <div className="flex justify-between flex-wrap ">
             <h2 className=" text-2xl font-medium sm:text-3xl">
-              Sales products
+              Sản phẩm giảm giá
             </h2>
             <Link aria-label="Products" href="/products">
               <div
@@ -42,7 +42,7 @@ function NewArrivals() {
                   })
                 )}
               >
-                View all
+                Xem tất cả
               </div>
             </Link>
           </div>

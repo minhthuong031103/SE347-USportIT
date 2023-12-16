@@ -80,7 +80,7 @@ export function CartSheet() {
       </SheetTrigger>
       <SheetContent className="flex w-full flex-col pr-0 sm:max-w-lg">
         <SheetHeader className="px-1">
-          <SheetTitle>Cart {itemCount > 0 && `(${itemCount})`}</SheetTitle>
+          <SheetTitle>Giỏ hàng {itemCount > 0 && `(${itemCount})`}</SheetTitle>
         </SheetHeader>
         <div className="pr-6">
           <Separator />
@@ -117,14 +117,14 @@ export function CartSheet() {
               <SheetFooter className="mt-1.5">
                 <SheetTrigger asChild>
                   <Link
-                    aria-label="View your cart"
+                    aria-label="Xem giỏ hàng của bạn"
                     href="/cart"
                     className={buttonVariants({
                       size: 'sm',
                       className: 'w-full',
                     })}
                   >
-                    View your cart
+                    Xem giỏ hàng của bạn
                   </Link>
                 </SheetTrigger>
               </SheetFooter>
