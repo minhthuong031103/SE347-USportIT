@@ -55,19 +55,18 @@ export const useCart = () => {
     };
   };
 
-  //Khi ứng dụng khởi chạy, cart sẽ rỗng
-
   const cart = session
     ? userCart
       ? convertToReduxCart(userCart)
       : null
     : reduxCart;
 
+  const queryClient = useQueryClient();
+
   useEffect(() => {
     queryClient.removeQueries(['cartQuery']);
   }, [session]);
 
-  const queryClient = useQueryClient();
   const addToCartMutationFn = async ({ data, selectedSize, quantity }) => {
     const response = await axios.post(
       `/api/user/cart/cart-item?userId=${session?.user.id}`,
