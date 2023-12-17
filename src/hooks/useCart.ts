@@ -55,6 +55,8 @@ export const useCart = () => {
     };
   };
 
+  //Khi ứng dụng khởi chạy, cart sẽ rỗng
+
   const cart = session
     ? userCart
       ? convertToReduxCart(userCart)
@@ -62,9 +64,7 @@ export const useCart = () => {
     : reduxCart;
 
   useEffect(() => {
-    if (session) {
-      queryClient.removeQueries(['cartQuery']);
-    }
+    queryClient.removeQueries(['cartQuery']);
   }, [session]);
 
   const queryClient = useQueryClient();
