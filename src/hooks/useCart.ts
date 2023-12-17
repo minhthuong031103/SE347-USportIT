@@ -29,7 +29,11 @@ export const useCart = () => {
     return userShoppingCart;
   };
 
-  const { data: userCart, refetch } = useQuery({
+  const {
+    data: userCart,
+    refetch,
+    isLoading,
+  } = useQuery({
     queryKey: ['useCart'],
     queryFn: () => fetchUserCart(session?.user.id),
     enabled: !!session,
@@ -56,16 +60,18 @@ export const useCart = () => {
   };
 
   const cart = session
-    ? userCart
+    ? isLoading
+      ? null
+      : userCart
       ? convertToReduxCart(userCart)
       : null
     : reduxCart;
 
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    queryClient.removeQueries(['cartQuery']);
-  }, [session]);
+  // useEffect(() => {
+  //   queryClient.removeQueries(['cartQuery']);
+  // }, [session]);
 
   const addToCartMutationFn = async ({ data, selectedSize, quantity }) => {
     const response = await axios.post(

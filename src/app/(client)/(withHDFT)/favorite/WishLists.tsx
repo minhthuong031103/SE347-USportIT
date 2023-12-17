@@ -39,7 +39,7 @@ function WishLists() {
                   })
                 )}
               >
-                Xem tất cả sản phẩm
+                Xem tất cả
               </div>
             </Link>
           </div>

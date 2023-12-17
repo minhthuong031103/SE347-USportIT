@@ -31,11 +31,12 @@ const LoginPage = async ({ searchParams }: { searchParams: unknown }) => {
           <div className="mx-auto h-full flex w-full flex-col justify-center space-y-6 ">
             <div className="flex flex-col space-y-2 text-center">
               <h1 className="text-2xl font-semibold tracking-tight">
-                Create an account
+                Tạo tài khoản
               </h1>
               <p className="text-sm text-muted-foreground">
-                Create your Member profile and get first access to the very best
-                of our products, inspiration and community.
+                Tạo hồ sơ thành viên của bạn và trải nghiệm sự tiện lợi đầu tiên
+                với những sản phẩm tốt nhất của chúng tôi, nguồn cảm hứng và
+                cộng đồng.
               </p>
             </div>
             <Register payload={{ email, name }} />
