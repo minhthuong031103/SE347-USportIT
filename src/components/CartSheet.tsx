@@ -137,7 +137,7 @@ export function CartSheet() {
             })}
 
             <div className="text-xl font-medium text-muted-foreground">
-              Your cart is empty
+              Giỏ hàng của bạn đang trống
             </div>
             <SheetTrigger asChild>
               <Link
@@ -151,7 +151,7 @@ export function CartSheet() {
                   })
                 )}
               >
-                Add items to your cart to checkout
+                Thêm sản phẩm vào giỏ hàng để thanh toán
               </Link>
             </SheetTrigger>
           </div>

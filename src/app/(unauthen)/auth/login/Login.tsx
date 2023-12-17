@@ -84,14 +84,14 @@ const Login = ({ className }: { className?: string; providers: unknown }) => {
             <div className="grid gap-6">
               <div className="gap-8 flex flex-col">
                 <div className="flex flex-col gap-3 ">
-                  <Label>Email</Label>
+                  <Label>Tài khoản</Label>
                   <FormField
                     control={form.control}
                     name="email"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <Input placeholder="Enter Username" {...field} />
+                          <Input placeholder="Nhập tên đăng nhập" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -99,7 +99,7 @@ const Login = ({ className }: { className?: string; providers: unknown }) => {
                   />
                 </div>
                 <div className="flex flex-col gap-3 ">
-                  <Label>Password</Label>
+                  <Label>Mật khẩu</Label>
                   <FormField
                     control={form.control}
                     name="password"
@@ -127,7 +127,7 @@ const Login = ({ className }: { className?: string; providers: unknown }) => {
                             value={field.value}
                             onChange={field.onChange}
                             id="password"
-                            placeholder="Enter your password"
+                            placeholder="Nhập mật khẩu"
                             type={show.showPass ? 'text' : 'password'}
                             autoCapitalize="none"
                             autoComplete="password"
@@ -141,7 +141,7 @@ const Login = ({ className }: { className?: string; providers: unknown }) => {
                 </div>
               </div>
 
-              <Button type="submit">Sign in</Button>
+              <Button type="submit">Đăng nhập</Button>
             </div>
           </form>
         </Form>
@@ -152,7 +152,7 @@ const Login = ({ className }: { className?: string; providers: unknown }) => {
           </div>
           <div className="relative flex justify-center text-xs uppercase">
             <span className="bg-background px-2 text-muted-foreground">
-              Or continue with
+              Hoặc có thể tiếp tục với
             </span>
           </div>
         </div>
@@ -200,9 +200,9 @@ const Login = ({ className }: { className?: string; providers: unknown }) => {
       </div>
 
       <p className="mt-10 px-8 text-center text-sm text-muted-foreground">
-        Don't have an account?{' '}
+        Chưa có tài khoản?{' '}
         <Link className="font-bold underline text-black" href="/auth/register">
-          Register
+          Đăng ký
         </Link>
       </p>
     </div>

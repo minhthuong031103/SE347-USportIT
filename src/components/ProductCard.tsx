@@ -13,8 +13,8 @@ import {
   AiFillHeart,
   AiOutlineShoppingCart,
 } from 'react-icons/ai';
-import { useFavorite } from '@/hooks/useFavorite';
 import { useCart } from '@/hooks/useCart';
+import { useWishList } from '@/hooks/useWishList';
 
 // import { Input, Spinner, Textarea } from '@nextui-org/react';
 // import { FaCheckCircle, FaStar, FaExclamationTriangle } from 'react-icons/fa';
@@ -29,90 +29,9 @@ export default function ProductCard({ product }) {
   // const [showSuccess, setShowSuccess] = useState(false);
   // const [rating, setRating] = useState(0);
   // const [hover, setHover] = useState(0);
-
-  const { onAddFavorite, onDeleteFavorite } = useFavorite();
   const { cart } = useCart();
   const { onSelectProduct, onToggleDialog } = useSelectedProduct();
-  // const { handleSubmit, control, reset } = useForm();
-
-  // const onSubmit = async (data) => {
-  //   await setIsInvalid(false);
-  //   console.log(
-  //     'isInvalid = ' +
-  //       isInvalid +
-  //       ' rating = ' +
-  //       rating +
-  //       ' isTitleValid = ' +
-  //       isTitleValid +
-  //       ' isContentValid = ' +
-  //       isContentValid
-  //   );
-  //   // Reset isInvalid to false when the dialog is opened
-  //   if (rating === 0) {
-  //     setIsInvalid(true); // Set isInvalid to true if rating is 0
-  //     return;
-  //   }
-  //   if (data.title === '') {
-  //     setIsTitleValid(false);
-  //     setIsInvalid(true); // Set isInvalid to true if title is empty
-  //     return;
-  //   } else {
-  //     setIsTitleValid(true);
-  //   }
-  //   if (data.text === '') {
-  //     setIsContentValid(false);
-  //     setIsInvalid(true); // Set isInvalid to true if content is empty
-  //     return;
-  //   } else {
-  //     setIsContentValid(true);
-  //   }
-  //   //If all input is valid, then submit
-  //   // Set loading state to true when submitting for submiting dialog
-
-  //   setIsLoading(true);
-  //   const userId = await onGetSession();
-  //   // const images = await startUpload([...files]).then((res) => {
-  //   //   const formattedImages = res?.map((image) => ({
-  //   //     id: image.key,
-  //   //     name: image.key.split('_')[1] ?? image.key,
-  //   //     url: image.url,
-  //   //   }));
-  //   //   return formattedImages ?? null;
-  //   // });
-
-  //   // const [data] = useQuery('key', func(), {});
-  //   const ret = await onPostProductReview(
-  //     JSON.stringify({
-  //       ...data,
-  //       rating: parseInt(data.rating),
-  //       image: [...images],
-  //       userId: userId,
-  //       productId: product.id,
-  //       reviewDate: new Date(),
-  //     })
-  //   );
-
-  //   if (ret) {
-  //     console.log(ret);
-  //     // Set loading state to false and show success dialog
-  //     setIsLoading(false);
-  //     setShowSuccess(true);
-
-  //     // Reset form and other state variables after submission after 2sec
-  //     setTimeout(() => {
-  //       reset();
-  //       // setFiles([]);
-  //       setRating(0);
-  //       setHover(0);
-  //       setIsShowDialog(false);
-  //       setIsLoading(false);
-  //       setShowSuccess(false);
-  //       setIsInvalid(false);
-  //     }, 2000);
-  //     reviewItemRefetch();
-  //     reviewRatingRefetch();
-  //   }
-  // };
+  const { wishList, onAddUserWishList, onRemoveUserWishList } = useWishList();
 
   useEffect(() => {
     console.log(isAddToCart, isShowDialog);
@@ -124,6 +43,16 @@ export default function ProductCard({ product }) {
       setIsAddToCart(true);
     }
   }, [cart?.listItem]);
+
+  // Kiểm tra khi wishList thay đổi thì cập nhật lại isLiked
+  useEffect(() => {
+    if (!wishList) return;
+
+    const isProductInWishList = wishList.some(
+      (wishListProduct) => wishListProduct.id === product.id
+    );
+    setIsLiked(isProductInWishList);
+  }, [wishList]);
 
   return (
     <div>
@@ -149,12 +78,11 @@ export default function ProductCard({ product }) {
         <div
           onClick={() => {
             if (!isLiked) {
-              onAddFavorite({ data: product });
+              onAddUserWishList(product);
             }
             if (isLiked) {
-              onDeleteFavorite({ data: product });
+              onRemoveUserWishList(product);
             }
-
             setIsLiked(!isLiked);
           }}
           className="transform duration-200 

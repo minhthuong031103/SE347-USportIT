@@ -86,7 +86,7 @@ export function FilterSheet() {
                       className: 'w-full',
                     })}
                   >
-                    View your cart
+                    Xem giỏ hàng của bạn
                   </Link>
                 </SheetTrigger>
               </SheetFooter>
@@ -99,7 +99,7 @@ export function FilterSheet() {
             })}
 
             <div className="text-xl font-medium text-muted-foreground">
-              Your cart is empty
+              Giỏ hàng của bạn đang trống
             </div>
             <SheetTrigger asChild>
               <Link
@@ -113,7 +113,7 @@ export function FilterSheet() {
                   })
                 )}
               >
-                Add items to your cart to checkout
+                Thêm sản phẩm vào giỏ hàng để thanh toán
               </Link>
             </SheetTrigger>
           </div>
