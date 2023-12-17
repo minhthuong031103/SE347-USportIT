@@ -1,8 +1,7 @@
 'use client';
 import { buttonVariants } from '@/components/ui/button';
-import { cn, parseJSON } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -11,24 +10,8 @@ import ProductCard from '@/components/ProductCard';
 import Loader from '@/components/Loader';
 import { useWishList } from '@/hooks/useWishList';
 
-function WishLists({ session }) {
-  const { onGetUserWishList } = useWishList();
-  const [wishLists, setWishLists] = useState([]);
-
-  useEffect(() => {
-    const getWishLists = async () => {
-      const fetchedWishLists = await onGetUserWishList(session?.user.id);
-      if (fetchedWishLists) {
-        console.log(fetchedWishLists);
-      }
-      const data = parseJSON(JSON.stringify(fetchedWishLists));
-      if (data) {
-        setWishLists(data);
-      }
-    };
-
-    getWishLists();
-  }, []);
+function WishLists() {
+  const { wishList } = useWishList();
 
   return (
     <section className="lg:px-10 px-5 py-10 mt-20 md:mt-30">
@@ -87,9 +70,9 @@ function WishLists({ session }) {
             modules={[Navigation]}
             className="w-full h-auto overflow-visible relative"
           >
-            {wishLists ? (
-              wishLists?.map((product, index) => (
-                <SwiperSlide key={index}>
+            {wishList ? (
+              wishList?.map((product) => (
+                <SwiperSlide key={product.id}>
                   <ProductCard product={product} />
                 </SwiperSlide>
               ))
