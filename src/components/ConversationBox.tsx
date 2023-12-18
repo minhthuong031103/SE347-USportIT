@@ -57,7 +57,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
       return lastMessage;
     }
 
-    return 'Started a conversation';
+    return 'Bắt đầu trò chuyện';
   }, [lastMessage]);
   const messageDate = new Date(data.lastMessageAt);
   return (
