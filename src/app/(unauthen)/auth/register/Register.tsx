@@ -31,35 +31,35 @@ import { zodResolver } from '@hookform/resolvers/zod';
 const formSchema = z
   .object({
     name: z.string().min(1, {
-      message: 'Name is required',
+      message: 'Yêu cầu nhập tên',
     }),
     password: z
       .string()
       .min(1, {
-        message: 'Password is required',
+        message: 'Yêu cầu nhập mật khẩu',
       })
-      .min(8, { message: 'Password must be at least 8 characters' })
+      .min(8, { message: 'Mật khẩu phải chứa ít nhất 8 ký tự' })
       .regex(regexPasswordSpecial, {
-        message: 'Password must contain at least 1 special character',
+        message: 'Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt',
       })
       .regex(regexPasswordNumber, {
-        message: 'Password must contain at least 1 number',
+        message: 'Mật khẩu phải chứa ít nhất 1 ký tự số',
       })
       .regex(regexPasswordUpperCase, {
-        message: 'Password must contain at least 1 uppercase character',
+        message: 'Mật khẩu phải chứa ít nhất 1 ký tự viết hoa',
       }),
     email: z
       .string()
       .min(1, {
-        message: 'Email is required',
+        message: 'Yêu cầu nhập email',
       })
-      .email({ message: 'Email is invalid' }),
+      .email({ message: 'Email không hợp lệ' }),
     confirmPassword: z.string().min(1, {
-      message: 'Confirm password is required',
+      message: 'Yêu cầu xác nhận mật khẩu',
     }),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Password doesn't match",
+    message: 'Mật khẩu xác nhận không trùng khớp',
     path: ['confirmPassword'],
   });
 const Register = ({
@@ -83,7 +83,7 @@ const Register = ({
   useEffect(() => {
     if (payload?.email && payload?.name) {
       toast.error(
-        'Your account is not registered yet, please register to continue'
+        'Tài khoản của bạn chưa được đăng ký. Vui lòng đăng ký để tiếp tục!'
       );
     }
   }, []);
@@ -126,7 +126,7 @@ const Register = ({
                         <FormControl>
                           <Input
                             type="email"
-                            placeholder="Enter Email"
+                            placeholder="Nhập email"
                             autoComplete="username"
                             {...field}
                           />
@@ -137,7 +137,7 @@ const Register = ({
                   />
                 </div>
                 <div className="flex flex-col gap-3 ">
-                  <Label>Name</Label>
+                  <Label>Tên người dùng</Label>
                   <FormField
                     control={form.control}
                     name="name"
@@ -146,7 +146,7 @@ const Register = ({
                         <FormControl>
                           <Input
                             type="text"
-                            placeholder="Enter Username"
+                            placeholder="Nhập tên người dùng"
                             {...field}
                           />
                         </FormControl>
@@ -156,7 +156,7 @@ const Register = ({
                   />
                 </div>
                 <div className="flex flex-col gap-3 ">
-                  <Label>Password</Label>
+                  <Label>Mật khẩu</Label>
                   <FormField
                     control={form.control}
                     name="password"
@@ -165,7 +165,7 @@ const Register = ({
                         <FormItem>
                           <FormControl>
                             <Input
-                              placeholder="Enter your password"
+                              placeholder="Nhập mật khẩu"
                               type={show.password ? 'text' : 'password'}
                               value={field.value}
                               onChange={field.onChange}
@@ -195,7 +195,7 @@ const Register = ({
                   />
                 </div>
                 <div className="flex flex-col gap-3 ">
-                  <Label>Confirm password</Label>
+                  <Label>Xác nhận mật khẩu</Label>
                   <FormField
                     control={form.control}
                     name="confirmPassword"
@@ -204,7 +204,7 @@ const Register = ({
                         <FormItem>
                           <FormControl>
                             <Input
-                              placeholder="Enter your password"
+                              placeholder="Nhập lại mật khẩu"
                               type={show.confirmPassword ? 'text' : 'password'}
                               value={field.value}
                               onChange={field.onChange}
@@ -236,16 +236,16 @@ const Register = ({
               </div>
 
               <Button type="submit" className="">
-                Sign Up
+                Đăng ký
               </Button>
             </div>
           </form>
         </Form>
       </div>
       <p className=" mt-10 text-center text-sm text-muted-foreground">
-        Already have an account?{' '}
+        Đã có tài khoản?{' '}
         <Link className=" font-bold underline text-black" href="/auth/login">
-          Sign in
+          Đăng nhập
         </Link>
       </p>
     </div>

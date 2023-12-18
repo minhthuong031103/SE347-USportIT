@@ -91,7 +91,10 @@ export async function POST(req: Request) {
       sizes.push(JSON.parse(size.toString()));
     });
 
-    const productSizeUpdates = sizes.map((size) => {
+    const sizeToUpdate = sizes.filter((size) => size.id);
+    const sizeToCreate = sizes.filter((size) => !size.id);
+
+    const productSizeUpdates = sizeToUpdate.map((size) => {
       return prisma.productSize.updateMany({
         where: {
           id: size.id, // Specify the unique identifier for the size you want to update
@@ -102,8 +105,19 @@ export async function POST(req: Request) {
       });
     });
 
+    const productSizeCreate = await prisma.productSize.createMany({
+      data: sizeToCreate?.map((size) => ({
+        ...size,
+        productId: parseInt(id),
+      })),
+    });
+
     try {
-      const updatedSizes = await Promise.all(productSizeUpdates);
+      const updatedSizes = await Promise.all([
+        ...productSizeUpdates,
+        productSizeCreate,
+      ]);
+
       const ret = { updateProduct, updatedSizes };
 
       if (updatedSizes) {

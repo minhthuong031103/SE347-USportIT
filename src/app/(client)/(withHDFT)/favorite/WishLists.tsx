@@ -1,8 +1,7 @@
 'use client';
 import { buttonVariants } from '@/components/ui/button';
-import { cn, parseJSON } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -10,25 +9,15 @@ import { Navigation } from 'swiper/modules';
 import ProductCard from '@/components/ProductCard';
 import Loader from '@/components/Loader';
 import { useWishList } from '@/hooks/useWishList';
+import { CommonSvg } from '@/assets/CommonSvg';
+import { useEffect } from 'react';
 
-function WishLists({ session }) {
-  const { onGetUserWishList } = useWishList();
-  const [wishLists, setWishLists] = useState([]);
+function WishLists() {
+  const { wishList } = useWishList();
 
   useEffect(() => {
-    const getWishLists = async () => {
-      const fetchedWishLists = await onGetUserWishList(session?.user.id);
-      if (fetchedWishLists) {
-        console.log(fetchedWishLists);
-      }
-      const data = parseJSON(JSON.stringify(fetchedWishLists));
-      if (data) {
-        setWishLists(data);
-      }
-    };
-
-    getWishLists();
-  }, []);
+    console.log('wishList', wishList);
+  }, [wishList]);
 
   return (
     <section className="lg:px-10 px-5 py-10 mt-20 md:mt-30">
@@ -39,7 +28,9 @@ function WishLists({ session }) {
           className="space-y-6"
         >
           <div className="flex justify-between flex-wrap ">
-            <h2 className=" text-2xl font-medium sm:text-3xl">Favorite</h2>
+            <h2 className=" text-2xl font-medium sm:text-3xl">
+              Sản phẩm ưa thích
+            </h2>
             <Link aria-label="Products" href="/products">
               <div
                 className={cn(
@@ -48,7 +39,7 @@ function WishLists({ session }) {
                   })
                 )}
               >
-                View all
+                Xem tất cả
               </div>
             </Link>
           </div>
@@ -87,14 +78,26 @@ function WishLists({ session }) {
             modules={[Navigation]}
             className="w-full h-auto overflow-visible relative"
           >
-            {wishLists ? (
-              wishLists?.map((product, index) => (
-                <SwiperSlide key={index}>
+            {wishList ? (
+              wishList?.map((product) => (
+                <SwiperSlide key={product.id}>
                   <ProductCard product={product} />
                 </SwiperSlide>
               ))
             ) : (
               <Loader />
+            )}
+
+            {wishList?.length === 0 && (
+              <div className="flex h-full flex-col items-center justify-center space-y-1">
+                {CommonSvg.cart({
+                  className: 'mb-4 h-16 w-16 text-muted-foreground',
+                })}
+
+                <div className="text-xl font-medium text-muted-foreground">
+                  Danh sách sản phẩm yêu thích của bạn còn trống
+                </div>
+              </div>
             )}
           </Swiper>
         </section>

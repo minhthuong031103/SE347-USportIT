@@ -117,9 +117,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                     <span className="inline-block text-2xl ml-8 font-semibold">
                       {`${
                         reviewRatingData ? reviewRatingData?.totalReview : ''
-                      } ${
-                        reviewRatingData?.totalReview > 1 ? 'Reviews' : 'Review'
-                      }`}
+                      } Đánh Giá`}
                     </span>
                   </div>
                   <div className="flex flex-row w-full justify-center items-center ">
@@ -129,7 +127,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                         className="flex flex-row ml-1 border-collapse pb-2 items-center justify-between"
                       >
                         <div className="w-14 text-xs lg:text-sm pr-1 font-bold">
-                          5 Stars
+                          5 Sao
                         </div>
                         {reviewRatingData?.totalReview ? (
                           <div className="h-4 xl:w-[75%] md:w-[60%] w-[50%] bg-slate-400 border-1 rounded-lg">
@@ -157,7 +155,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                         className="flex flex-row ml-1 border-collapse pb-2 items-center justify-between"
                       >
                         <div className="w-14 text-xs lg:text-sm pr-1 font-bold">
-                          4 Stars
+                          4 Sao
                         </div>
                         {reviewRatingData?.totalReview ? (
                           <div className="h-4 xl:w-[75%] md:w-[60%] w-[50%] bg-slate-400 border-1 rounded-lg">
@@ -185,7 +183,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                         className="flex flex-row ml-1 border-collapse pb-2 items-center justify-between"
                       >
                         <div className="w-14 text-xs lg:text-sm pr-1 font-bold">
-                          3 Stars
+                          3 Sao
                         </div>
                         {reviewRatingData?.totalReview ? (
                           <div className="h-4 xl:w-[75%] md:w-[60%] w-[50%] bg-slate-400 border-1 rounded-lg">
@@ -213,7 +211,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                         className="flex flex-row ml-1 border-collapse pb-2 items-center justify-between"
                       >
                         <div className="w-14 text-xs lg:text-sm pr-1 font-bold">
-                          2 Stars
+                          2 Sao
                         </div>
                         {reviewRatingData?.totalReview ? (
                           <div className="h-4 xl:w-[75%] md:w-[60%] w-[50%] bg-slate-400 border-1 rounded-lg">
@@ -241,7 +239,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                         className="flex flex-row ml-1 border-collapse pb-2 items-center justify-between"
                       >
                         <div className="w-14 text-xs lg:text-sm pr-1 font-bold">
-                          1 Star
+                          1 Sao
                         </div>
                         {reviewRatingData?.totalReview ? (
                           <div className="h-4 xl:w-[75%] md:w-[60%] w-[50%] bg-slate-400 border-1 rounded-lg">
@@ -272,7 +270,10 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
           ) : reviewRatingData?.totalReview == 0 ? (
             // Case 2: reviewRatingData is not null, but totalReview is 0
             <div>
-              <span className="text-2xl font-light"> No reviews yet!</span>
+              <span className="text-2xl font-light">
+                {' '}
+                Chưa có đánh giá nào cả!
+              </span>
             </div>
           ) : (
             // Case 3: reviewRatingData is not null and totalReview is not 0
@@ -312,9 +313,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                   {averageRating()}
                 </span>
                 <span className="inline-block text-2xl ml-8 font-semibold">
-                  {`${reviewRatingData?.totalReview} ${
-                    reviewRatingData?.totalReview > 1 ? 'Reviews' : 'Review'
-                  }`}
+                  {`${reviewRatingData?.totalReview} Đánh Giá`}
                 </span>
               </div>
               <div className="flex flex-row w-full p-8 md:ml-4 mr-4 xs:mr-0">
@@ -324,7 +323,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                     className="flex flex-row items-center justify-between ml-1 pb-2"
                   >
                     <div className="w-14 text-xs sm:text-sm pr-1 font-bold">
-                      5 Stars
+                      5 Sao
                     </div>
                     {reviewRatingData?.totalReview ? (
                       <div className="h-4 xl:w-[75%] md:w-[60%] w-[50%] bg-slate-400 rounded-lg">
@@ -353,7 +352,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                     className="flex flex-row ml-1 pb-2 items-center justify-between"
                   >
                     <div className="w-14 text-xs sm:text-sm pr-1 font-bold">
-                      4 Stars
+                      4 Sao
                     </div>
                     {reviewRatingData?.totalReview ? (
                       <div className="h-4 xl:w-[75%] md:w-[60%] w-[50%] bg-slate-400 rounded-lg">
@@ -381,7 +380,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                     className="flex flex-row ml-1 pb-2 items-center justify-between"
                   >
                     <div className="w-14 text-xs sm:text-sm pr-1 font-bold">
-                      3 Stars
+                      3 Sao
                     </div>
                     {reviewRatingData?.totalReview ? (
                       <div className="h-4 xl:w-[75%] md:w-[60%] w-[50%] bg-slate-400 rounded-lg">
@@ -409,7 +408,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                     className="flex flex-row ml-1 pb-2 items-center justify-between"
                   >
                     <div className="w-14 text-xs sm:text-sm pr-1 font-bold">
-                      2 Stars
+                      2 Sao
                     </div>
                     {reviewRatingData?.totalReview ? (
                       <div className="h-4 xl:w-[75%] md:w-[60%] w-[50%] bg-slate-400 rounded-lg">
@@ -437,7 +436,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                     className="flex flex-row ml-1 pb-2 items-center justify-between"
                   >
                     <div className="w-14 text-xs sm:text-sm pr-1 font-bold">
-                      1 Star
+                      1 Sao
                     </div>
                     {reviewRatingData?.totalReview ? (
                       <div className="h-4 xl:w-[75%] md:w-[60%] w-[50%] bg-slate-400 rounded-lg">

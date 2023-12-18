@@ -59,17 +59,17 @@ export function FilterSheet() {
             </div>
             <div className="grid gap-1.5 pr-6 text-sm">
               <Separator className="mb-2" />
-              <div className="flex">
+              {/* <div className="flex">
                 <span className="flex-1">Subtotal</span>
                 <span>{currencyFormat(cartTotal)}</span>
-              </div>
+              </div> */}
               <div className="flex">
                 <span className="flex-1">Shipping</span>
                 <span>Free</span>
               </div>
               <div className="flex">
                 <span className="flex-1">Taxes</span>
-                <span>Calculated at checkout</span>
+                <span>Free</span>
               </div>
               <Separator className="mt-2" />
               <div className="flex">
@@ -86,7 +86,7 @@ export function FilterSheet() {
                       className: 'w-full',
                     })}
                   >
-                    View your cart
+                    Xem giỏ hàng của bạn
                   </Link>
                 </SheetTrigger>
               </SheetFooter>
@@ -99,7 +99,7 @@ export function FilterSheet() {
             })}
 
             <div className="text-xl font-medium text-muted-foreground">
-              Your cart is empty
+              Giỏ hàng của bạn đang trống
             </div>
             <SheetTrigger asChild>
               <Link
@@ -113,7 +113,7 @@ export function FilterSheet() {
                   })
                 )}
               >
-                Add items to your cart to checkout
+                Thêm sản phẩm vào giỏ hàng để thanh toán
               </Link>
             </SheetTrigger>
           </div>

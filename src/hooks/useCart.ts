@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSession } from 'next-auth/react';
 // import { User } from '@/models';
@@ -29,7 +29,11 @@ export const useCart = () => {
     return userShoppingCart;
   };
 
-  const { data: userCart, refetch } = useQuery({
+  const {
+    data: userCart,
+    refetch,
+    isLoading,
+  } = useQuery({
     queryKey: ['useCart'],
     queryFn: () => fetchUserCart(session?.user.id),
     enabled: !!session,
@@ -56,12 +60,19 @@ export const useCart = () => {
   };
 
   const cart = session
-    ? userCart
+    ? isLoading
+      ? null
+      : userCart
       ? convertToReduxCart(userCart)
       : null
     : reduxCart;
 
   const queryClient = useQueryClient();
+
+  // useEffect(() => {
+  //   queryClient.removeQueries(['cartQuery']);
+  // }, [session]);
+
   const addToCartMutationFn = async ({ data, selectedSize, quantity }) => {
     const response = await axios.post(
       `/api/user/cart/cart-item?userId=${session?.user.id}`,

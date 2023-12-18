@@ -52,7 +52,7 @@ const ProductReview = ({ product }) => {
   return (
     <div>
       <div className=" flex-col gap-1 mt-20 lg:mt-25 justify-center items-center flex text-[34px] font-semibold mb-2 leading-tight">
-        Reviews
+        Đánh Giá
         <div className="w-full pt-2">
           <ProductReviewRating reviewRatingData={reviewRatingData} />
         </div>

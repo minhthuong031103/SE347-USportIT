@@ -10,22 +10,22 @@ import { Balancer } from 'react-wrap-balancer';
 
 const productCollections = [
   {
-    title: 'FootBall',
+    title: 'Bóng Đá',
     image:
       'https://static.nike.com/a/images/f_auto/dpr_3.0,cs_srgb/h_400,c_limit/2c048b8b-97b5-4919-9fd0-ad85c469b545/nike-football.jpg',
   },
   {
-    title: 'BasketBall',
+    title: 'Bóng Rổ',
     image:
       'https://static.nike.com/a/images/f_auto/dpr_3.0,cs_srgb/w_342,c_limit/3aa7f8f6-d54e-40bd-8822-f6d87c0cbb60/jordan-brand-launches-tatum-1-signature-shoe.jpg',
   },
   {
-    title: 'Running',
+    title: 'Chạy Bộ',
     image:
       'https://static.nike.com/a/images/f_auto/dpr_3.0,cs_srgb/h_500,c_limit/x0vxyo4swzcoitrfxlj7/nike-basketball.jpg',
   },
   {
-    title: 'Training and Gym',
+    title: 'Tập luyện - Gym',
     image:
       'https://static.nike.com/a/images/f_auto/dpr_1.3,cs_srgb/w_945,c_limit/d7a055b4-6dff-4e9e-90fe-de00e6eab13c/should-you-do-cardio-before-or-after-weight-training.jpg',
   },
@@ -40,10 +40,11 @@ function ShopByCollection() {
     >
       <div className="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center">
         <h2 className="text-3xl font-bold leading-[1.1] sm:text-3xl md:text-5xl">
-          Shop by collection
+          BỘ SƯU TẬP
         </h2>
         <Balancer className="max-w-[46rem] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
-          Explore our collection and find the best products for you
+          Khám phá những bộ sưu tập của chúng tôi và tìm những sản phẩm hợp với
+          bạn
         </Balancer>
       </div>
       <Swiper

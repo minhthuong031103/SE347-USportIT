@@ -33,7 +33,7 @@ function FeaturedProduct() {
         >
           <div className="flex justify-between flex-wrap ">
             <h2 className=" text-2xl font-medium sm:text-3xl">
-              Featured products
+              Sản phẩm đang có sẵn
             </h2>
             <Link aria-label="Products" href="/products">
               <div
@@ -43,7 +43,7 @@ function FeaturedProduct() {
                   })
                 )}
               >
-                View all
+                Xem tất cả
               </div>
             </Link>
           </div>

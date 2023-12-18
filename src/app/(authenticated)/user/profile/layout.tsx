@@ -13,7 +13,7 @@ const layout = ({ children }) => {
           <SidebarDesktop />
         </div>
 
-        <div className="w-full lg:w-[80%]">{children}</div>
+        <div className="w-full lg:w-[80%] h-full">{children}</div>
       </div>
     </>
   );
