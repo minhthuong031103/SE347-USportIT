@@ -263,7 +263,7 @@ const NavigationMenuDemo = ({ session }) => {
           </div>
         ) : (
           <div className="flex space-x-4 items-center">
-            <Button className="w-[70px] h-8">
+            <Button className="w-[100px] h-8">
               <Link href={'/auth/login'}>Đăng nhập</Link>
             </Button>
             <CartSheet />
