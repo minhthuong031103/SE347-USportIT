@@ -35,7 +35,7 @@ export const PaymentForm = ({
       <Select
         key={'method'}
         radius={'md'}
-        label="Payment method"
+        label="Phương thức thanh toán"
         isInvalid={isTypeValid || !typeTouched ? false : true}
         errorMessage={
           isTypeValid || !typeTouched

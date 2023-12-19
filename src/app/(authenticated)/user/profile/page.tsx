@@ -50,13 +50,13 @@ function page() {
 
   return (
     <div>
-      <h1 className="text-xl font-medium">Profile</h1>
+      <h1 className="text-xl font-medium">Hồ sơ </h1>
       <Button
         onClick={() => {
           setIsOpen(true);
         }}
       >
-        Edit Profile
+        Sửa thông tin{' '}
       </Button>
       <Card className="bg-white p-6 rounded-lg shadow-md relative mt-4">
         <div className="flex flex-col gap-6 mt-4">

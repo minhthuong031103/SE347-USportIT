@@ -25,7 +25,7 @@ function NewArrivals() {
             Tiết kiệm lên tới 50% sản phẩm. Không cần mã giảm giá.
           </Balancer>
         </section>
-        <section
+        {/* <section
           id="featured-products"
           aria-labelledby="featured-products-heading"
           className="space-y-6"
@@ -81,7 +81,7 @@ function NewArrivals() {
             modules={[Navigation]}
             className="w-full h-auto overflow-visible relative"
           ></Swiper>
-        </section>
+        </section> */}
       </div>
     </section>
   );

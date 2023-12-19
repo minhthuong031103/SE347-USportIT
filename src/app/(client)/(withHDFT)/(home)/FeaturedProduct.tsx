@@ -83,7 +83,7 @@ function FeaturedProduct() {
             modules={[Navigation]}
             className="w-full h-auto overflow-visible relative"
           >
-            {featuredProducts ? (
+            {featuredProducts?.length > 0 ? (
               featuredProducts?.map((product, index) => (
                 <SwiperSlide key={index} virtualIndex={index}>
                   <ProductCard product={product} />

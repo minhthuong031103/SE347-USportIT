@@ -406,7 +406,7 @@ export function CartLineItems({
       {enableCheck ?? (
         <Button
           onClick={allSelected ? unselectAll : checkAll}
-          className="mt-4 w-[80px] max-h-max cursor-pointer bg-black"
+          className="mt-4 w-[120px] max-h-max cursor-pointer bg-black"
         >
           {allSelected ? 'Bỏ chọn tất cả' : 'Chọn tất cả'}
         </Button>

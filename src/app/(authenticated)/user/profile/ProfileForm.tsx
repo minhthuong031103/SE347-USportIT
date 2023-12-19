@@ -179,7 +179,7 @@ const ProfileForm = ({
           setIsModalOpen(true);
         }}
       >
-        Add address
+        Thêm địa chỉ
       </Button>
 
       {isModalOpen && (
@@ -192,7 +192,7 @@ const ProfileForm = ({
           }}
           className="w-[50%] mt-12"
         >
-          Edit Profile
+          Sửa thông tin{' '}
         </Button>
       </div>
     </div>

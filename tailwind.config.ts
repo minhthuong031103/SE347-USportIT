@@ -10,6 +10,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        mont: ['var(--font-mont)'],
+      },
       colors: {
         border: '#e4e4e7',
         input: '#e4e4e7',
