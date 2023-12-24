@@ -245,9 +245,9 @@ const NavigationMenuDemo = ({ session }) => {
                   {' '}
                   <Link href={'/user/profile'}>Hồ sơ</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                {/* <DropdownMenuItem>
                   <Link href={'/admin/add-product'}>Thêm sản phẩm</Link>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
                 <DropdownMenuItem>
                   <Link href={'/user/conversations'}>Chat</Link>
                 </DropdownMenuItem>

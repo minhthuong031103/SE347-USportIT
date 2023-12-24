@@ -201,7 +201,8 @@ const Body = ({ session }) => {
                 content: 'Hình ảnh', // Assuming you want to send the image URL as content
                 userId: session.user.id,
                 conversationId,
-                fileUrl: image.url, // Replace 'yourConversationId' with the actual conversation ID
+                fileUrl: image.url,
+                createdAt: new Date().toISOString(), // Replace 'yourConversationId' with the actual conversation ID
               };
               const temporaryMessage = {
                 id: temporaryMessages.length + 1, // Generate a unique ID for the temporary message
@@ -209,6 +210,7 @@ const Body = ({ session }) => {
                 userId: session.user.id,
                 conversationId,
                 fileUrl: image.url,
+                createdAt: new Date().toISOString(),
               };
               setTemporaryMessages([...temporaryMessages, temporaryMessage]);
               updateMessages([temporaryMessage]);
@@ -296,7 +298,7 @@ const Body = ({ session }) => {
       <div className="w-full h-[75%]">
         <div
           id="scrollableDiv"
-          className="h-[650px] lg:h-[550px] w-full overflow-y-auto flex flex-col-reverse"
+          className="h-[650px] sm:lg:h-[550px] lg:h-[550px] w-full overflow-y-auto flex flex-col-reverse"
         >
           <InfiniteScroll
             dataLength={
