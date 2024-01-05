@@ -298,7 +298,7 @@ const Body = ({ session }) => {
       <div className="w-full h-[75%]">
         <div
           id="scrollableDiv"
-          className="h-[650px] sm:lg:h-[550px] lg:h-[550px] w-full overflow-y-auto flex flex-col-reverse"
+          className="h-[600px] sm:h-[550px] w-full overflow-y-auto flex flex-col-reverse"
         >
           <InfiniteScroll
             dataLength={

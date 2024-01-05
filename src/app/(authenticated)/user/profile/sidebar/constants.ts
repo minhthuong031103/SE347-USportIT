@@ -4,7 +4,7 @@ export const mainNavItems = [
     icon: 'news',
     items: [
       {
-        title: 'Cá nhân',
+        title: 'Trang chủ',
         href: '/',
         description: 'All the products we have to offer.',
 
