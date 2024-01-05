@@ -127,7 +127,7 @@ export const AddAddress = ({ isModalOpen, setIsModalOpen }) => {
     });
     setIsLoading(false);
     if (res?.message === 'success') {
-      toast.success('Add address successfully');
+      toast.success('Thêm địa chỉ thành công');
     }
     queryClient.refetchQueries(['userInfo', session?.data?.user?.id]);
     queryClient.refetchQueries(['userAddresses', session?.data?.user?.id]);
