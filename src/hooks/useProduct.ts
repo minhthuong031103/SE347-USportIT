@@ -99,5 +99,24 @@ export const useProduct = () => {
     };
   };
 
-  return { onGetProductDetail, getProductsAction, fetchProduct };
+  const onGetProductDetailFromOrder = async (id) => {
+    try {
+      const res = await getRequest({
+        endPoint: `api/product/detail?productId=${id}`,
+      });
+      console.log(res);
+      if (res) {
+        return res;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  return {
+    onGetProductDetail,
+    getProductsAction,
+    fetchProduct,
+    onGetProductDetailFromOrder,
+  };
 };

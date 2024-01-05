@@ -33,15 +33,16 @@ model User {
 }
 
 model Address {
-  id                Int        @id  @default(autoincrement())
-  city              String    
-  district          String
-  selected          Boolean    @default(false)  
-  ward              String
-  street            String
-  houseNumber       String
-  userId            Int
-  user              User         @relation(fields: [userId], references: [id])
+  id          Int     @id @default(autoincrement())
+  city        String
+  district    String
+  ward        String
+  street      String
+  houseNumber String
+  userId      Int
+  selected    Boolean @default(false)
+  user        User    @relation(fields: [userId], references: [id])
+
   @@index([userId])
 }
 
@@ -83,6 +84,7 @@ model Product {
   @@index([subcategoryId])
   @@index([genderId])
 }
+
 model ProductSize {
   id        Int      @id @default(autoincrement())
   size      String
@@ -122,7 +124,6 @@ model Gender {
   products Product[]
 }
 
-
 model Review {
   id         Int      @id @default(autoincrement())
   text       String   @db.LongText
@@ -147,17 +148,17 @@ model Sale {
 }
 
 model Order {
-  id         Int         @id @default(autoincrement())
-  orderDate  DateTime       @default(now())
-  total      Float
-  userId     Int?
-  user       User?       @relation(fields: [userId], references: [id])
-  anonymousUser    String?
-  anonymousUserName String?
+  id                 Int         @id @default(autoincrement())
+  orderDate          DateTime    @default(now())
+  total              Float
+  userId             Int?
+  status             String      @default("Pending")
+  address            String
+  anonymousUser      String?
   anonymousUserEmail String?
-  orderItems OrderItem[] 
-  status  String   @default("Pending")
-  address         String
+  anonymousUserName  String?
+  user               User?       @relation(fields: [userId], references: [id])
+  orderItems         OrderItem[]
 
   @@index([userId])
 }
@@ -207,33 +208,6 @@ model Payment {
 
   @@index([userId])
 }
-
-
-// model ShippingMethod {
-//   id                    Int        @id @default(autoincrement())
-//   name                  String
-//   estimatedDeliveryTime String
-//   shipments             Shipment[]
-// }
-
-// model Shipment {
-//   id                    Int             @id @default(autoincrement())
-//   trackingCode          String
-//   shipDate              DateTime
-//   estimatedDeliveryDate DateTime
-//   userId                Int
-//   orderId               Int
-//   shippingMethodId      Int
-//   shippingAddressId     Int
-//   user                  User            @relation(fields: [userId], references: [id])
-//   shippingMethod        ShippingMethod  @relation(fields: [shippingMethodId], references: [id])
-//   shippingAddress       ShippingAddress @relation(fields: [shippingAddressId], references: [id])
-
-//   @@index([shippingAddressId])
-//   @@index([shippingMethodId])
-//   @@index([orderId])
-//   @@index([userId])
-// }
 
 model Promotion {
   id          Int          @id @default(autoincrement())
@@ -315,7 +289,7 @@ model ProductToSale {
   @@unique([A, B], map: "_ProductToSale_AB_unique")
   @@index([B], map: "_ProductToSale_B_index")
   @@map("_ProductToSale")
-} 
+}
 
 model ProductToWishlist {
   A Int

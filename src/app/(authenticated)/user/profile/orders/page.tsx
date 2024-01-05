@@ -9,10 +9,12 @@ import { Pagination } from '@nextui-org/react';
 import { useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
+import { OrderDetail } from './OrderDetail';
 
 const page = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const session = useSession();
   const { data: orders, isLoading } = useQuery({
     queryKey: ['orders', session?.data?.user?.id],
@@ -40,6 +42,10 @@ const page = () => {
     );
   }
 
+  const handleOpenOrderDetail = () => {
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="flex flex-col px-10 gap-y-5 py-10">
       {orders?.data?.map((item) => {
@@ -60,7 +66,8 @@ const page = () => {
                 Trạng thái :{' '}
                 {item?.status == 'Pending' ? 'Đang xử lý' : item?.status}
               </div>
-              <Button>Chi tiết</Button>
+
+              <OrderDetail data={item} />
             </div>
           </div>
         );
