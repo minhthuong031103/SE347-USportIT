@@ -1,12 +1,12 @@
 import React from 'react';
 import Test from './Test';
+import AddProductDialog from '../(withHDFT)/(home)/AddProductDialog';
 
 export default function Page({
   searchParams,
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
-
   // const sort = searchParams ? searchParams?.sort : null;
   // const gender = searchParams ? searchParams?.gender : null;
   // const categories = searchParams ? searchParams?.categories : null;
@@ -23,6 +23,7 @@ export default function Page({
         subcategories={searchParams?.subcategories}
         price_range={searchParams?.price_range}
       />
+      <AddProductDialog />
     </div>
   );
 }

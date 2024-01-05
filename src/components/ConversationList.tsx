@@ -108,7 +108,7 @@ const ConversationList: React.FC<ConversationListProps> = ({ session }) => {
               </div>
               <div className="flex flex-col">
                 <div className="text-gray-900">Admin</div>
-                <div className="text-gray-900">Started a conversation</div>
+                <div className="text-gray-900">Bắt đầu trò chuyện</div>
               </div>
             </div>
           )}

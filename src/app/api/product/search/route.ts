@@ -51,7 +51,9 @@ export async function GET(req: Request) {
   };
 
   const items = await prisma.product.findMany({
-    where,
+    where: {
+      isdeleted: false,
+    },
     orderBy: {
       [column || 'id']: order || 'desc',
     },
@@ -60,7 +62,9 @@ export async function GET(req: Request) {
   });
 
   const count = await prisma.product.count({
-    where,
+    where: {
+      isdeleted: false,
+    },
   });
   const response = {
     data: [...items],
