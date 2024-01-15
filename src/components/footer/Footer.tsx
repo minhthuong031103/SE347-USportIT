@@ -58,7 +58,7 @@ const Footer = () => {
             {/* MENU START */}
             <div className="flex flex-col gap-3">
               <div className="font-oswald font-medium uppercase text-sm">
-                về UITSport
+                về Elite Motion
               </div>
               <div className="text-sm text-white/[0.5] hover:text-white cursor-pointer">
                 Tin tức
@@ -102,7 +102,7 @@ const Footer = () => {
       >
         {/* LEFT START */}
         <div className="text-[12px] text-white/[0.5] hover:text-white cursor-pointer text-center md:text-left">
-          © 2023 UITSPORT, Inc. All Rights Reserved
+          © 2023 Elite Motion, Inc. All Rights Reserved
         </div>
         {/* LEFT END */}
 

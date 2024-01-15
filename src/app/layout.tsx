@@ -16,8 +16,8 @@ const montserrat = Montserrat({
 });
 
 const metadata: Metadata = {
-  title: 'UIT Sport',
-  description: 'Just Do It By UIT',
+  title: 'Elite Motion',
+  description: 'Just Do It By Elite Motion',
   openGraph: {
     images: [
       'https://static.nike.com/a/images/f_auto/dpr_2.0,cs_srgb/w_1423,c_limit/16b3442b-cfbb-4be0-8541-682a26631f15/nike-just-do-it.png',

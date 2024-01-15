@@ -37,7 +37,7 @@ const page = async ({ searchParams }: { searchParams: any }) => {
       //     },
       //   });
       //   await transporter.sendMail({
-      //     from: '"UIT_Sport" <playground.dev001@gmail.com>',
+      //     from: '"EliteMotion" <playground.dev001@gmail.com>',
       //     to: email,
       //     subject: 'Email Verification OTP',
       //     text: `Your OTP for email verification is: ${otp}`,
@@ -57,7 +57,7 @@ const page = async ({ searchParams }: { searchParams: any }) => {
       //     </style>
       //   </head>
       // <body>
-      //   <div class="title">UIT Sport</div>
+      //   <div class="title">Elite Motion</div>
       //   <div> <b>Your OTP code is: ${otp}</b></div>
       // </body>
       //      `, // HTML body
