@@ -47,13 +47,12 @@ export async function GET(req: Request) {
       minPrice ? { price: { gte: minPrice } } : undefined,
       maxPrice ? { price: { lte: maxPrice } } : undefined,
       q ? { name: { contains: q } } : undefined,
+      { isdeleted: false },
     ].filter(Boolean),
   };
 
   const items = await prisma.product.findMany({
-    where: {
-      isdeleted: false,
-    },
+    where,
     orderBy: {
       [column || 'id']: order || 'desc',
     },
@@ -62,9 +61,7 @@ export async function GET(req: Request) {
   });
 
   const count = await prisma.product.count({
-    where: {
-      isdeleted: false,
-    },
+    where,
   });
   const response = {
     data: [...items],
