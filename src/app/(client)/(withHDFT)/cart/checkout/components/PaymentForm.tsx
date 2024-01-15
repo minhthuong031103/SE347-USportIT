@@ -66,7 +66,15 @@ export const PaymentForm = ({
           total={total}
         />
       )}
-      {method === 'Block chain Wallet' && <Web3Checkout />}
+      {method === 'Block chain Wallet' && (
+        <Web3Checkout
+          userAddress={userAddress}
+          userFullName={userFullName}
+          userEmail={userEmail}
+          checkedItems={checkedItems}
+          total={total}
+        />
+      )}
       {method === 'VnPay' && (
         <VnPayCheckout checkedItems={checkedItems} total={total} />
       )}

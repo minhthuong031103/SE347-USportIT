@@ -21,14 +21,29 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { postRequest } from '@/lib/fetch';
 import toast from 'react-hot-toast';
 import { Input } from '@/components/ui/input';
-const tokenAddress = '0xf0698869A8DCb2175b84059D7DF8A20AB233cf53';
+import { AddTokenButton } from '@/components/AddTokenButton';
+import { useRouter } from 'next/navigation';
+const tokenAddress = '0x00BCf4Ee95444D6aFF032a029080fAFE90C9d53B';
 const contractAddress = '0xD5b2d91f7E04667728eb2E38327f559D998d6919';
-const receiver = '0x9feacc5E9509C1A198ff4E65B4096C289A176287';
+const receiver = '0x29e9F7fc39950d1691Cb905d6B538bD85074d57a';
 const USDTAddress = '0xdAC17F958D2ee523a2206206994597C13D831ec7';
-const uitContractAddress = '0xf0698869A8DCb2175b84059D7DF8A20AB233cf53';
-export const Web3Checkout = () => {
+const uitContractAddress = '0x00BCf4Ee95444D6aFF032a029080fAFE90C9d53B';
+export const Web3Checkout = ({
+  checkedItems,
+  total,
+  userFullName,
+  userAddress,
+  userEmail,
+}) => {
+  console.log(
+    '🚀 ~ checkedItems:',
+    checkedItems.length > 0
+      ? JSON.stringify([...checkedItems])
+      : JSON.stringify([checkedItems])
+  );
   const address = useAddress();
   const { data: uitContract } = useContract(uitContractAddress);
+
   const { data: uitBalance } = useTokenBalance(uitContract, address);
   const [inputSend, setInputSend] = React.useState('');
   const session = useSession();
@@ -41,14 +56,21 @@ export const Web3Checkout = () => {
     enabled: !!session?.data?.user?.id,
   });
   console.log(userDetail);
-
+  const router = useRouter();
   const switchChain = useSwitchChain();
   const { selectedChain, setSelectedChain } = useChain();
   const chainId = useChainId();
   console.log('🚀 ~ file: checkout.tsx:23 ~ Checkout ~ chainId:', chainId);
+  const uuid = localStorage.getItem('uuid');
 
   const { contract: tokenContract } = useContract(tokenAddress, 'token');
-
+  const dataArray = Object.values(checkedItems).map((item) => {
+    return {
+      id: item.data.id,
+      quantity: item.quantity,
+      selectedSize: item.selectedSize,
+    };
+  });
   useEffect(() => {
     if (!address) return;
     if (chainId === FantomTestnet.chainId) {
@@ -90,12 +112,28 @@ export const Web3Checkout = () => {
               action={async (contract) => {
                 await contract?.call('approve', [
                   tokenAddress,
-                  ethers.utils.parseEther(inputSend),
+                  ethers.utils.parseEther((total / 22400).toString()),
                 ]);
-                await contract?.call('transfer', [
+                const tx = await contract?.call('transfer', [
                   receiver,
-                  ethers.utils.parseEther(inputSend),
+                  ethers.utils.parseEther((total / 22400).toString()),
                 ]);
+                if (tx) {
+                  const res = await postRequest({
+                    endPoint: '/api/web3/callback',
+                    formData: {
+                      checkedItems: JSON.stringify(dataArray),
+                      amount: total,
+                      userFullName,
+                      userAddress,
+                      userEmail,
+                      uuid,
+                    },
+                    isFormData: false,
+                  });
+                  toast.success('Thanh toán thành công');
+                  router.push('/user/profile/orders');
+                }
               }}
             >
               Check out
@@ -107,11 +145,11 @@ export const Web3Checkout = () => {
               action={async (contract) => {
                 await contract?.call('approve', [
                   USDTAddress,
-                  ethers.utils.parseEther(inputSend),
+                  ethers.utils.parseEther((total / 22400).toString()),
                 ]);
                 await contract?.call('transfer', [
                   receiver,
-                  ethers.utils.parseEther(inputSend),
+                  ethers.utils.parseEther((total / 22400).toString()),
                 ]);
               }}
             >
@@ -149,6 +187,7 @@ export const Web3Checkout = () => {
           >
             add
           </Button> */}
+          <AddTokenButton />
         </div>
       )}
     </div>
