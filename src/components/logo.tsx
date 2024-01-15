@@ -9,13 +9,15 @@ function Logo() {
         <Image
           alt="A&Z"
           src={
-            'https://utfs.io/f/2d7566c9-a715-4a1e-8d05-140479024390_shoes%20(1).png'
+            'https://utfs.io/f/ef06a82d-3a60-4934-a92b-5de2eda046cc-oxx5jb.jpg'
           }
           width={40}
           height={40}
         />
 
-        <div className="text-lg w-full font-bold tracking-tight">UITSport</div>
+        <div className="text-lg w-full font-bold tracking-tight">
+          Elite Motion
+        </div>
       </div>
     </Link>
   );
