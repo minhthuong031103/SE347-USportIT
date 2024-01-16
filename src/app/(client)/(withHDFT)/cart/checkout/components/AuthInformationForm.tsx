@@ -84,7 +84,7 @@ const AuthInformationForm = ({
           })}
         </Select>
         <Button
-          disabled={!addressValue || !fullName || !email}
+          disabled={!fullName || !email}
           className="w-32"
           onClick={() => {
             setIsAddressModalOpen(true);

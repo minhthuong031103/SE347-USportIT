@@ -10,7 +10,7 @@ import VnPayCheckout from './childComponents/VnPayCheckout';
 const checkOutConst = [
   { value: 'Stripe' },
   { value: 'Block chain Wallet' },
-  { value: 'VnPay' },
+  // { value: 'VnPay' },
 ];
 export const PaymentForm = ({
   checkedItems,
@@ -75,9 +75,9 @@ export const PaymentForm = ({
           total={total}
         />
       )}
-      {method === 'VnPay' && (
+      {/* {method === 'VnPay' && (
         <VnPayCheckout checkedItems={checkedItems} total={total} />
-      )}
+      )} */}
     </div>
   );
 };
